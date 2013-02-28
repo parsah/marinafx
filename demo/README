@@ -1,0 +1,38 @@
+Two FASTA files (groups) are provided (see 'most_induced.fasta' and 
+'most_suppressed.fasta') to demonstrate usage of this tool.
+Both groups represent promoter-sequences 2kb upstream of 
+differentially-expressed genes from a Soybean--Soybean Rust RNA-Seq
+study (Tremblay et. al., 2012).
+
+Accompanying PWMs
+=================
+Accompanying these FASTA files are several PWMs. Since
+PWM distribution restrictions exist, we generated de-novo PWM models 
+(see 'sample_pwms.txt') using several known plant-PDB structures and the 
+web-application '3DTF' (Alamanova et. al., 2012).
+
+Accompanying DNA motifs
+=======================
+A set of manually-mined DNA TFBS motifs are available (see 'sample_motifs.txt').
+These motifs came from the following peer-reviewed publications:
+
+1) "Selective interaction of plant homeodomain proteins mediates high 
+DNA-binding affinity.", Smith et. al., 2002.
+2) "Determinants in the sequence specific binding of two plant transcription 
+factors, CBF1 and NtERF2, to the DRE and GCC motifs.", Hao et. al., 2002.
+3) "Isolation and characterization of three DREB/ERF-type transcription 
+factors from melon (Cucumis melo).", Mizuno et. al., 2006.
+4) "Soybean Trihelix Transcription Factors GmGT-2A and GmGT-2B Improve Plant 
+Tolerance to Abiotic Stresses in Transgenic Arabidopsis.", Xie et. al., 2009.
+5) "Molecular cloning and characterization of a gene that encodes a 
+MYC-related protein in Arabidopsis.", Urao et. al., 1996.
+6) "Isolation and characterization of IRO2, a novel iron-regulated bHLH 
+transcription factor in graminaceous plants.", Ogo et. al., 2006.
+7) "Stimulus-Dependent, Promoter-Specific Binding of Transcription Factor 
+WRKY1 to Its Native Promoter and the Defense-Related Gene PcPR1-1 in Parsley",
+Turck et. al., 2004.
+8) "ARF1, a transcription factor that binds to auxin response elements.",
+Ulmasov et. al., 1996.
+9) "Auxin signal transduction in Arabidopsis vein formation.", 
+Donner et. al., 2010.
+
