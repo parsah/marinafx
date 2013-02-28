@@ -1,5 +1,8 @@
 package marina.gui;
 
+import java.util.Arrays;
+
+import marina.matrix.Matrix;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -22,7 +25,12 @@ public class Marina extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		double[][] d = new double[][]{{1,2,3}, {4,5,6}};
+		Matrix m = new Matrix(d);
+		System.out.println(m.getWidth());
+		m.debug();
 		
+		System.out.println(Arrays.toString(m.getColumn(2)));
 	}
 
 }
