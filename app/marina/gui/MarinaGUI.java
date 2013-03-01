@@ -1,8 +1,6 @@
 package marina.gui;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -14,7 +12,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
+public class MarinaGUI extends Application {
 	private static MarinaGUI instance = new MarinaGUI();
 	private BorderPane layout;
 	private OptionsDialog options;
@@ -44,26 +42,53 @@ public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
 	/**
 	 * Helper-method to position Menus and MenuBar on the actual stage.
 	 * */
-	private void createMenu() {
+	private void populateMenuBar() {
 		MenuBar menuBar = new MenuBar();
-		Menu menuFile = new Menu("File");
-		Menu menuHelp = new Menu("Help");
-		MenuItem itemNew = new MenuItem("New");
-		MenuItem itemOptions = new MenuItem("Options");
-		MenuItem itemExit = new MenuItem("Exit");
-		
-		MenuItem itemSchema = new MenuItem("TFBS Schemas");
-		itemSchema.setOnAction(this);
-		
-		menuFile.getItems().addAll(itemNew, this.createFASTAMenu(), 
-				this.createTFBSMenu(), new SeparatorMenuItem(), itemOptions,
-				new SeparatorMenuItem(), itemExit);
-		menuHelp.getItems().addAll(itemSchema);
-		menuBar.getMenus().addAll(menuFile, menuHelp);
+		menuBar.getMenus().addAll(this.getFileMenu(), this.getHelpMenu());
 		MarinaGUI.get().getLayout().setTop(menuBar);
 	}
 	
-	private Menu createFASTAMenu() {
+	/**
+	 * Get the File menu which encapsulates runtime capabilities.
+	 * @return Menu item reference.
+	 * */
+	private Menu getFileMenu() {
+		Menu menuFile = new Menu("File");
+		MenuItem itemNew = new MenuItem("New");
+		MenuItem itemOptions = new MenuItem("Options");
+		MenuItem itemExit = new MenuItem("Exit");
+		menuFile.getItems().addAll(itemNew, this.getFASTAMenu(),
+				this.getTFBSMenu(), new SeparatorMenuItem(), itemOptions,
+				new SeparatorMenuItem(), itemExit);
+		itemOptions.setOnAction(new MenuEventHandler());
+		itemOptions.setId("showOptions");
+		return menuFile;
+	}
+	
+	/**
+	 * Creates a Menu instance to encapsulate the Help menu. This menu is
+	 * useful in-that it provides information as-to TFBS model schemas be-it
+	 * DNA motifs or PWMs.
+	 * @return Menu item referencing the Help-menu capabilities.
+	 * */
+	private Menu getHelpMenu() {
+		Menu menuHelp = new Menu("Help");
+		MenuItem itemSchema = new MenuItem("TFBS Schemas");
+		itemSchema.setOnAction(new MenuEventHandler());
+		itemSchema.setId("showSchema");
+		menuHelp.getItems().addAll(itemSchema);
+		return menuHelp;
+	}
+	
+	/**
+	 * Get the FASTA menu which is used for inputting user-provided promoter
+	 * sequences. These sequences serve as groups: collections of promoter
+	 * sequences. A total of 2x groups are provided: a conditional and a
+	 * baseline. Their respective TFBS abundances are contrasted against
+	 * one another.
+	 * @return Menu referencing input of FASTA files.
+	 * */
+	private Menu getFASTAMenu() {
 		Menu fileLoadFASTA = new Menu("Load FASTA");
 		MenuItem itemQuery = new MenuItem("Load query");
 		MenuItem itemBaseline = new MenuItem("Load baseline");
@@ -71,7 +96,12 @@ public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
 		return fileLoadFASTA;
 	}
 	
-	private Menu createTFBSMenu() {
+	/**
+	 * Get the Menu object referencing TFBS objects. This menu simply enables
+	 * user-input of desired TFBS models.
+	 * @return Menu referencing input of TFBS models.
+	 * */
+	private Menu getTFBSMenu() {
 		Menu fileLoadTFBS = new Menu("Load TFBSs");
 		MenuItem itemPWMs= new MenuItem("Load PWMs");
 		MenuItem itemMotifs = new MenuItem("Load DNA motifs");
@@ -85,7 +115,7 @@ public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
 		// create all other GUI components
 		MarinaGUI.get().setOptions(new OptionsDialog());
 		MarinaGUI.get().setStatusBar(new StatusBar());
-		MarinaGUI.get().createMenu();
+		MarinaGUI.get().populateMenuBar();
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);
@@ -110,7 +140,7 @@ public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
 	/**
 	 * @param layout the layout to set
 	 */
-	public void setLayout(BorderPane layout) {
+	private void setLayout(BorderPane layout) {
 		this.layout = layout;
 	}
 
@@ -140,11 +170,5 @@ public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
 	 */
 	private void setStatusBar(StatusBar statusBar) {
 		this.statusBar = statusBar;
-	}
-
-	@Override
-	public void handle(ActionEvent event) {
-		new SchemaDialog();
-		
 	}
 }

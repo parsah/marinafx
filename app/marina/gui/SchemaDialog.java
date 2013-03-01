@@ -21,7 +21,6 @@ public class SchemaDialog extends Stage {
 		this.setWidth(550);
 		this.setHeight(450);
 		this.positionTabs();
-		this.show();
 	}
 
 	/**
