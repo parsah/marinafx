@@ -1,18 +1,23 @@
 package marina.gui;
 
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class MarinaGUI extends Application {
+public class MarinaGUI extends Application implements EventHandler<ActionEvent>{
 	private static MarinaGUI instance = new MarinaGUI();
 	private BorderPane layout;
-	private OptionsWindow options;
+	private OptionsDialog options;
 	private StatusBar statusBar;
 	
 	/**
@@ -25,6 +30,18 @@ public class MarinaGUI extends Application {
 	}
 	
 	/**
+	 * Helpful method to take a string and generate a corresponding header.
+	 * This header is bold (by default) and done-so to enable easy separation
+	 * between other GUI sub-sections.
+	 * @return header Text object
+	 * */
+	public static Text createHeader(String text) {
+		Text header = new Text(text);
+		header.setFont(Font.font(null, FontWeight.BOLD, 12));
+		return header;
+	}
+	
+	/**
 	 * Helper-method to position Menus and MenuBar on the actual stage.
 	 * */
 	private void createMenu() {
@@ -34,11 +51,15 @@ public class MarinaGUI extends Application {
 		MenuItem itemNew = new MenuItem("New");
 		MenuItem itemOptions = new MenuItem("Options");
 		MenuItem itemExit = new MenuItem("Exit");
+		
+		MenuItem itemSchema = new MenuItem("TFBS Schemas");
+		itemSchema.setOnAction(this);
+		
 		menuFile.getItems().addAll(itemNew, this.createFASTAMenu(), 
 				this.createTFBSMenu(), new SeparatorMenuItem(), itemOptions,
 				new SeparatorMenuItem(), itemExit);
+		menuHelp.getItems().addAll(itemSchema);
 		menuBar.getMenus().addAll(menuFile, menuHelp);
-		
 		MarinaGUI.get().getLayout().setTop(menuBar);
 	}
 	
@@ -62,7 +83,7 @@ public class MarinaGUI extends Application {
 	public void start(Stage stage) throws Exception {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
-		MarinaGUI.get().setOptions(new OptionsWindow());
+		MarinaGUI.get().setOptions(new OptionsDialog());
 		MarinaGUI.get().setStatusBar(new StatusBar());
 		MarinaGUI.get().createMenu();
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
@@ -96,14 +117,14 @@ public class MarinaGUI extends Application {
 	/**
 	 * @return the options
 	 */
-	public OptionsWindow getOptions() {
+	public OptionsDialog getOptions() {
 		return options;
 	}
 
 	/**
 	 * @param options the options to set
 	 */
-	private void setOptions(OptionsWindow options) {
+	private void setOptions(OptionsDialog options) {
 		this.options = options;
 	}
 
@@ -119,5 +140,11 @@ public class MarinaGUI extends Application {
 	 */
 	private void setStatusBar(StatusBar statusBar) {
 		this.statusBar = statusBar;
+	}
+
+	@Override
+	public void handle(ActionEvent event) {
+		new SchemaDialog();
+		
 	}
 }
