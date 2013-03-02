@@ -11,12 +11,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import marina.parameter.ParameterMap;
 
 public class MarinaGUI extends Application {
 	private static MarinaGUI instance = new MarinaGUI();
 	private BorderPane layout;
 	private StatusPane statusBar;
-	// TODO add reference from Options to a RuntimeArguments class
+	private ParameterMap parameterMap;
 	
 	/**
 	 * Represent the GUI as a singleton so that it can be accessible 
@@ -30,6 +31,7 @@ public class MarinaGUI extends Application {
 	/**
 	 * Helpful method to take a string and generate a corresponding header.
 	 * This header is bold (by default) and done-so to enable easy separation
+	
 	 * between other GUI sub-sections.
 	 * @return header Text object
 	 * */
@@ -121,6 +123,7 @@ public class MarinaGUI extends Application {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
 		MarinaGUI.get().setStatusBar(new StatusPane());
+		MarinaGUI.get().setParameterMap(new ParameterMap());
 		MarinaGUI.get().placeMenuBar();
 		MarinaGUI.get().placeStatusBar();
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
@@ -128,7 +131,7 @@ public class MarinaGUI extends Application {
 		stage.setScene(scene);
 		stage.setHeight(300);
 		stage.setWidth(300);
-		stage.show();
+		stage.show();		
 	}
 	
 	public static void main(String args[]) {
@@ -163,5 +166,19 @@ public class MarinaGUI extends Application {
 	 */
 	private void setStatusBar(StatusPane statusBar) {
 		this.statusBar = statusBar;
+	}
+
+	/**
+	 * @return the runtimeArgs
+	 */
+	public ParameterMap getParameterMap() {
+		return parameterMap;
+	}
+
+	/**
+	 * @param runtimeArgs the runtimeArgs to set
+	 */
+	private void setParameterMap(ParameterMap params) {
+		this.parameterMap = params;
 	}
 }

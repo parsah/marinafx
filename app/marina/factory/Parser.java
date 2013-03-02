@@ -1,5 +1,11 @@
 package marina.factory;
 
+/**
+ * User-provided input must ultimately be parsed, enabling the ability to
+ * quantify abundance-of. All Parser sub-classes must therefore be able
+ * to not only parse compatible files but also filter it, respectively.
+ * @author Parsa Hosseini
+ * */
 public interface Parser {
 	
 	/**

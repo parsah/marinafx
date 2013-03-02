@@ -1,11 +1,22 @@
 package marina.gui;
 
+import java.util.List;
+
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import marina.parameter.BaseWeightParameter;
+import marina.parameter.BooleanParameter;
+import marina.parameter.NumericParameter;
+import marina.parameter.Parameter;
+import marina.parameter.ParameterMap;
 
 public class ParameterStage extends Stage {
 	private GridPane layout;
@@ -38,23 +49,29 @@ public class ParameterStage extends Stage {
 	 * length, PWM, and Laplace-cutoff selection, amongst others.
 	 * */
 	private void positionAdjustments() {
-		this.getLayout().add(MarinaGUI.createHeader("General Options"),  
-				0, 0, 2, 1);
-		// Length, count and difference cutoffs
-		Slider sliderLength = this.createSlider(6, 0, 100, 50);
-		Slider sliderCount = this.createSlider(3, 0, 100, 50);
-		Slider sliderDifference = this.createSlider(4, 0, 100, 50);
-		// Support, PWM cutoff and PWM cutoffs
-		Slider sliderSupport = this.createSlider(0, 0, 100, 10);
-		Slider sliderPWMCutoff = this.createSlider(0.80, 0, 1.0, 0.10);
-		Slider sliderLaplace = this.createSlider(0.30, 0, 1.0, 0.10);
-		
-		this.getLayout().add(sliderLength, 1, 1);
-		this.getLayout().add(sliderCount, 1, 2);
-		this.getLayout().add(sliderDifference, 1, 3);
-		this.getLayout().add(sliderSupport, 1, 4);
-		this.getLayout().add(sliderPWMCutoff, 1, 5);
-		this.getLayout().add(sliderLaplace, 1, 6);
+		ParameterMap paramSet = MarinaGUI.get().getParameterMap();
+		int rowNum = 0; // for each parameter, add it to the layout
+		for (String name: paramSet.keySet()) {
+			Parameter param = paramSet.get(name);
+			if (param instanceof NumericParameter) { // create sliders
+				NumericParameter p = (NumericParameter)param;
+				Slider slider = this.createSlider(p.getArgument(), 
+						p.getMin(), p.getMax());
+				this.getLayout().add(new Label(p.getName()), 0, rowNum);
+				this.getLayout().add(slider, 1, rowNum);
+			}
+			if (param instanceof BooleanParameter) { // create checkbox
+				BooleanParameter p = (BooleanParameter)param;
+				CheckBox cb = this.createCheckBox(p.getName(), p.getArgument());
+				this.getLayout().add(cb, 1, rowNum);
+			}
+			if (param instanceof BaseWeightParameter) { // base weights
+				BaseWeightParameter p = (BaseWeightParameter)param;
+				GridPane weights = this.createWeightsPane(p.getArguments());
+				this.getLayout().add(weights, 0, rowNum, 2, 1);
+			}
+			rowNum += 1;
+		}
 	}
 		
 	/**
@@ -62,16 +79,50 @@ public class ParameterStage extends Stage {
 	 * maximum range.
 	 * @return slider object preset to a specified range.
 	 * */
-	private Slider createSlider(double val, double min, double max, 
-			double tickUnit) {
+	private Slider createSlider(double val, double min, double max) {
 		Slider slider = new Slider();
 		slider.setMin(min);
 		slider.setMax(max);
 		slider.setValue(val);
 		slider.setShowTickLabels(true);
 		slider.setShowTickMarks(true);
-		slider.setMajorTickUnit(tickUnit);
+		if (max == 1.0) { // make the tick-unit less if maximum is 1.0
+			slider.setMajorTickUnit(0.1);
+		}
+		if (max <= Marina.getNumWorkers() && max != 1.0) { // worker-slider
+			slider.setMajorTickUnit(1);
+			slider.setMinorTickCount(0);
+			slider.setSnapToTicks(true);
+		}
 		return slider;
+	}
+	
+	/**
+	 * Create a checkbox so that a true/false value can be selected. Such a
+	 * scenario is especially true in the case of IPF standardization.
+	 * @return CheckBox object.
+	 * */
+	private CheckBox createCheckBox(String name, boolean state) {
+		CheckBox cb = new CheckBox(name);
+		return cb;
+	}
+	
+	/**
+	 * Contains weights for each of the 4 bases; A, T, G, C, respectively.
+	 * The user can adjust weights for these nucleotides individually,
+	 * resulting in different PWM computations.
+	 * */
+	private GridPane createWeightsPane(List<NumericParameter> params) {
+		GridPane grid = new GridPane(); // name and weight ontop of each other
+		grid.setAlignment(Pos.CENTER);
+		for (int i = 0; i < params.size(); i++) {
+			NumericParameter p = params.get(i);
+			grid.add(new Label(p.getName()), i, 0); // name on row i
+			TextField field = new TextField(String.valueOf(p.getArgument()));
+			field.setPrefColumnCount(3);
+			grid.add(field, i, 1); // name on row i+1
+		}
+		return grid;
 	}
 
 	/**
