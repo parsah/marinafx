@@ -1,6 +1,5 @@
 package marina.gui;
 
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.TextArea;
@@ -12,9 +11,9 @@ import javafx.stage.Stage;
  * Provides a simple user interface so the user can see what are valid
  * TFBS and DNA motif schemas.
  * */
-public class SchemaDialog extends Stage {
+public class SchemaStage extends Stage {
 
-	public SchemaDialog() {
+	public SchemaStage() {
 		super();
 		this.setTitle("TFBS Schemas");
 		this.initModality(Modality.APPLICATION_MODAL);
@@ -56,7 +55,6 @@ public class SchemaDialog extends Stage {
 		textSchema.setEditable(false);
 		textSchema.setText(schema);
 		textSchema.setWrapText(true);
-		textSchema.setPadding(new Insets(10, 10, 10, 10));
 
 		TitledPane pane = new TitledPane();
 		pane.setText("DNA motifs");
@@ -86,7 +84,6 @@ public class SchemaDialog extends Stage {
 		textSchema.setEditable(false);
 		textSchema.setText(schema);
 		textSchema.setWrapText(true);
-		textSchema.setPadding(new Insets(10, 10, 10, 10));
 
 		TitledPane pane = new TitledPane();
 		pane.setText("Position Weight Matrices (PWMs)");

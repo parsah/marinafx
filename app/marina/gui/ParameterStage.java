@@ -7,10 +7,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class OptionsDialog extends Stage {
+public class ParameterStage extends Stage {
 	private GridPane layout;
 	
-	public OptionsDialog() {
+	public ParameterStage() {
 		super();
 		this.setTitle("Options");
 		this.initModality(Modality.APPLICATION_MODAL);

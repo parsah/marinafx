@@ -15,8 +15,8 @@ import javafx.stage.Stage;
 public class MarinaGUI extends Application {
 	private static MarinaGUI instance = new MarinaGUI();
 	private BorderPane layout;
-	private OptionsDialog options;
-	private StatusBar statusBar;
+	private StatusPane statusBar;
+	// TODO add reference from Options to a RuntimeArguments class
 	
 	/**
 	 * Represent the GUI as a singleton so that it can be accessible 
@@ -42,10 +42,17 @@ public class MarinaGUI extends Application {
 	/**
 	 * Helper-method to position Menus and MenuBar on the actual stage.
 	 * */
-	private void populateMenuBar() {
+	private void placeMenuBar() {
 		MenuBar menuBar = new MenuBar();
 		menuBar.getMenus().addAll(this.getFileMenu(), this.getHelpMenu());
 		MarinaGUI.get().getLayout().setTop(menuBar);
+	}
+	
+	/**
+	 * Helper-method to position the real-time status bar.
+	 * */
+	private void placeStatusBar() {
+		MarinaGUI.get().getLayout().setBottom(this.getStatusBar());
 	}
 	
 	/**
@@ -113,9 +120,9 @@ public class MarinaGUI extends Application {
 	public void start(Stage stage) throws Exception {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
-		MarinaGUI.get().setOptions(new OptionsDialog());
-		MarinaGUI.get().setStatusBar(new StatusBar());
-		MarinaGUI.get().populateMenuBar();
+		MarinaGUI.get().setStatusBar(new StatusPane());
+		MarinaGUI.get().placeMenuBar();
+		MarinaGUI.get().placeStatusBar();
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);
@@ -145,30 +152,16 @@ public class MarinaGUI extends Application {
 	}
 
 	/**
-	 * @return the options
-	 */
-	public OptionsDialog getOptions() {
-		return options;
-	}
-
-	/**
-	 * @param options the options to set
-	 */
-	private void setOptions(OptionsDialog options) {
-		this.options = options;
-	}
-
-	/**
 	 * @return the statusBar
 	 */
-	public StatusBar getStatusBar() {
+	public StatusPane getStatusBar() {
 		return statusBar;
 	}
 
 	/**
 	 * @param statusBar the statusBar to set
 	 */
-	private void setStatusBar(StatusBar statusBar) {
+	private void setStatusBar(StatusPane statusBar) {
 		this.statusBar = statusBar;
 	}
 }

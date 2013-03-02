@@ -16,11 +16,12 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 		if (source instanceof MenuItem ) { // invoke actions per menu item.
 			MenuItem menuItem = (MenuItem)source;
 			if (menuItem.getId().equals("showSchema")) {
-				SchemaDialog dialog = new SchemaDialog();
+				SchemaStage dialog = new SchemaStage();
 				dialog.show();
 			}
 			else if (menuItem.getId().equals("showOptions")) {
-				MarinaGUI.get().getOptions().show();
+				ParameterStage paramStage = new ParameterStage();
+				paramStage.show();
 			}
 		}
 	}
