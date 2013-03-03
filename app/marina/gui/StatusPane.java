@@ -20,10 +20,13 @@ public class StatusPane extends AnchorPane {
 	 * current progress of a specific task.
 	 * */
 	public StatusPane() {
-		this.resetStatus();
+		this.setStatus(new Label());
+		this.setProgressBar(new ProgressBar(0)); // set to 0%
 		this.getChildren().addAll(this.getStatus(), this.getProgressBar());
 		AnchorPane.setLeftAnchor(this.getStatus(), 10.0);
 		AnchorPane.setRightAnchor(this.getProgressBar(), 10.0);
+		this.resetStatus();
+		
 	}
 	
 	/**
@@ -31,9 +34,8 @@ public class StatusPane extends AnchorPane {
 	 * a default value.
 	 * */
 	public void resetStatus() {
-		this.setProgressBar(new ProgressBar(0)); // set to 0%
 		this.getProgressBar().setPrefWidth(150);
-		this.setStatus(new Label("Ready"));		
+		this.setText("Ready");
 	}
 	
 	/**

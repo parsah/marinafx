@@ -1,5 +1,6 @@
 package marina.group;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,11 +14,29 @@ import java.util.List;
  * @author Parsa Hosseini
  * */
 public class Group {
-	
 	private List<FASTASequence> sequences;
+	private File file; // input filename to represent the group.
 	
-	public Group() {
+	
+	public Group(File file) {
 		this.setSequences(new ArrayList<FASTASequence>());
+		this.setFile(file);
+	}
+	
+	/**
+	 * Parse a user-provided FASTA file since each group is essentially a
+	 * collection of these data-types.
+	 * */
+	public void parseFASTA() {
+		
+	}
+	
+	/**
+	 * Returns the base-name of the specific parser filename.
+	 * @return string representing base-name of file.
+	 * */
+	public String getBasename() {
+		return this.getFile().getName();
 	}
 
 	/**
@@ -42,4 +61,17 @@ public class Group {
 		return this.getSequences().size();
 	}
 
+	/**
+	 * @return the file
+	 */
+	public File getFile() {
+		return file;
+	}
+
+	/**
+	 * @param file the file to set
+	 */
+	private void setFile(File file) {
+		this.file = file;
+	}
 }

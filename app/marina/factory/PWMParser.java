@@ -1,5 +1,8 @@
 package marina.factory;
 
+import java.io.File;
+import java.io.IOException;
+
 import marina.bindingsite.PositionWeightMatrix;
 
 /**
@@ -11,10 +14,18 @@ import marina.bindingsite.PositionWeightMatrix;
  * @author Parsa Hosseini
  * @see PositionWeightMatrix
  * */
-public class PWMParser implements Parser {
+public class PWMParser extends Parser {
+
+	public PWMParser(File file) {
+		super(file);
+	}
+	
+	public PWMParser() {
+		super(null);
+	}
 
 	@Override
-	public void parse() {
+	public void parse() throws IOException {
 		// TODO Auto-generated method stub
 		
 	}
@@ -24,5 +35,4 @@ public class PWMParser implements Parser {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
