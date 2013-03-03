@@ -3,11 +3,10 @@ package marina.parameter;
 import java.io.File;
 
 public class FileParameter extends Parameter {
-	private File argument; // parameter argument
+	private File argument;
 	
-	public FileParameter(String param, File arg) {
-		super(param);
-		this.setArgument(arg);
+	public FileParameter(String name) {
+		super(name);
 	}
 
 	/**
@@ -23,4 +22,5 @@ public class FileParameter extends Parameter {
 	public void setArgument(File argument) {
 		this.argument = argument;
 	}
+
 }

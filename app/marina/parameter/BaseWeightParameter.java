@@ -12,32 +12,32 @@ import java.util.List;
  * @author Parsa Hosseini
  * */
 public class BaseWeightParameter extends Parameter {
-	private List<NumericParameter> arguments;
+	private List<DoubleParameter> arguments;
 
 	public BaseWeightParameter(String name) {
 		super(name);
-		this.setArguments(new ArrayList<NumericParameter>());
+		this.setArguments(new ArrayList<DoubleParameter>());
 		this.assignDefaultWeights();
 	}
 	
 	private void assignDefaultWeights() {
-		this.getArguments().add(new NumericParameter("A", 0.25, 0, 1));
-		this.getArguments().add(new NumericParameter("T", 0.25, 0, 1));
-		this.getArguments().add(new NumericParameter("G", 0.25, 0, 1));
-		this.getArguments().add(new NumericParameter("C", 0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter("A", 0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter("T", 0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter("G", 0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter("C", 0.25, 0, 1));
 	}
 
 	/**
 	 * @return the arguments
 	 */
-	public List<NumericParameter> getArguments() {
+	public List<DoubleParameter> getArguments() {
 		return arguments;
 	}
 
 	/**
 	 * @param arguments the arguments to set
 	 */
-	public void setArguments(List<NumericParameter> arguments) {
+	public void setArguments(List<DoubleParameter> arguments) {
 		this.arguments = arguments;
 	}
 

@@ -11,6 +11,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import marina.gui.listener.MenuEventHandler;
 import marina.parameter.ParameterMap;
 
 public class MarinaGUI extends Application {
@@ -69,8 +70,10 @@ public class MarinaGUI extends Application {
 		menuFile.getItems().addAll(itemNew, this.getFASTAMenu(),
 				this.getTFBSMenu(), new SeparatorMenuItem(), itemOptions,
 				new SeparatorMenuItem(), itemExit);
-		itemOptions.setOnAction(new MenuEventHandler());
 		itemOptions.setId("showOptions");
+		itemExit.setId("exit");
+		itemOptions.setOnAction(new MenuEventHandler());
+		itemExit.setOnAction(new MenuEventHandler());
 		return menuFile;
 	}
 	
@@ -130,7 +133,7 @@ public class MarinaGUI extends Application {
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);
 		stage.setHeight(300);
-		stage.setWidth(300);
+		stage.setWidth(350);
 		stage.show();		
 	}
 	

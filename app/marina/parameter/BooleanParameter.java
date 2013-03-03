@@ -18,7 +18,7 @@ public class BooleanParameter extends Parameter {
 	/**
 	 * @param argument the argument to set
 	 */
-	private void setArgument(boolean argument) {
+	public void setArgument(boolean argument) {
 		this.argument = argument;
 	}
 
