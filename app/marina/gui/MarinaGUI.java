@@ -104,6 +104,10 @@ public class MarinaGUI extends Application {
 		Menu fileLoadFASTA = new Menu("Load FASTA");
 		MenuItem itemQuery = new MenuItem("Load query");
 		MenuItem itemBaseline = new MenuItem("Load baseline");
+		itemQuery.setId("loadQuery");
+		itemBaseline.setId("loadBaseline");
+		itemQuery.setOnAction(new MenuEventHandler());
+		itemBaseline.setOnAction(new MenuEventHandler());
 		fileLoadFASTA.getItems().addAll(itemQuery, itemBaseline);
 		return fileLoadFASTA;
 	}
@@ -117,6 +121,10 @@ public class MarinaGUI extends Application {
 		Menu fileLoadTFBS = new Menu("Load TFBSs");
 		MenuItem itemPWMs= new MenuItem("Load PWMs");
 		MenuItem itemMotifs = new MenuItem("Load DNA motifs");
+		itemPWMs.setId("loadPWMs");
+		itemMotifs.setId("loadMotifs");
+		itemPWMs.setOnAction(new MenuEventHandler());
+		itemMotifs.setOnAction(new MenuEventHandler());
 		fileLoadTFBS.getItems().addAll(itemPWMs, itemMotifs);
 		return fileLoadTFBS;
 	}
@@ -141,14 +149,12 @@ public class MarinaGUI extends Application {
 		Application.launch(args);
 	}
 
-
 	/**
 	 * @return the layout
 	 */
 	public BorderPane getLayout() {
 		return layout;
 	}
-
 
 	/**
 	 * @param layout the layout to set

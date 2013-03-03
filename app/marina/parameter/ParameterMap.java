@@ -44,5 +44,22 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 			this.put(p.getName(), p);
 		}
 	}
-
+	
+	/**
+	 * Determines if all the weight-sums equal to one (1). If this sum does
+	 * not equal to one, the user cannot progress. By default, all four
+	 * weights are assigned a weight of 0.25 each.
+	 * @return boolean whether all four weights sum to 1.0.
+	 * */
+	public boolean hasValidWeights() {
+		BaseWeightParameter w = (BaseWeightParameter)this.get("Weights");
+		double sum = 0;
+		for (DoubleParameter np: w.getArguments()) {
+			sum += np.getArgument();
+		}
+		if (sum == 1.0) {
+			return true;
+		}
+		return false;
+	}
 }

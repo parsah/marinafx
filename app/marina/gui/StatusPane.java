@@ -37,6 +37,14 @@ public class StatusPane extends AnchorPane {
 	}
 	
 	/**
+	 * Sets text to the message-bar designed to inform the user as-to the
+	 * current task in operation.
+	 * */
+	public void setText(String text) {
+		this.getStatus().setText(text);
+	}
+	
+	/**
 	 * @return the progressBar
 	 */
 	public ProgressBar getProgressBar() {
@@ -51,7 +59,7 @@ public class StatusPane extends AnchorPane {
 	/**
 	 * @return the status
 	 */
-	public Label getStatus() {
+	private Label getStatus() {
 		return status;
 	}
 	/**

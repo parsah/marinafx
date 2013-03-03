@@ -4,12 +4,15 @@ import java.math.BigDecimal;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -25,6 +28,13 @@ import marina.parameter.IntegerParameter;
 import marina.parameter.Parameter;
 import marina.parameter.ParameterMap;
 
+/**
+ * Represents the stage for-which the user can tweak parameters which will
+ * be used throughout runtime. These parameters pertain to Laplace 
+ * correction, PWM cutoff probability, support and count thresholds, amongst
+ * others.
+ * @author Parsa Hosseini
+ * */
 public class ParameterStage extends Stage {
 	private GridPane layout;
 
@@ -58,7 +68,7 @@ public class ParameterStage extends Stage {
 	private void positionAdjustments() {
 		ParameterMap paramSet = MarinaGUI.get().getParameterMap();
 		int rowNum = 0; // for each parameter, add it to the layout
-		for (String name: paramSet.keySet()) {
+		for (String name: paramSet.keySet()) { // create widgets per parameter
 			Parameter p = paramSet.get(name);
 			if (p instanceof DoubleParameter) { // create sliders
 				DoubleParameter np = (DoubleParameter)p;
@@ -107,7 +117,7 @@ public class ParameterStage extends Stage {
 		});
 		return field;
 	}
-	
+
 	/**
 	 * Helper-function to create an arbitrary slider given its minimum and
 	 * maximum range.
@@ -132,9 +142,16 @@ public class ParameterStage extends Stage {
 	 * scenario is especially true in the case of IPF standardization.
 	 * @return CheckBox object.
 	 * */
-	private CheckBox createCheckBox(BooleanParameter p) {
+	private CheckBox createCheckBox(final BooleanParameter p) {
 		CheckBox cb = new CheckBox(p.getName());
 		cb.setId(p.getName());
+		cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> repr,
+					Boolean past, Boolean now) {
+				p.setArgument(now); // update argument to current state
+			}
+		});
 		return cb;
 	}
 
@@ -162,11 +179,22 @@ public class ParameterStage extends Stage {
 	 * @return HBox button layout.
 	 * */
 	private HBox createButtons() {
-		Button ok = new Button("OK");
-		Button help = new Button("Help");
+		final Button ok = new Button("OK");
+		ok.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				if (MarinaGUI.get().getParameterMap().hasValidWeights()) {
+					hide();
+				}
+				else {
+					ok.setTooltip(new Tooltip("All weights must sum to 1.0"));
+					ok.setStyle("-fx-border-color: red; -fx-border-width:3");
+				}
+			}
+		});
 		HBox layout = new HBox(20);
 		layout.setAlignment(Pos.CENTER);
-		layout.getChildren().addAll(ok, help);
+		layout.getChildren().addAll(ok);
 		return layout;
 	}
 

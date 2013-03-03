@@ -29,6 +29,18 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 			else if (menuItem.getId().equals("exit")) {
 				Platform.exit();
 			}
+			else if (menuItem.getId().equals("loadQuery")) {
+				// TODO handle query-loading functionality
+			}
+			else if (menuItem.getId().equals("loadBaseline")) {
+				// TODO handle baseline-loading functionality
+			}
+			else if (menuItem.getId().equals("loadPWMs")) {
+				// TODO handle baseline-loading functionality
+			}
+			else if (menuItem.getId().equals("loadMotifs")) {
+				// TODO handle baseline-loading functionality
+			}
 		}
 	}
 }
