@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import marina.factory.DNAMotifParser;
+import marina.factory.PWMParser;
 import marina.group.Group;
 
 /**
@@ -18,12 +20,16 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	private static final long serialVersionUID = 1L;
 	private Group queryGroup;
 	private Group baselineGroup;
+	private DNAMotifParser motifParser;
+	private PWMParser pwmParser;
 	
 	public ParameterMap() {
 		super();
 		this.mapDefaultArguments();
 		this.setBaseline(null);
 		this.setQuery(null);
+		this.setMotifParser(null);
+		this.setPWMParser(null);
 	}
 	
 	/**
@@ -77,13 +83,11 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	 * @return boolean whether execution can go on.
 	 * */
 	public boolean canRun() {
-		if ((this.getBaseline() != null && this.getQuery() != null)
-				&& ()) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		boolean hasParser = (this.getMotifParser() != null || 
+				this.getPWMParser() != null );
+		boolean hasFASTA = (this.getQuery() != null && 
+				this.getBaseline() != null);
+		return hasFASTA && hasParser; // both clauses must be met to continue
 	}
 
 	/**
@@ -93,8 +97,6 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 		return queryGroup;
 	}
 	
-
-
 	/**
 	 * @param queryGroup the queryGroup to set
 	 */
@@ -114,5 +116,33 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	 */
 	public void setBaseline(Group baselineGroup) {
 		this.baselineGroup = baselineGroup;
+	}
+
+	/**
+	 * @return the motifParser
+	 */
+	public DNAMotifParser getMotifParser() {
+		return motifParser;
+	}
+
+	/**
+	 * @param motifParser the motifParser to set
+	 */
+	public void setMotifParser(DNAMotifParser motifParser) {
+		this.motifParser = motifParser;
+	}
+
+	/**
+	 * @return the pwmParser
+	 */
+	public PWMParser getPWMParser() {
+		return pwmParser;
+	}
+
+	/**
+	 * @param pwmParser the pwmParser to set
+	 */
+	public void setPWMParser(PWMParser pwmParser) {
+		this.pwmParser = pwmParser;
 	}
 }

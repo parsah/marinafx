@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import marina.bindingsite.LinearDNAMotif;
 import marina.gui.MarinaGUI;
@@ -21,13 +23,16 @@ import marina.gui.MarinaGUI;
  * @see LinearDNAMotif
  * */
 public class DNAMotifParser extends Parser {
+	private List<LinearDNAMotif> linearMotifs;
 
 	public DNAMotifParser(File file) {
 		super(file);
+		this.setLinearMotifs(new ArrayList<LinearDNAMotif>());
 	}
 
 	public DNAMotifParser() {
 		super(null);
+		this.setLinearMotifs(new ArrayList<LinearDNAMotif>());
 	}
 
 	@Override
@@ -43,18 +48,32 @@ public class DNAMotifParser extends Parser {
 					throw new IndexOutOfBoundsException(msg);
 				}
 				else {
-					for (int i = 0; i < columns.length; i++) {
-						// TODO process each column
-					}
+					LinearDNAMotif m = new LinearDNAMotif(columns);
+					this.getLinearMotifs().add(m);
 				}
 			}
 		}
-		MarinaGUI.get().getStatusBar().setText("TFBSs parsed successfully.");
+		String msg = this.getLinearMotifs().size() + " TFBSs parsed.";
+		MarinaGUI.get().getStatusBar().setText(msg);
 	}
 
 	@Override
 	public void filter(int minLen) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * @return the motifs
+	 */
+	public List<LinearDNAMotif> getLinearMotifs() {
+		return linearMotifs;
+	}
+
+	/**
+	 * @param motifs the motifs to set
+	 */
+	public void setLinearMotifs(List<LinearDNAMotif> motifs) {
+		this.linearMotifs = motifs;
 	}
 }

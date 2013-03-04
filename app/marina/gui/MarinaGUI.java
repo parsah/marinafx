@@ -156,8 +156,8 @@ public class MarinaGUI extends Application {
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);
 		stage.setHeight(300);
-		stage.setWidth(500);
-		stage.show();		
+		stage.setWidth(520);
+		stage.show();
 	}
 	
 	public static void main(String args[]) {
