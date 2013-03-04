@@ -14,6 +14,10 @@ import javafx.stage.FileChooser;
 public abstract class Parser {
 	private File file;
 	
+	public Parser() {
+		this.setFile(null);
+	}
+	
 	public Parser(File file) {
 		this.setFile(file);
 	}
@@ -38,16 +42,39 @@ public abstract class Parser {
 	 * enables selection of input files which will ultimately be specified
 	 * as input for the various TFBS models.
 	 * */
-	public void showTFBSPrompt(String title) {
+	public void showNoFilterPrompt() {
 		FileChooser chooser = new FileChooser();
-		chooser.setTitle(title);
 		chooser.setInitialDirectory(new File("./demo/"));
 		File file = chooser.showOpenDialog(null);
 		if (file != null) {
 			this.setFile(file);
 		}
 		else {
-			throw new NullPointerException("No TFBS file selected.");
+			throw new NullPointerException("No file selected.");
+		}
+	}
+	
+	/**
+	 * Prompt the user to input a FASTA file. Several file-filters exist
+	 * which enable only files to be selected which end in a valid filename
+	 * extension. Even if a file is in FASTA format but its extensions are 
+	 * not, this specific file will therefore not be selected to be displayed.
+	 * */
+	public void showFASTAFilterPrompt() {
+		FileChooser.ExtensionFilter fastaFilter = 
+				new FileChooser.ExtensionFilter("FASTA (*.fasta)", "*.fasta");
+		FileChooser.ExtensionFilter faFilter = 
+				new FileChooser.ExtensionFilter("FASTA (*.fa)", "*.fa");
+		FileChooser chooser = new FileChooser();
+		chooser.setInitialDirectory(new File("./demo/"));
+		chooser.getExtensionFilters().add(fastaFilter);
+		chooser.getExtensionFilters().add(faFilter);
+		File file = chooser.showOpenDialog(null);
+		if (file != null) {
+			this.setFile(file);
+		}
+		else {
+			throw new NullPointerException("No FASTA file selected.");
 		}
 	}
 	

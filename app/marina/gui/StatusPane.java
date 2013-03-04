@@ -35,7 +35,7 @@ public class StatusPane extends AnchorPane {
 	 * */
 	public void resetStatus() {
 		this.getProgressBar().setPrefWidth(150);
-		this.setText("Ready");
+		this.setText("Ready.");
 	}
 	
 	/**

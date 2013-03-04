@@ -14,7 +14,7 @@ public abstract class DNASequence {
 	private String sequence;
 	
 	public DNASequence() {
-		this.setSequence("");
+		this.setSequence(null);
 	}
 
 	/**
@@ -27,10 +27,14 @@ public abstract class DNASequence {
 	/**
 	 * @param sequence the sequence to set
 	 */
-	private void setSequence(String sequence) {
+	public void setSequence(String sequence) {
 		this.sequence = sequence;
 	}
 	
+	/**
+	 * Trivial function to get the sequence length.
+	 * @return integer representing sequence length.
+	 * */
 	public int getLength() {
 		return this.getSequence().length();
 	}

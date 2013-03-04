@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import marina.group.Group;
+
 /**
  * Contains as well as runtime arguments used for analysis throughout Marina.
  * Each parameter is referenced by a string which points to a Parameter object.
@@ -14,10 +16,14 @@ import java.util.List;
  * */
 public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	private static final long serialVersionUID = 1L;
+	private Group queryGroup;
+	private Group baselineGroup;
 	
 	public ParameterMap() {
 		super();
 		this.mapDefaultArguments();
+		this.setBaseline(null);
+		this.setQuery(null);
 	}
 	
 	/**
@@ -39,7 +45,7 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 		BaseWeightParameter weights = new BaseWeightParameter("Weights");
 		List<Parameter> paramSet = new ArrayList<Parameter>();
 		Collections.addAll(paramSet, supp, diff, len, count, pwm, lapl, 
-				pVal, worker, ipf, weights); // add parameters to global set
+				pVal, worker, ipf, weights); // add parameters to global-set
 		for (Parameter p: paramSet) {
 			this.put(p.getName(), p);
 		}
@@ -61,5 +67,33 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * @return the queryGroup
+	 */
+	public Group getQuery() {
+		return queryGroup;
+	}
+
+	/**
+	 * @param queryGroup the queryGroup to set
+	 */
+	public void setQuery(Group queryGroup) {
+		this.queryGroup = queryGroup;
+	}
+
+	/**
+	 * @return the baselineGroup
+	 */
+	public Group getBaseline() {
+		return baselineGroup;
+	}
+
+	/**
+	 * @param baselineGroup the baselineGroup to set
+	 */
+	public void setBaseline(Group baselineGroup) {
+		this.baselineGroup = baselineGroup;
 	}
 }

@@ -39,7 +39,7 @@ public class DNAMotifParser extends Parser {
 			while ((line = reader.readLine()) != null) {
 				String[] columns = line.trim().split("\t");
 				if (columns.length != 3) {
-					String msg = "DNA motifs must be 3 tab-delimited columns.";
+					String msg = "Motifs must have 3 tab-delimited columns.";
 					throw new IndexOutOfBoundsException(msg);
 				}
 				else {
@@ -49,7 +49,7 @@ public class DNAMotifParser extends Parser {
 				}
 			}
 		}
-		MarinaGUI.get().getStatusBar().setText("TFBSs parsed successfully");
+		MarinaGUI.get().getStatusBar().setText("TFBSs parsed successfully.");
 	}
 
 	@Override

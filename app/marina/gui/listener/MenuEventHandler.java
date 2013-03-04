@@ -7,7 +7,9 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import marina.factory.DNAMotifParser;
+import marina.factory.FASTAParser;
 import marina.factory.PWMParser;
+import marina.group.Group;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
@@ -36,19 +38,27 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					Platform.exit();
 				}
 				else if (menuItem.getId().equals("loadQuery")) {
-					// TODO handle query-loading functionality
+					FASTAParser parser = new FASTAParser();
+					parser.showFASTAFilterPrompt();
+					parser.parse(); // set parser to the parameter-set
+					Group queryGroup = new Group(parser);
+					MarinaGUI.get().getParameterMap().setQuery(queryGroup);
 				}
 				else if (menuItem.getId().equals("loadBaseline")) {
-					// TODO handle baseline-loading functionality
+					FASTAParser parser = new FASTAParser();
+					parser.showFASTAFilterPrompt();
+					parser.parse(); // set parser to the parameter-set
+					Group controlGroup = new Group(parser);
+					MarinaGUI.get().getParameterMap().setBaseline(controlGroup);
 				}
 				else if (menuItem.getId().equals("loadPWMs")) {
 					PWMParser parser = new PWMParser();
-					parser.showTFBSPrompt("Select a file containing PWMs");
+					parser.showNoFilterPrompt();
 					parser.parse(); // TODO implement PWM parsing
 				}
 				else if (menuItem.getId().equals("loadMotifs")) {
 					DNAMotifParser parser = new DNAMotifParser();
-					parser.showTFBSPrompt("Select a DNA motifs file");
+					parser.showNoFilterPrompt();
 					parser.parse();
 				}
 			}

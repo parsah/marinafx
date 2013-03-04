@@ -5,8 +5,9 @@ import java.io.File;
 public class FileParameter extends Parameter {
 	private File argument;
 	
-	public FileParameter(String name) {
+	public FileParameter(String name, File argument) {
 		super(name);
+		this.setArgument(argument);
 	}
 
 	/**

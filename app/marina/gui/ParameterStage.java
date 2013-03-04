@@ -73,14 +73,12 @@ public class ParameterStage extends Stage {
 			if (p instanceof DoubleParameter) { // create sliders
 				DoubleParameter np = (DoubleParameter)p;
 				BigDecimalField slider = this.createDoubleSlider(np);
-				slider.setSkin(new BigDecimalFieldSkin(slider));
 				this.getLayout().add(slider, 1, rowNum);
 				this.getLayout().add(new Label(p.getName()), 0, rowNum);
 			}
 			if (p instanceof IntegerParameter) { // create sliders
 				IntegerParameter ip = (IntegerParameter)p;
 				ListSpinner<Integer> slider = this.createIntegerSlider(ip);
-				slider.setSkin(new ListSpinnerCaspianSkin<>(slider));
 				this.getLayout().add(slider, 1, rowNum);
 				this.getLayout().add(new Label(p.getName()), 0, rowNum);
 			}
@@ -104,6 +102,7 @@ public class ParameterStage extends Stage {
 	 * */
 	private BigDecimalField createDoubleSlider(final DoubleParameter p) {
 		BigDecimalField field = new BigDecimalField();
+		field.setSkin(new BigDecimalFieldSkin(field));
 		field.setMinValue(new BigDecimal(p.getMinValue()));
 		field.setMaxValue(new BigDecimal(p.getMaxValue()));
 		field.setNumber(new BigDecimal(p.getArgument()));
@@ -127,6 +126,7 @@ public class ParameterStage extends Stage {
 		ListSpinner<Integer> spinner = new ListSpinner<Integer>(
 				p.getMinValue(), p.getMaxValue());
 		spinner.setValue(p.getArgument());
+		spinner.setSkin(new ListSpinnerCaspianSkin<>(spinner));
 		spinner.valueProperty().addListener(new ChangeListener<Integer>() {
 			@Override
 			public void changed(ObservableValue<? extends Integer> repr,

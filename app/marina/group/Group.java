@@ -1,8 +1,6 @@
 package marina.group;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import marina.factory.FASTAParser;
 
 /**
  * A Group is a collection of FASTA sequences, i.e. promoter sequences.
@@ -14,21 +12,10 @@ import java.util.List;
  * @author Parsa Hosseini
  * */
 public class Group {
-	private List<FASTASequence> sequences;
-	private File file; // input filename to represent the group.
+	private FASTAParser parser;
 	
-	
-	public Group(File file) {
-		this.setSequences(new ArrayList<FASTASequence>());
-		this.setFile(file);
-	}
-	
-	/**
-	 * Parse a user-provided FASTA file since each group is essentially a
-	 * collection of these data-types.
-	 * */
-	public void parseFASTA() {
-		
+	public Group(FASTAParser parser) {
+		this.setParser(parser);
 	}
 	
 	/**
@@ -36,42 +23,28 @@ public class Group {
 	 * @return string representing base-name of file.
 	 * */
 	public String getBasename() {
-		return this.getFile().getName();
+		return this.getParser().getFile().getName();
 	}
 
-	/**
-	 * @return the sequences
-	 */
-	public List<FASTASequence> getSequences() {
-		return sequences;
-	}
-
-	/**
-	 * @param sequences the sequences to set
-	 */
-	private void setSequences(List<FASTASequence> sequences) {
-		this.sequences = sequences;
-	}
-	
 	/**
 	 * Return the number of sequences in the group; its size
 	 * @return group size.
 	 * */
 	public int getSize() {
-		return this.getSequences().size();
+		return this.getParser().getSequences().size();
 	}
 
 	/**
-	 * @return the file
+	 * @return the parser
 	 */
-	public File getFile() {
-		return file;
+	public FASTAParser getParser() {
+		return parser;
 	}
 
 	/**
-	 * @param file the file to set
+	 * @param parser the parser to set
 	 */
-	private void setFile(File file) {
-		this.file = file;
+	private void setParser(FASTAParser parser) {
+		this.parser = parser;
 	}
 }
