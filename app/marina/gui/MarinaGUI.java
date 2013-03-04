@@ -30,6 +30,16 @@ public class MarinaGUI extends Application {
 	}
 	
 	/**
+	 * Reset the current state of the GUI and make it so that a fresh
+	 * analysis can be executed. Parameters set from the prior analysis
+	 * are also removed and reverted back to their original value.
+	 * */
+	public void reset() {
+		MarinaGUI.get().getStatusBar().reset();
+		MarinaGUI.get().setParameterMap(new ParameterMap());
+	}
+	
+	/**
 	 * Helpful method to take a string and generate a corresponding header.
 	 * This header is bold (by default) and done-so to enable easy separation
 	
@@ -66,12 +76,17 @@ public class MarinaGUI extends Application {
 		Menu menuFile = new Menu("File");
 		MenuItem itemNew = new MenuItem("New");
 		MenuItem itemOptions = new MenuItem("Options");
+		MenuItem itemRun = new MenuItem("Run");
 		MenuItem itemExit = new MenuItem("Exit");
 		menuFile.getItems().addAll(itemNew, this.getFASTAMenu(),
 				this.getTFBSMenu(), new SeparatorMenuItem(), itemOptions,
-				new SeparatorMenuItem(), itemExit);
+				itemRun, new SeparatorMenuItem(), itemExit);
 		itemOptions.setId("showOptions");
 		itemExit.setId("exit");
+		itemRun.setId("run");
+		itemNew.setId("new");
+		itemNew.setOnAction(new MenuEventHandler());
+		itemRun.setOnAction(new MenuEventHandler());
 		itemOptions.setOnAction(new MenuEventHandler());
 		itemExit.setOnAction(new MenuEventHandler());
 		return menuFile;
@@ -134,9 +149,9 @@ public class MarinaGUI extends Application {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
 		MarinaGUI.get().setStatusBar(new StatusPane());
-		MarinaGUI.get().setParameterMap(new ParameterMap());
 		MarinaGUI.get().placeMenuBar();
 		MarinaGUI.get().placeStatusBar();
+		MarinaGUI.get().reset();
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);

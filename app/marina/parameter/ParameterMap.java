@@ -68,6 +68,23 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 		}
 		return false;
 	}
+	
+	/**
+	 * Determine if enough arguments are provided to enable subsequent
+	 * execution. In order to make this possible, 2x FASTA files must
+	 * be provided (1x for the baseline, 1x for the query) as well as
+	 * either a DNA motifs and/or PWMs.
+	 * @return boolean whether execution can go on.
+	 * */
+	public boolean canRun() {
+		if ((this.getBaseline() != null && this.getQuery() != null)
+				&& ()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 
 	/**
 	 * @return the queryGroup
@@ -75,6 +92,8 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	public Group getQuery() {
 		return queryGroup;
 	}
+	
+
 
 	/**
 	 * @param queryGroup the queryGroup to set

@@ -37,6 +37,9 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				else if (menuItem.getId().equals("exit")) {
 					Platform.exit();
 				}
+				else if (menuItem.getId().equals("new")) {
+					MarinaGUI.get().reset();
+				}
 				else if (menuItem.getId().equals("loadQuery")) {
 					FASTAParser parser = new FASTAParser();
 					parser.showFASTAFilterPrompt();
@@ -60,6 +63,16 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					DNAMotifParser parser = new DNAMotifParser();
 					parser.showNoFilterPrompt();
 					parser.parse();
+				}
+				else if (menuItem.getId().equals("run")) {
+					if (MarinaGUI.get().getParameterMap().canRun() == true) {
+						System.out.println(true);
+					}
+					else {
+						String msg = "2x FASTA files & DNA motifs " +
+								"and/or PWMs needed";
+						throw new IOException(msg);
+					}
 				}
 			}
 		} catch (IOException | IndexOutOfBoundsException | 

@@ -25,15 +25,13 @@ public class StatusPane extends AnchorPane {
 		this.getChildren().addAll(this.getStatus(), this.getProgressBar());
 		AnchorPane.setLeftAnchor(this.getStatus(), 10.0);
 		AnchorPane.setRightAnchor(this.getProgressBar(), 10.0);
-		this.resetStatus();
-		
 	}
 	
 	/**
 	 * Reset both the progress bar back to zero and set the status-message to
 	 * a default value.
 	 * */
-	public void resetStatus() {
+	public void reset() {
 		this.getProgressBar().setPrefWidth(150);
 		this.setText("Ready.");
 	}
