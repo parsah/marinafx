@@ -2,10 +2,13 @@ package marina.factory;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import marina.group.Group;
 import marina.gui.MarinaGUI;
 
-public abstract class AbstractAlignmentFactory extends Task<Void> {
+public abstract class AbstractAlignmentFactory 
+extends Task<Void> implements EventHandler<WorkerStateEvent> {
 	
 	public Group[] getGroups() {
 		Group query = MarinaGUI.get().getParameterMap().getQuery();
