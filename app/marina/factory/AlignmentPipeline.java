@@ -51,7 +51,7 @@ public final class AlignmentPipeline {
 		this.parameters = parameters;
 	}
 	
-	public static void execute(Task<Void> task) {
+	public static void runTask(Task<Void> task) {
 		Thread t = new Thread(task);
 		t.setDaemon(true);
 		t.start();
@@ -60,7 +60,7 @@ public final class AlignmentPipeline {
 	public void perform() {
 		if (this.useMotifsOnly()) {
 			MotifAlignmentFactory factory = new MotifAlignmentFactory();
-			AlignmentPipeline.execute(factory);
+			AlignmentPipeline.runTask(factory);
 		}
 		else if (this.usePWMOnly()) {
 			// TODO implement background thread to map only PWMs

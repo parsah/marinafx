@@ -57,7 +57,7 @@ public class MarinaGUI extends Application {
 	 * */
 	private void placeMenuBar() {
 		MenuBar menuBar = new MenuBar();
-		menuBar.getMenus().addAll(this.getFileMenu(), this.getHelpMenu());
+		menuBar.getMenus().addAll(this.fileMenu(), this.helpMenu());
 		MarinaGUI.get().getLayout().setTop(menuBar);
 	}
 	
@@ -72,21 +72,18 @@ public class MarinaGUI extends Application {
 	 * Get the File menu which encapsulates runtime capabilities.
 	 * @return Menu item reference.
 	 * */
-	private Menu getFileMenu() {
+	private Menu fileMenu() {
 		Menu menuFile = new Menu("File");
 		MenuItem itemNew = new MenuItem("New");
 		MenuItem itemOptions = new MenuItem("Options");
-		MenuItem itemRun = new MenuItem("Run");
 		MenuItem itemExit = new MenuItem("Exit");
-		menuFile.getItems().addAll(itemNew, this.getFASTAMenu(),
+		menuFile.getItems().addAll(itemNew, this.fastaMenu(),
 				this.getTFBSMenu(), new SeparatorMenuItem(), itemOptions,
-				itemRun, new SeparatorMenuItem(), itemExit);
+				this.runMenu(), new SeparatorMenuItem(), itemExit);
 		itemOptions.setId("showOptions");
 		itemExit.setId("exit");
-		itemRun.setId("run");
 		itemNew.setId("new");
 		itemNew.setOnAction(new MenuEventHandler());
-		itemRun.setOnAction(new MenuEventHandler());
 		itemOptions.setOnAction(new MenuEventHandler());
 		itemExit.setOnAction(new MenuEventHandler());
 		return menuFile;
@@ -98,7 +95,7 @@ public class MarinaGUI extends Application {
 	 * DNA motifs or PWMs.
 	 * @return Menu item referencing the Help-menu capabilities.
 	 * */
-	private Menu getHelpMenu() {
+	private Menu helpMenu() {
 		Menu menuHelp = new Menu("Help");
 		MenuItem itemSchema = new MenuItem("TFBS Schemas");
 		itemSchema.setOnAction(new MenuEventHandler());
@@ -115,7 +112,7 @@ public class MarinaGUI extends Application {
 	 * one another.
 	 * @return Menu referencing input of FASTA files.
 	 * */
-	private Menu getFASTAMenu() {
+	private Menu fastaMenu() {
 		Menu fileLoadFASTA = new Menu("Load FASTA");
 		MenuItem itemQuery = new MenuItem("Load query");
 		MenuItem itemBaseline = new MenuItem("Load baseline");
@@ -125,6 +122,24 @@ public class MarinaGUI extends Application {
 		itemBaseline.setOnAction(new MenuEventHandler());
 		fileLoadFASTA.getItems().addAll(itemQuery, itemBaseline);
 		return fileLoadFASTA;
+	}
+	
+	/**
+	 * The Run menu provides the bulk of all analytical capabilities. Using
+	 * these functions, the user can execute group-alignment given two Groups
+	 * and from these, determine their magnitude of over-representation.
+	 * @return Menu referencing the Run menu.
+	 * */
+	private Menu runMenu() {
+		Menu fileRunMenu = new Menu("Run");
+		MenuItem itemRun = new MenuItem("Align");
+		MenuItem itemQuantify = new MenuItem("Quantify");
+		itemRun.setId("run");
+		itemQuantify.setId("quantify");
+		itemRun.setOnAction(new MenuEventHandler());
+		itemQuantify.setOnAction(new MenuEventHandler());
+		fileRunMenu.getItems().addAll(itemRun, itemQuantify);
+		return fileRunMenu;
 	}
 	
 	/**

@@ -8,17 +8,22 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	private DNAMotifParser parser;
 	
 	public MotifAlignmentFactory() {
-		this.setBaseline(MarinaGUI.get().getParameterMap().getBaseline());
-		this.setQuery(MarinaGUI.get().getParameterMap().getQuery());
 		this.setParser(MarinaGUI.get().getParameterMap().getMotifParser());
 	}
 	
 	@Override
 	protected Void call() throws Exception {
-		for(FASTASequence seq: this.getQuery().getParser().getSequences()) {
-			Thread.sleep(500);
-			System.out.println(seq);
+		Group[] groups = this.getGroups();
+		for (int i = 0; i < groups.length; i++) {
+			Group group = groups[i];
+			for (int j = 0; j < group.getSize(); j++) {
+				FASTASequence seq = group.getParser().getSequences().get(j);
+				Thread.sleep(10);
+				this.updateGUI(group);
+				this.updateGUI(j, group.getSize());
+			}
 		}
+		this.updateTaskDone("Boyer-Moore-Horspool alignment successful.");
 		return null;
 	}
 
@@ -34,33 +39,5 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	 */
 	private void setParser(DNAMotifParser parser) {
 		this.parser = parser;
-	}
-
-	/**
-	 * @return the query
-	 */
-	public Group getQuery() {
-		return query;
-	}
-
-	/**
-	 * @param query the query to set
-	 */
-	private void setQuery(Group query) {
-		this.query = query;
-	}
-
-	/**
-	 * @return the baseline
-	 */
-	public Group getBaseline() {
-		return baseline;
-	}
-
-	/**
-	 * @param baseline the baseline to set
-	 */
-	private void setBaseline(Group baseline) {
-		this.baseline = baseline;
 	}
 }

@@ -1,5 +1,6 @@
 package marina.gui.listener;
 
+import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -67,6 +68,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					MarinaGUI.get().getParameterMap().setMotifParser(parser);
 				}
 				else if (menuItem.getId().equals("run")) {
+					this.loadDemoFiles();
 					if (MarinaGUI.get().getParameterMap().canRun() == true) {
 						AlignmentPipeline factory = new AlignmentPipeline();
 						factory.perform();
@@ -83,4 +85,24 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());
 		}
 	}
+	
+	/**
+	 * Solely for demonstration purposes; loads the demo files and saves time
+	 * explicitly loading them at runtime.
+	 * */
+	private void loadDemoFiles() throws IOException {
+		FASTAParser p = new FASTAParser(new File("./demo/most_induced.fasta"));
+		p.parse();
+		Group controlGroup = new Group(p);
+		MarinaGUI.get().getParameterMap().setBaseline(controlGroup);
+		// load demo query
+		FASTAParser j = new FASTAParser(new File("./demo/most_suppressed.fasta"));
+		j.parse();
+		Group queryGroup = new Group(j);
+		MarinaGUI.get().getParameterMap().setQuery(queryGroup);
+		DNAMotifParser parser = new DNAMotifParser(new File("./demo/sample_motifs.txt"));
+		parser.parse();
+		MarinaGUI.get().getParameterMap().setMotifParser(parser);
+	}
+	
 }

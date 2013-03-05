@@ -23,7 +23,7 @@ public class Group {
 	 * @return string representing base-name of file.
 	 * */
 	public String getBasename() {
-		return this.getParser().getFile().getName();
+		return "\""+this.getParser().getFile().getName() + "\"";
 	}
 
 	/**

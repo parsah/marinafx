@@ -38,6 +38,14 @@ public class StatusPane extends AnchorPane {
 	}
 	
 	/**
+	 * Set the progress-bar value
+	 * @param value A fraction with maximum value being 1.0.
+	 * */
+	public void setProgressValue(double value) {
+		this.getProgressBar().setProgress(value);
+	}
+	
+	/**
 	 * Sets text to the message-bar designed to inform the user as-to the
 	 * current task in operation.
 	 * */
@@ -54,7 +62,7 @@ public class StatusPane extends AnchorPane {
 	/**
 	 * @param progressBar the progressBar to set
 	 */
-	private void setProgressBar(ProgressBar progressBar) {
+	public void setProgressBar(ProgressBar progressBar) {
 		this.progressBar = progressBar;
 	}
 	/**
