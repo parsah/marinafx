@@ -21,7 +21,8 @@ public class StatusPane extends AnchorPane {
 	 * */
 	public StatusPane() {
 		this.setStatus(new Label());
-		this.setProgressBar(new ProgressBar(0)); // set to 0%
+		this.setProgressBar(new ProgressBar(0.01)); // set to 0%
+		this.getProgressBar().setPrefHeight(20);
 		this.getChildren().addAll(this.getStatus(), this.getProgressBar());
 		AnchorPane.setLeftAnchor(this.getStatus(), 10.0);
 		AnchorPane.setRightAnchor(this.getProgressBar(), 10.0);

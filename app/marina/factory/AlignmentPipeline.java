@@ -1,5 +1,6 @@
 package marina.factory;
 
+import javafx.concurrent.Task;
 import marina.gui.MarinaGUI;
 import marina.parameter.ParameterMap;
 
@@ -13,24 +14,9 @@ import marina.parameter.ParameterMap;
  * */
 public final class AlignmentPipeline {
 	private ParameterMap parameters;
-	
+
 	public AlignmentPipeline() {
 		this.setParameters(MarinaGUI.get().getParameterMap());
-	}
-	
-	/**
-	 * Given the type of TFBS models, run the respective alignment.
-	 * */
-	public void performAlignment() {
-		if (this.useMotifsOnly()) {
-			// TODO implement background thread to map only DNA motifs
-		}
-		else if (this.usePWMOnly()) {
-			// TODO implement background thread to map only PWMs
-		}
-		else {
-			// TODO implement capability to run both alignment methods
-		}
 	}
 
 	/**
@@ -41,7 +27,7 @@ public final class AlignmentPipeline {
 		return (this.getParameters().getMotifParser() != null &&
 				this.getParameters().getPWMParser() == null);
 	}
-	
+
 	/**
 	 * Determine whether only PWMs will be aligned and not DNA motifs.
 	 * @return boolean whether only PWMs will be run.
@@ -50,7 +36,7 @@ public final class AlignmentPipeline {
 		return (this.getParameters().getMotifParser() == null &&
 				this.getParameters().getPWMParser() != null);
 	}
-	
+
 	/**
 	 * @return the parameters
 	 */
@@ -63,6 +49,25 @@ public final class AlignmentPipeline {
 	 */
 	public void setParameters(ParameterMap parameters) {
 		this.parameters = parameters;
+	}
+	
+	public static void execute(Task<Void> task) {
+		Thread t = new Thread(task);
+		t.setDaemon(true);
+		t.start();
+	}
+
+	public void perform() {
+		if (this.useMotifsOnly()) {
+			MotifAlignmentFactory factory = new MotifAlignmentFactory();
+			AlignmentPipeline.execute(factory);
+		}
+		else if (this.usePWMOnly()) {
+			// TODO implement background thread to map only PWMs
+		}
+		else {
+			// TODO implement capability to run both alignment methods
+		}
 	}
 
 }

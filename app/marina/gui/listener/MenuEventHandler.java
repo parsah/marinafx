@@ -69,7 +69,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				else if (menuItem.getId().equals("run")) {
 					if (MarinaGUI.get().getParameterMap().canRun() == true) {
 						AlignmentPipeline factory = new AlignmentPipeline();
-						factory.performAlignment(); // hand-off to algorithm.
+						factory.perform();
 					}
 					else {
 						String msg = "2x FASTA files & DNA motifs " +
