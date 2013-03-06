@@ -58,6 +58,14 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	}
 	
 	/**
+	 * Retrieves both the groups as a list and not as a singular entity.
+	 * @return list of Group objects.
+	 * */
+	public Group[] getGroups() {
+		return new Group[]{this.getQuery(), this.getBaseline()};
+	}
+	
+	/**
 	 * Determines if all the weight-sums equal to one (1). If this sum does
 	 * not equal to one, the user cannot progress. By default, all four
 	 * weights are assigned a weight of 0.25 each.

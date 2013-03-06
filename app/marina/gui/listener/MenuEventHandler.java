@@ -7,7 +7,8 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
-import marina.factory.AlignmentPipeline;
+import marina.factory.AlignmentAction;
+import marina.factory.AlignmentTaskListener;
 import marina.factory.DNAMotifParser;
 import marina.factory.FASTAParser;
 import marina.factory.PWMParser;
@@ -70,8 +71,10 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				else if (menuItem.getId().equals("run")) {
 					this.loadDemoFiles();
 					if (MarinaGUI.get().getParameterMap().canRun() == true) {
-						AlignmentPipeline factory = new AlignmentPipeline();
-						factory.perform();
+						AlignmentAction factory = new AlignmentAction();
+						factory.setOnSucceeded(new AlignmentTaskListener());
+						factory.setOnFailed(new AlignmentTaskListener());
+						new Thread(factory).start();
 					}
 					else {
 						String msg = "2x FASTA files & DNA motifs " +

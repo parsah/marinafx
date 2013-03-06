@@ -12,11 +12,12 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	
 	public MotifAlignmentFactory() {
 		this.setParser(MarinaGUI.get().getParameterMap().getMotifParser());
+		this.setName("Boyer-Moore-Horspool");
 	}
 	
 	@Override
 	public void align() throws IOException {
-		Group[] groups = this.getGroups();
+		Group[] groups = MarinaGUI.get().getParameterMap().getGroups();
 		for (int i = 0; i < groups.length; i++) { // for each group ...
 			Group group = groups[i];
 			for (int j = 0; j < group.getSize(); j++) { // for each sequence
@@ -26,18 +27,16 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 					BoyerMooreHorspool bmh = new BoyerMooreHorspool();
 					bmh.align(seq, motif);
 				}
-				this.updateGUI(group);
+				this.updateGUI(group.getBasename() + " - " + this.getName());
 				this.updateGUI(j, group.getSize());
 			}
 		}
-		this.updateTaskDone("Boyer-Moore-Horspool alignment complete");
 	}
-	
 	
 	/**
 	 * @return the parser
 	 */
-	public DNAMotifParser getParser() {
+	private DNAMotifParser getParser() {
 		return parser;
 	}
 

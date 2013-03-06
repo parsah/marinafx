@@ -3,24 +3,32 @@ package marina.factory;
 import java.io.IOException;
 
 import javafx.application.Platform;
-import marina.group.Group;
 import marina.gui.MarinaGUI;
 
 public abstract class AbstractAlignmentFactory {
+	public abstract void align() throws IOException;
+	private String name; // long-name to help ID alignment mode.
 	
-	public Group[] getGroups() {
-		Group query = MarinaGUI.get().getParameterMap().getQuery();
-		Group baseline = MarinaGUI.get().getParameterMap().getBaseline();
-		return new Group[]{query, baseline};
+	/**
+	 * @return the alignment name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the alignment name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 	
-	protected void updateGUI(final Group group) {
+	protected void updateGUI(final String text) {
 		Platform.runLater(new Runnable() {
 			
 			@Override
 			public void run() {
-				String msg = "Aligning group " + group.getBasename();
-				MarinaGUI.get().getStatusBar().setText(msg);
+				MarinaGUI.get().getStatusBar().setText(text);
 			}
 		});
 	}
@@ -43,11 +51,5 @@ public abstract class AbstractAlignmentFactory {
 				MarinaGUI.get().getStatusBar().setProgressValue(0.01);
 			}
 		});
-		
 	}
-
-	public void align() throws IOException {
-		// TODO Auto-generated method stub
-	}
-	
 }
