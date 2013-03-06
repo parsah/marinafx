@@ -1,14 +1,12 @@
 package marina.factory;
 
+import java.io.IOException;
+
 import javafx.application.Platform;
-import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import marina.group.Group;
 import marina.gui.MarinaGUI;
 
-public abstract class AbstractAlignmentFactory 
-extends Task<Void> implements EventHandler<WorkerStateEvent> {
+public abstract class AbstractAlignmentFactory {
 	
 	public Group[] getGroups() {
 		Group query = MarinaGUI.get().getParameterMap().getQuery();
@@ -46,6 +44,10 @@ extends Task<Void> implements EventHandler<WorkerStateEvent> {
 			}
 		});
 		
+	}
+
+	public void align() throws IOException {
+		// TODO Auto-generated method stub
 	}
 	
 }

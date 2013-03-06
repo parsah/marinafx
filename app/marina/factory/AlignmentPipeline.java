@@ -1,6 +1,11 @@
 package marina.factory;
 
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
+import marina.bindingsite.BindingSite;
+import marina.bindingsite.LinearDNAMotif;
+import marina.group.FASTASequence;
 import marina.gui.MarinaGUI;
 import marina.parameter.ParameterMap;
 
@@ -23,18 +28,16 @@ public final class AlignmentPipeline {
 	 * Determine whether only DNA motifs will be aligned and not PWMs.
 	 * @return boolean whether only DNA motifs will be run.
 	 * */
-	private boolean useMotifsOnly() {
-		return (this.getParameters().getMotifParser() != null &&
-				this.getParameters().getPWMParser() == null);
+	private boolean isUsingMotifs() {
+		return this.getParameters().getMotifParser() != null;
 	}
 
 	/**
 	 * Determine whether only PWMs will be aligned and not DNA motifs.
 	 * @return boolean whether only PWMs will be run.
 	 * */
-	private boolean usePWMOnly() {
-		return (this.getParameters().getMotifParser() == null &&
-				this.getParameters().getPWMParser() != null);
+	private boolean isUsingPWMs() {
+		return this.getParameters().getPWMParser() != null;
 	}
 
 	/**
@@ -50,24 +53,33 @@ public final class AlignmentPipeline {
 	public void setParameters(ParameterMap parameters) {
 		this.parameters = parameters;
 	}
-	
-	public static void runTask(Task<Void> task) {
-		Thread t = new Thread(task);
-		t.setDaemon(true);
-		t.start();
-	}
 
 	public void perform() {
-		if (this.useMotifsOnly()) {
-			MotifAlignmentFactory factory = new MotifAlignmentFactory();
-			AlignmentPipeline.runTask(factory);
-		}
-		else if (this.usePWMOnly()) {
-			// TODO implement background thread to map only PWMs
-		}
-		else {
-			// TODO implement capability to run both alignment methods
-		}
+		final Task<Void> task = new Task<Void>() {
+			@Override
+			protected Void call() throws Exception {
+				if (isUsingMotifs()) {
+					MotifAlignmentFactory factory = new MotifAlignmentFactory();
+					factory.align();
+				}
+				if (isUsingPWMs()) {
+					// TODO implement PWM alignment factory
+				} // return nothing since Group objects are global.
+				return null;
+			}
+		};
+		task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+			@Override
+			public void handle(WorkerStateEvent event) {
+				for (FASTASequence seq: getParameters().getBaseline().getParser().getSequences()) {
+					System.out.println(seq);
+					 for(BindingSite site: seq.getMappings().keySet()) {
+						 LinearDNAMotif motif = (LinearDNAMotif)site;
+						 System.out.println("\t" + seq + "\t"+ motif.getGene() +" " + motif.getFamily() + " " + seq.getMappings().get(motif));
+					 }
+				}
+			}
+		});
+		new Thread(task).start();
 	}
-
 }

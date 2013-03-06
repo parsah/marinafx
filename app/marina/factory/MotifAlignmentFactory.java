@@ -1,7 +1,7 @@
 package marina.factory;
 
-import javafx.concurrent.WorkerStateEvent;
-import marina.bindingsite.BindingSite;
+import java.io.IOException;
+
 import marina.bindingsite.LinearDNAMotif;
 import marina.group.FASTASequence;
 import marina.group.Group;
@@ -15,7 +15,7 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	}
 	
 	@Override
-	protected Void call() throws Exception {
+	public void align() throws IOException {
 		Group[] groups = this.getGroups();
 		for (int i = 0; i < groups.length; i++) { // for each group ...
 			Group group = groups[i];
@@ -30,22 +30,10 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 				this.updateGUI(j, group.getSize());
 			}
 		}
-		this.setOnSucceeded(this);
-		return null;
+		this.updateTaskDone("Boyer-Moore-Horspool alignment complete");
 	}
 	
-	@Override
-	public void handle(WorkerStateEvent worker) {
-		this.updateTaskDone("Boyer-Moore-Horspool alignment successful.");
-		Group base = MarinaGUI.get().getParameterMap().getBaseline();
-		for (FASTASequence seq: base.getParser().getSequences()) {
-			System.out.println(seq.getHeader());
-			for (BindingSite site: seq.getMappings().keySet()) {
-				System.out.println("\t" + site + "\t" + seq.getMappings().get(site));
-			}
-		}
-	}
-
+	
 	/**
 	 * @return the parser
 	 */

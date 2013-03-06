@@ -12,7 +12,7 @@ import marina.group.DNASequence;
 public class LinearDNAMotif extends DNASequence implements BindingSite {
 	private String family;
 	private String gene;
-	
+
 	/**
 	 * Create a LinearDNAMotif object.
 	 * @param family TF family object.
@@ -24,10 +24,30 @@ public class LinearDNAMotif extends DNASequence implements BindingSite {
 		this.setGene(attribs[1]);
 		this.setSequence(attribs[2]);
 	}
-	
+
 	@Override
 	public boolean sanityCheck() {
 		return false;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if(obj instanceof LinearDNAMotif) { // equality based on gene name
+			LinearDNAMotif other = (LinearDNAMotif)obj;
+			return this.getGene().equals(other.getGene());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() { // Gene name is unique.
+		return this.getGene().hashCode();
 	}
 
 	/**
