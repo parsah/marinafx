@@ -2,7 +2,6 @@ package marina.factory;
 
 import java.io.IOException;
 
-import marina.bindingsite.BindingSite;
 import marina.bindingsite.LinearDNAMotif;
 import marina.group.FASTASequence;
 import marina.group.Group;
@@ -32,14 +31,6 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 				}
 				this.updateGUI(group.getBasename() + " - " + this.getName());
 				this.updateGUI(j, group.getSize());
-			}
-			
-			for (FASTASequence seq: group.getParser().getSequences()) {
-				System.out.println(seq.getHeader());
-				for (BindingSite tfbs: seq.getMappings().keySet()) {
-					LinearDNAMotif motif = (LinearDNAMotif)tfbs;
-					System.out.println("\t" + motif.getGene() +" " + motif.getSequence() +"\t" + seq.getMappings().get(motif).size());
-				}
 			}
 		}
 	}

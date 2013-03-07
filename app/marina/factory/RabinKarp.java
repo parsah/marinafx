@@ -20,7 +20,6 @@ public class RabinKarp {
 	 * */
 	public void align(FASTASequence seq, LinearDNAMotif motif) throws IOException {
 		// create empty array to prevent null-pointer exceptions later-on.
-		seq.getMappings().put(motif, new ArrayList<Integer>());
 		char[] fastaList = seq.getSequence().toCharArray();
 		char[] motifList = motif.getSequence().toCharArray();
 		int motifLen = motifList.length;
@@ -45,6 +44,9 @@ public class RabinKarp {
 			if (patternHash == seqHash) {
 				if (isEqual(fastaList, motifList, offset))  {
 					// motif is found in the sequence; add its offset.
+					if (!seq.getMappings().containsKey(motif)) {
+						seq.getMappings().put(motif, new ArrayList<Integer>());
+					}
 					seq.getMappings().get(motif).add(offset);
 				}
 			}

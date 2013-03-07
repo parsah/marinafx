@@ -23,10 +23,11 @@ public class Group {
 	}
 
 	/**
-	 * Return a map of how many times each TFBS is found within the group.
-	 * @return map referencing a BindingSite object and its group-abundance.
+	 * A GroupMappingWrapper encapsulates behaviors and states to enable
+	 * contrasting binding-site abundance across different groups.
+	 * @return GroupMappingWrapper for the respective group.
 	 * */
-	public Map<BindingSite, Integer> mappings() {
+	public GroupMappingWrapper mappingWrapper() {
 		Map<BindingSite, Integer> maps = new HashMap<BindingSite, Integer>();
 		for (FASTASequence seq: this.getParser().getSequences()) {
 			for (BindingSite tfbs: seq.getMappings().keySet()) {
@@ -37,7 +38,7 @@ public class Group {
 				maps.put(tfbs,  maps.get(tfbs) + newValue);
 			}
 		}
-		return maps;
+		return new GroupMappingWrapper(maps);
 	}
 
 	/**

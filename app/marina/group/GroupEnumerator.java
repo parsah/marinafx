@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import marina.bindingsite.BindingSite;
-import marina.bindingsite.LinearDNAMotif;
 
 /**
  * Upon successful binding site mapping be-it from DNA motifs or PWMs,
@@ -16,10 +15,16 @@ import marina.bindingsite.LinearDNAMotif;
  * @author Parsa Hosseini
  * */
 public class GroupEnumerator {
-	private Group[] groups;
+	private Group query;
+	private Group baseline;
 	
-	public GroupEnumerator(Group ... groups) {
-		this.setGroups(groups);
+	public GroupEnumerator(Group query, Group baseline) {
+		this.setBaseline(baseline);
+		this.setQuery(query);
+	}
+	
+	private Group[] groups() {
+		return new Group[]{this.getQuery(), this.getBaseline()};
 	}
 	
 	/**
@@ -29,32 +34,56 @@ public class GroupEnumerator {
 	public Set<BindingSite> union() {
 		// iterate over each group
 		Set<BindingSite> union = new HashSet<BindingSite>();
-		for (Group group: this.getGroups()) {
+		for (Group group: this.groups()) {
 			// iterate over each sequence in the group
 			for (FASTASequence seq: group.getParser().getSequences()) {
 				union.addAll(seq.getMappings().keySet());
 			}
-			
-			for (BindingSite tfbs: group.mappings().keySet()) {
-				System.out.println(((LinearDNAMotif)tfbs).getGene() + "\t" + group.mappings().get(tfbs));
-			}
-			System.out.println();
-			
 		}
 		return union;
 	}
-
+	
 	/**
-	 * @return the groups
-	 */
-	private Group[] getGroups() {
-		return groups;
+	 * Binding sites shared between the baseline and control groups are given.
+	 * In doing so, one can then extract counts for each binding site
+	 * and place such counts in a contingency matrix. Since a binding-site
+	 * union is produced, a binding site may not always be found in the
+	 * contrasting-group. In such instances, its abundance will be zero.
+	 * */
+	public void enumerateAlignments() {
+		GroupMappingWrapper wrapBase = this.getBaseline().mappingWrapper();
+		GroupMappingWrapper wrapQuery = this.getQuery().mappingWrapper();
+		for (BindingSite tfbs: this.union()) {
+			GroupMappingWrapper.toContingencyMatrix(tfbs, wrapQuery, wrapBase);
+		}
 	}
 
 	/**
-	 * @param groups the groups to set
+	 * @return the query
 	 */
-	private void setGroups(Group[] groups) {
-		this.groups = groups;
+	private Group getQuery() {
+		return query;
 	}
+
+	/**
+	 * @param query the query to set
+	 */
+	private void setQuery(Group query) {
+		this.query = query;
+	}
+
+	/**
+	 * @return the baseline
+	 */
+	private Group getBaseline() {
+		return baseline;
+	}
+
+	/**
+	 * @param baseline the baseline to set
+	 */
+	private void setBaseline(Group baseline) {
+		this.baseline = baseline;
+	}
+
 }

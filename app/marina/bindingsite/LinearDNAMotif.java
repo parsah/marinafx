@@ -77,5 +77,10 @@ public class LinearDNAMotif extends DNASequence implements BindingSite {
 	public void setGene(String gene) {
 		this.gene = gene;
 	}
+	
+	@Override
+	public String toString() {
+		return this.getGene();
+	}
 
 }

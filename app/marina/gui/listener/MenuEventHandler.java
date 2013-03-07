@@ -89,7 +89,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					if (params.isAlignmentSuccess()) {
 						GroupEnumerator enumer = new GroupEnumerator(
 								params.getQuery(), params.getBaseline());
-						enumer.union();
+						enumer.enumerateAlignments(); // begin analysis
 					}
 					else {
 						String msg = "Alignment must be performed first.";
