@@ -14,7 +14,7 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	
 	public MotifAlignmentFactory() {
 		this.setParser(MarinaGUI.get().getParameterMap().getMotifParser());
-		this.setName("Boyer-Moore-Horspool");
+		this.setName("Rabin-Karp");
 	}
 	
 	@Override
@@ -25,10 +25,10 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 			Group group = groups[i];
 			for (int j = 0; j < group.getSize(); j++) { // for each sequence
 				FASTASequence seq = group.getParser().getSequences().get(j);
-				// perform Boyer-Moore-Horspool between sequence and DNA motif
+				// align sequence and motif using Rabin-Karp.
 				for (LinearDNAMotif motif: this.getParser().getLinearMotifs()) {
-					BoyerMooreHorspool bmh = new BoyerMooreHorspool();
-					bmh.align(seq, motif);
+					RabinKarp rk = new RabinKarp();
+					rk.align(seq, motif);
 				}
 				this.updateGUI(group.getBasename() + " - " + this.getName());
 				this.updateGUI(j, group.getSize());
