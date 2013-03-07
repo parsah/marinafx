@@ -13,9 +13,11 @@ import marina.factory.DNAMotifParser;
 import marina.factory.FASTAParser;
 import marina.factory.PWMParser;
 import marina.group.Group;
+import marina.group.GroupEnumerator;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
+import marina.parameter.ParameterMap;
 
 /**
  * Performs the core-logic when a clickable item is pressed by the user.
@@ -29,6 +31,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 			Object source = event.getSource();
 			if (source instanceof MenuItem ) { // actions per menu item.
 				MenuItem menuItem = (MenuItem)source;
+				ParameterMap params = MarinaGUI.get().getParameterMap();
 				if (menuItem.getId().equals("showSchema")) {
 					SchemaStage dialog = new SchemaStage();
 					dialog.show();
@@ -48,14 +51,14 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					parser.showFASTAFilterPrompt();
 					parser.parse(); // set parser to the parameter-set
 					Group queryGroup = new Group(parser);
-					MarinaGUI.get().getParameterMap().setQuery(queryGroup);
+					params.setQuery(queryGroup);
 				}
 				else if (menuItem.getId().equals("loadBaseline")) {
 					FASTAParser parser = new FASTAParser();
 					parser.showFASTAFilterPrompt();
 					parser.parse(); // set parser to the parameter-set
 					Group controlGroup = new Group(parser);
-					MarinaGUI.get().getParameterMap().setBaseline(controlGroup);
+					params.setBaseline(controlGroup);
 				}
 				else if (menuItem.getId().equals("loadPWMs")) {
 					PWMParser parser = new PWMParser();
@@ -66,11 +69,11 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					DNAMotifParser parser = new DNAMotifParser();
 					parser.showNoFilterPrompt();
 					parser.parse();
-					MarinaGUI.get().getParameterMap().setMotifParser(parser);
+					params.setMotifParser(parser);
 				}
 				else if (menuItem.getId().equals("run")) {
 					this.loadDemoFiles();
-					if (MarinaGUI.get().getParameterMap().canRun() == true) {
+					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
 						factory.setOnFailed(new AlignmentTaskListener());
@@ -79,6 +82,17 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					else {
 						String msg = "2x FASTA files & DNA motifs " +
 								"and/or PWMs needed";
+						throw new IOException(msg);
+					}
+				}
+				else if (menuItem.getId().equals("quantify")) {
+					if (params.isAlignmentSuccess()) {
+						GroupEnumerator enumer = new GroupEnumerator(
+								params.getQuery(), params.getBaseline());
+						enumer.union();
+					}
+					else {
+						String msg = "Alignment must be performed first.";
 						throw new IOException(msg);
 					}
 				}
@@ -107,5 +121,4 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 		parser.parse();
 		MarinaGUI.get().getParameterMap().setMotifParser(parser);
 	}
-	
 }

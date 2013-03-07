@@ -1,5 +1,11 @@
 package marina.group;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import marina.bindingsite.BindingSite;
+import marina.bindingsite.LinearDNAMotif;
+
 /**
  * Upon successful binding site mapping be-it from DNA motifs or PWMs,
  * the abundance of each binding site per group is to be tabulated. In doing
@@ -12,8 +18,30 @@ package marina.group;
 public class GroupEnumerator {
 	private Group[] groups;
 	
-	public GroupEnumerator(Group[] groups) {
+	public GroupEnumerator(Group ... groups) {
 		this.setGroups(groups);
+	}
+	
+	/**
+	 * Get a union as-to the binding-sites shared between both groups.
+	 * @return set of BindingSite objects shared between both groups.
+	 * */
+	public Set<BindingSite> union() {
+		// iterate over each group
+		Set<BindingSite> union = new HashSet<BindingSite>();
+		for (Group group: this.getGroups()) {
+			// iterate over each sequence in the group
+			for (FASTASequence seq: group.getParser().getSequences()) {
+				union.addAll(seq.getMappings().keySet());
+			}
+			
+			for (BindingSite tfbs: group.mappings().keySet()) {
+				System.out.println(((LinearDNAMotif)tfbs).getGene() + "\t" + group.mappings().get(tfbs));
+			}
+			System.out.println();
+			
+		}
+		return union;
 	}
 
 	/**
@@ -29,5 +57,4 @@ public class GroupEnumerator {
 	private void setGroups(Group[] groups) {
 		this.groups = groups;
 	}
-
 }

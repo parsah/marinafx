@@ -1,8 +1,8 @@
 package marina.factory;
 
-import marina.gui.MarinaGUI;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import marina.gui.MarinaGUI;
 
 /**
  * A listener for handling completion-states of various alignment factories.
@@ -15,8 +15,9 @@ public class AlignmentTaskListener implements EventHandler<WorkerStateEvent> {
 	@Override
 	public void handle(WorkerStateEvent event) {
 		if (WorkerStateEvent.WORKER_STATE_SUCCEEDED != null) {
-			String msg = "Alignment successful.";
+			String msg = "Alignments OK. Ready for quantification.";
 			MarinaGUI.get().getStatusBar().setText(msg);
+			MarinaGUI.get().getParameterMap().setAlignmentSuccess(true);
 		}
 		if (WorkerStateEvent.WORKER_STATE_FAILED == null) {
 			String msg = "Alignment failure due to background thread.";

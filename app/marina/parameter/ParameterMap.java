@@ -22,6 +22,7 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	private Group baselineGroup;
 	private DNAMotifParser motifParser;
 	private PWMParser pwmParser;
+	private boolean alignmentSuccess;
 	
 	public ParameterMap() {
 		super();
@@ -30,6 +31,7 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 		this.setQuery(null);
 		this.setMotifParser(null);
 		this.setPWMParser(null);
+		this.setAlignmentSuccess(false);
 	}
 	
 	/**
@@ -55,14 +57,6 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 		for (Parameter p: paramSet) {
 			this.put(p.getName(), p);
 		}
-	}
-	
-	/**
-	 * Retrieves both the groups as a list and not as a singular entity.
-	 * @return list of Group objects.
-	 * */
-	public Group[] getGroups() {
-		return new Group[]{this.getQuery(), this.getBaseline()};
 	}
 	
 	/**
@@ -152,5 +146,19 @@ public class ParameterMap extends LinkedHashMap<String, Parameter>{
 	 */
 	public void setPWMParser(PWMParser pwmParser) {
 		this.pwmParser = pwmParser;
+	}
+
+	/**
+	 * @return the alignmentSuccess
+	 */
+	public boolean isAlignmentSuccess() {
+		return alignmentSuccess;
+	}
+
+	/**
+	 * @param state whether alignment was a success or not
+	 */
+	public void setAlignmentSuccess(boolean state) {
+		this.alignmentSuccess = state;
 	}
 }

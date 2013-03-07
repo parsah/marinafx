@@ -2,10 +2,12 @@ package marina.factory;
 
 import java.io.IOException;
 
+import marina.bindingsite.BindingSite;
 import marina.bindingsite.LinearDNAMotif;
 import marina.group.FASTASequence;
 import marina.group.Group;
 import marina.gui.MarinaGUI;
+import marina.parameter.ParameterMap;
 
 public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	private DNAMotifParser parser;
@@ -17,7 +19,8 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 	
 	@Override
 	public void align() throws IOException {
-		Group[] groups = MarinaGUI.get().getParameterMap().getGroups();
+		ParameterMap param = MarinaGUI.get().getParameterMap(); // get options
+		Group[] groups = new Group[]{param.getQuery(), param.getBaseline()};
 		for (int i = 0; i < groups.length; i++) { // for each group ...
 			Group group = groups[i];
 			for (int j = 0; j < group.getSize(); j++) { // for each sequence
@@ -29,6 +32,14 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 				}
 				this.updateGUI(group.getBasename() + " - " + this.getName());
 				this.updateGUI(j, group.getSize());
+			}
+			
+			for (FASTASequence seq: group.getParser().getSequences()) {
+				System.out.println(seq.getHeader());
+				for (BindingSite tfbs: seq.getMappings().keySet()) {
+					LinearDNAMotif motif = (LinearDNAMotif)tfbs;
+					System.out.println("\t" + motif.getGene() +" " + motif.getSequence() +"\t" + seq.getMappings().get(motif).size());
+				}
 			}
 		}
 	}

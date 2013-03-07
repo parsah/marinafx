@@ -1,5 +1,9 @@
 package marina.group;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import marina.bindingsite.BindingSite;
 import marina.factory.FASTAParser;
 
 /**
@@ -13,11 +17,29 @@ import marina.factory.FASTAParser;
  * */
 public class Group {
 	private FASTAParser parser;
-	
+
 	public Group(FASTAParser parser) {
 		this.setParser(parser);
 	}
-	
+
+	/**
+	 * Return a map of how many times each TFBS is found within the group.
+	 * @return map referencing a BindingSite object and its group-abundance.
+	 * */
+	public Map<BindingSite, Integer> mappings() {
+		Map<BindingSite, Integer> maps = new HashMap<BindingSite, Integer>();
+		for (FASTASequence seq: this.getParser().getSequences()) {
+			for (BindingSite tfbs: seq.getMappings().keySet()) {
+				if (!maps.containsKey(tfbs)) {
+					maps.put(tfbs, 0);
+				}
+				int newValue = seq.getMappings().get(tfbs).size();
+				maps.put(tfbs,  maps.get(tfbs) + newValue);
+			}
+		}
+		return maps;
+	}
+
 	/**
 	 * Returns the base-name of the specific parser filename.
 	 * @return string representing base-name of file.
