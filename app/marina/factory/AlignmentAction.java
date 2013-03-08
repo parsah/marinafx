@@ -40,7 +40,7 @@ public final class AlignmentAction extends Task<Void> {
 	@Override
 	protected Void call() throws Exception {
 		if (isUsingMotifs()) {
-			MotifAlignmentFactory factory = new MotifAlignmentFactory();
+			ExhaustiveMotifAlignment factory = new ExhaustiveMotifAlignment();
 			factory.align();
 		}
 		if (isUsingPWMs()) {

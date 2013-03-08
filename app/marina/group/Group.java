@@ -27,7 +27,7 @@ public class Group {
 	 * contrasting binding-site abundance across different groups.
 	 * @return GroupMappingWrapper for the respective group.
 	 * */
-	public GroupMappingWrapper mappingWrapper() {
+	public GroupAbundanceWrapper mappingWrapper() {
 		Map<BindingSite, Integer> maps = new HashMap<BindingSite, Integer>();
 		for (FASTASequence seq: this.getParser().getSequences()) {
 			for (BindingSite tfbs: seq.getMappings().keySet()) {
@@ -38,7 +38,7 @@ public class Group {
 				maps.put(tfbs,  maps.get(tfbs) + newValue);
 			}
 		}
-		return new GroupMappingWrapper(maps);
+		return new GroupAbundanceWrapper(maps);
 	}
 
 	/**

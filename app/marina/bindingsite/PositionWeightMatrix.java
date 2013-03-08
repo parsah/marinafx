@@ -14,6 +14,11 @@ import marina.matrix.Matrix;
  * */
 public class PositionWeightMatrix extends Matrix implements BindingSite {
 
+	public PositionWeightMatrix(double[][] data) {
+		super(data);
+		// TODO Auto-generated constructor stub
+	}
+
 	@Override
 	public boolean sanityCheck() {
 		// TODO Auto-generated method stub

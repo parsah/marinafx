@@ -5,15 +5,18 @@ import java.util.Map;
 import marina.bindingsite.BindingSite;
 
 /**
- * A GroupAlignmentWrapper encapsulates various behaviors and states as-to
+ * A GroupAbundanceWrapper encapsulates various behaviors and states as-to
  * how many binding sites mapped to a specific group, and how many times a
- * specific binding site is found within a particular group. 
+ * specific binding site is found within a particular group. Having such
+ * behaviors and states within a class enables the ability to efficiently
+ * contrast abundance between a query and baseline group.
+ * @author Parsa Hosseini
  * */
-public class GroupMappingWrapper {
+public class GroupAbundanceWrapper {
 	private Map<BindingSite, Integer> maps;
 	private int numMappings; // total number of TFBss mapping to group
 	
-	public GroupMappingWrapper(Map<BindingSite, Integer> maps) {
+	public GroupAbundanceWrapper(Map<BindingSite, Integer> maps) {
 		this.setMaps(maps);
 		this.computeNumMappings();
 	}
@@ -32,13 +35,6 @@ public class GroupMappingWrapper {
 		this.setNumMappings(sum);
 	}
 	
-	public static void toContingencyMatrix(BindingSite tfbs, 
-			GroupMappingWrapper query, GroupMappingWrapper baseline) {
-		// TODO given a binding site, get its counts in both the query and
-		// baseline dataset.
-//		System.out.println("building CM for " + tfbs);
-	}
-
 	/**
 	 * @return the maps
 	 */

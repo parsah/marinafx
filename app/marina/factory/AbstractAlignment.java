@@ -5,7 +5,7 @@ import java.io.IOException;
 import javafx.application.Platform;
 import marina.gui.MarinaGUI;
 
-public abstract class AbstractAlignmentFactory {
+public abstract class AbstractAlignment {
 	public abstract void align() throws IOException;
 	private String name; // long-name to help ID alignment mode.
 	

@@ -8,12 +8,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import marina.factory.AlignmentAction;
-import marina.factory.AlignmentTaskListener;
+import marina.factory.CandidateFactory;
 import marina.factory.DNAMotifParser;
 import marina.factory.FASTAParser;
 import marina.factory.PWMParser;
 import marina.group.Group;
-import marina.group.GroupEnumerator;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
@@ -77,7 +76,9 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
 						factory.setOnFailed(new AlignmentTaskListener());
-						new Thread(factory).start();
+						Thread t = new Thread(factory);
+						t.setDaemon(true);
+						t.start();
 					}
 					else {
 						String msg = "2x FASTA files & DNA motifs " +
@@ -87,9 +88,9 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 				else if (menuItem.getId().equals("quantify")) {
 					if (params.isAlignmentSuccess()) {
-						GroupEnumerator enumer = new GroupEnumerator(
+						CandidateFactory enumer = new CandidateFactory(
 								params.getQuery(), params.getBaseline());
-						enumer.enumerateAlignments(); // begin analysis
+						enumer.buildCandidates();
 					}
 					else {
 						String msg = "Alignment must be performed first.";

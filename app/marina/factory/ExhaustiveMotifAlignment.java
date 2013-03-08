@@ -8,10 +8,10 @@ import marina.group.Group;
 import marina.gui.MarinaGUI;
 import marina.parameter.ParameterMap;
 
-public class MotifAlignmentFactory extends AbstractAlignmentFactory {
+public class ExhaustiveMotifAlignment extends AbstractAlignment {
 	private DNAMotifParser parser;
 	
-	public MotifAlignmentFactory() {
+	public ExhaustiveMotifAlignment() {
 		this.setParser(MarinaGUI.get().getParameterMap().getMotifParser());
 		this.setName("Rabin-Karp");
 	}
@@ -29,7 +29,7 @@ public class MotifAlignmentFactory extends AbstractAlignmentFactory {
 					RabinKarp rk = new RabinKarp();
 					rk.align(seq, motif);
 				}
-				this.updateGUI(group.getBasename() + " - " + this.getName());
+				this.updateGUI(this.getName() + " - " + seq.getHeader());
 				this.updateGUI(j, group.getSize());
 			}
 		}

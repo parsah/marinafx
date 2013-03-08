@@ -12,20 +12,11 @@ import java.util.HashMap;
  * @author Parsa Hosseini
  * */
 public class Matrix {
-	
 	private double[][] data;
 	private String[] columns;
 	private HashMap<String, Integer> rows; // row name references row number.
-	
-	/**
-	 * Create a bare-bones Matrix object where no states are provided.
-	 * */
-	public Matrix() {
-		this.setData(null);
-		this.setColumns(null);
-		this.setRows(null);
-	}
-	
+	private double sum;
+
 	/**
 	 * Create a Matrix object given a pre-populated array of values.
 	 * */
@@ -33,6 +24,7 @@ public class Matrix {
 		this.setData(data);
 		this.setColumns(null);
 		this.setRows(null);
+		this.setSum(this.computeSum());
 	}
 
 	/**
@@ -43,13 +35,27 @@ public class Matrix {
 	}
 	
 	/**
+	 * Compute sum of all the matrix values.
+	 * @return double representing Matrix sum.
+	 * */
+	public double computeSum() {
+		double sum = 0;
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				sum += this.getData()[i][j];
+			}
+		}
+		return sum;
+	}
+
+	/**
 	 * Get a specific row from the Matrix given its row index.
 	 * @return entire matrix row
 	 * */
 	public double[] getRow(int row) {
 		return this.getData()[row];
 	}
-	
+
 	/**
 	 * Get a specific column from the matrix given a column index.
 	 * @return entire column
@@ -61,7 +67,7 @@ public class Matrix {
 		}
 		return col;
 	}
-	
+
 	/**
 	 * Get the width of the current matrix (number of columns).
 	 * @return number of columns in the matrix
@@ -69,7 +75,7 @@ public class Matrix {
 	public int getWidth() {
 		return this.getData()[0].length;
 	}
-	
+
 	/**
 	 * Get the height of the current matrix (number of rows).
 	 * @return number of rows in the matrix.
@@ -77,7 +83,7 @@ public class Matrix {
 	public int getHeight() {
 		return this.getData().length;
 	}
-	
+
 	/**
 	 * Helper-method for iterating through a matrix and printing each of its
 	 * respective variables.
@@ -126,4 +132,17 @@ public class Matrix {
 		this.rows = rows;
 	}
 
+	/**
+	 * @return the sum
+	 */
+	public double getSum() {
+		return sum;
+	}
+
+	/**
+	 * @param sum the sum to set
+	 */
+	private void setSum(double sum) {
+		this.sum = sum;
+	}
 }
