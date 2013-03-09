@@ -1,4 +1,4 @@
-package marina.factory;
+package marina.alignment;
 
 import javafx.concurrent.Task;
 import marina.gui.MarinaGUI;

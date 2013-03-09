@@ -7,16 +7,17 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
-import marina.factory.AlignmentAction;
-import marina.factory.CandidateFactory;
-import marina.factory.DNAMotifParser;
-import marina.factory.FASTAParser;
-import marina.factory.PWMParser;
+import marina.alignment.AlignmentAction;
 import marina.group.Group;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
 import marina.parameter.ParameterMap;
+import marina.parser.DNAMotifParser;
+import marina.parser.FASTAParser;
+import marina.parser.PWMParser;
+import marina.quantification.AbundanceInference;
+import marina.quantification.GroupPairContraster;
 
 /**
  * Performs the core-logic when a clickable item is pressed by the user.
@@ -88,9 +89,11 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 				else if (menuItem.getId().equals("quantify")) {
 					if (params.isAlignmentSuccess()) {
-						CandidateFactory enumer = new CandidateFactory(
-								params.getQuery(), params.getBaseline());
-						enumer.buildCandidates();
+						// contrast TFBS abundances between two groups
+						GroupPairContraster con = new GroupPairContraster(
+										params.getQuery(), params.getBaseline());
+						AbundanceInference infer = new AbundanceInference(con);
+
 					}
 					else {
 						String msg = "Alignment must be performed first.";
@@ -103,7 +106,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Solely for demonstration purposes; loads the demo files and saves time
 	 * explicitly loading them at runtime.

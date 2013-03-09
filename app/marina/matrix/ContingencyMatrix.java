@@ -11,7 +11,7 @@ import marina.bindingsite.BindingSite;
  * */
 public class ContingencyMatrix extends Matrix {
 	private BindingSite bindingSite; // binding site representing the matrix.
-	
+
 	/**
 	 * A Contingency Matrix is a 2 by 2 Matrix, used for computing magnitude
 	 * of statistical significance across various categorical groups.
@@ -19,7 +19,7 @@ public class ContingencyMatrix extends Matrix {
 	public ContingencyMatrix() {
 		super(new double[2][2]); // each contingency matrix is 2x2 in size.
 	}
-	
+
 	/**
 	 * Create a Contingency Matrix given a pre-constructed multi-dimensional
 	 * matrix.
@@ -27,7 +27,7 @@ public class ContingencyMatrix extends Matrix {
 	public ContingencyMatrix(double[][] data) {
 		super(data);
 	}
-	
+
 	/**
 	 * Return the row representing the variable X across groups G and not-G.
 	 * @return double-array for discrete variable X.
@@ -35,7 +35,7 @@ public class ContingencyMatrix extends Matrix {
 	public double[] getX() {
 		return this.getData()[0];
 	}
-	
+
 	/**
 	 * Return the row representing the variable not-X given groups G and not-G.
 	 * @return double-array representing discrete variable not-X.
@@ -43,7 +43,7 @@ public class ContingencyMatrix extends Matrix {
 	public double[] getNotX() {
 		return this.getData()[1];
 	}
-	
+
 	/**
 	 * Return the column representing the group G across variables X and not-X.
 	 * @return double-array representing values for group G.
@@ -51,7 +51,7 @@ public class ContingencyMatrix extends Matrix {
 	public double[] getG() {
 		return this.getColumn(0);
 	}
-	
+
 	/**
 	 * Return the column representing the group not-G across X and not-X.
 	 * @return double-array representing values for group not-G.
@@ -59,41 +59,75 @@ public class ContingencyMatrix extends Matrix {
 	public double[] getNotG() {
 		return this.getColumn(1);
 	}
-	
+
 	/**
 	 * A Contingency Matrix represents frequency counts. Such a 
 	 * representation is beneficial, however oftentimes, a specific segment
 	 * of the matrix is to be represented as a probability. By having a
-	 * ContingencyIndex enumeration, the locations of each variable as well
-	 * as its respective group are preset. As a result, such indices can be
-	 * easily retrieved and represented as frequencies or probabilities. This
-	 * ensures an additional class is not created to solely work with
+	 * ContingencyMatrixCell enumeration, the locations of each variable as 
+	 * well as its respective group are preset. As a result, such indices can 
+	 * be easily retrieved and represented as frequencies or probabilities. 
+	 * This ensures an additional class is not created to solely work with
 	 * probabilities.
-	 * @param ContingencyIndex enumeration which represents a specific index.
+	 * @param ContingencyMatrixCell a value in the contingency matrix.
 	 * @return double representing probability of contingency matrix index.
 	 * */
-	public double getProbability(ContingencyIndex idx) {
+	public double getProb(ContingencyMatrixCell idx) {
 		double freq = this.getData()[idx.getRow()][idx.getColumn()];
 		return freq / this.getSum();
 	}
-	
+
 	/**
 	 * Retrieve the actual value in the contingency matrix as-is and without
 	 * any pre-computed probability.
+	 * @param ContingencyMatrixCell a value in the contingency matrix.
 	 * @return double representing the contingency matrix value.
 	 * */
-	public double getFrequency(ContingencyIndex idx) {
+	public double getFreq(ContingencyMatrixCell idx) {
 		return this.getData()[idx.getRow()][idx.getColumn()];
 	}
-	
+
+
+	/**
+	 * Support is the probability as to how many times the variable, X, is
+	 * found in the group, G. This probability is then multiplied by 100. 
+	 * @return double representing contingency matrix support.
+	 * */
 	public double getSupport() {
-		// TODO implement support
-		return 0;
+		return this.getProb(ContingencyMatrixCell.X_AND_G) * 100;
 	}
-	
+
+	/**
+	 * Computes in-place Iterative Proportional Fitting (IPF). Given a 
+	 * matrix with cells f(0, 0), f(1, 0), f(0, 1) and f(1, 1), 
+	 * cells f(0, 0) and f(1, 1) will have the same value, x. Values 
+	 * for f(1, 0) and f(0, 1) will however be (N/2) - x.
+	 * */
+	public void ipf() {
+		double xAndG = this.getFreq(ContingencyMatrixCell.X_AND_G);
+		double notXNotG = this.getFreq(ContingencyMatrixCell.NOT_X_AND_NOT_G);
+		double notXAndG = this.getFreq(ContingencyMatrixCell.NOT_X_AND_G);
+		double xAndNotG = this.getFreq(ContingencyMatrixCell.X_AND_NOT_G);
+		// create variables to perform IPF normalization
+		double numer = this.getSum() * Math.sqrt(xAndG * notXNotG);
+		double denom = 2 * (Math.sqrt(notXAndG * xAndG) + 
+				Math.sqrt(xAndNotG * notXAndG));
+		// adjust matrix counts for f(0, 0) and f(1, 1)
+		this.getData()[1][1] = this.getData()[0][0] = (numer / denom);
+		// adjust matrix counts for f(0, 1) and f(1, 0)
+		double diagValue = (this.getSum() / 2) - xAndG;
+		this.getData()[1][0] = this.getData()[0][1] = diagValue;
+		this.computeSum();
+	}
+
+	/**
+	 * Difference is the absolute-value when you subtract the frequencies 
+	 * of a variable, X, given its presence in both groups G and not-G.
+	 * @return difference of variable X across groups G and not-G (!G).
+	 * */
 	public double getDifference() {
-		// TODO implement difference
-		return 0;
+		return Math.abs(this.getFreq(ContingencyMatrixCell.X_AND_G) - 
+				this.getFreq(ContingencyMatrixCell.X_AND_NOT_G));
 	}
 
 	/**

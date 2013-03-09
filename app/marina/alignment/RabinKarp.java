@@ -1,4 +1,4 @@
-package marina.factory;
+package marina.alignment;
 
 import java.io.IOException;
 import java.util.ArrayList;

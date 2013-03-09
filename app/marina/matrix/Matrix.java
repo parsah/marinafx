@@ -24,7 +24,7 @@ public class Matrix {
 		this.setData(data);
 		this.setColumns(null);
 		this.setRows(null);
-		this.setSum(this.computeSum());
+		this.computeSum();
 	}
 
 	/**
@@ -38,14 +38,14 @@ public class Matrix {
 	 * Compute sum of all the matrix values.
 	 * @return double representing Matrix sum.
 	 * */
-	public double computeSum() {
+	public void computeSum() {
 		double sum = 0;
 		for (int i = 0; i < this.getHeight(); i++) {
 			for (int j = 0; j < this.getWidth(); j++) {
 				sum += this.getData()[i][j];
 			}
 		}
-		return sum;
+		this.setSum(sum);
 	}
 
 	/**

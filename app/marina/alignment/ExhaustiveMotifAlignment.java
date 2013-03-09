@@ -1,4 +1,4 @@
-package marina.factory;
+package marina.alignment;
 
 import java.io.IOException;
 
@@ -7,6 +7,7 @@ import marina.group.FASTASequence;
 import marina.group.Group;
 import marina.gui.MarinaGUI;
 import marina.parameter.ParameterMap;
+import marina.parser.DNAMotifParser;
 
 public class ExhaustiveMotifAlignment extends AbstractAlignment {
 	private DNAMotifParser parser;

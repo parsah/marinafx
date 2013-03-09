@@ -1,4 +1,4 @@
-package marina.factory;
+package marina.quantification;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,11 +19,11 @@ import marina.matrix.ContingencyMatrix;
  * data-structure frequently used to model multivariate abundances.
  * @author Parsa Hosseini
  * */
-public class CandidateFactory {
+public class GroupPairContraster {
 	private Group query;
 	private Group baseline;
 	
-	public CandidateFactory(Group query, Group baseline) {
+	public GroupPairContraster(Group query, Group baseline) {
 		this.setBaseline(baseline);
 		this.setQuery(query);
 	}
@@ -90,18 +90,19 @@ public class CandidateFactory {
 	 * statistically quantified.
 	 * @return list of ContingencyMatrix objects.
 	 * */
-	public List<ContingencyMatrix> buildCandidates() {
+	public List<ContingencyMatrix> generateCandidates() {
 		List<ContingencyMatrix> matrices = new ArrayList<ContingencyMatrix>();
 		GroupAbundanceWrapper wrapBase = this.getBaseline().mappingWrapper();
 		GroupAbundanceWrapper wrapQuery = this.getQuery().mappingWrapper();
 		for (BindingSite tfbs: this.union()) {
-			matrices.add(CandidateFactory.build(tfbs, wrapQuery, wrapBase));
+			matrices.add(GroupPairContraster.build(tfbs, wrapQuery, wrapBase));
 		}
 		
 		for (ContingencyMatrix cm: matrices) {
 			System.out.println(cm.getBindingSite());
 			cm.debug();
 			System.out.println(cm.getSum());
+			System.out.println();
 		}
 		return matrices;
 	}

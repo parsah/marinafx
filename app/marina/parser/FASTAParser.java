@@ -1,4 +1,4 @@
-package marina.factory;
+package marina.parser;
 
 import java.io.BufferedReader;
 import java.io.File;

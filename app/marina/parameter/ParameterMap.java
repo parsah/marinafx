@@ -5,9 +5,9 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import marina.factory.DNAMotifParser;
-import marina.factory.PWMParser;
 import marina.group.Group;
+import marina.parser.DNAMotifParser;
+import marina.parser.PWMParser;
 
 /**
  * Contains as well as runtime arguments used for analysis throughout Marina.

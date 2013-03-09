@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import marina.bindingsite.BindingSite;
-import marina.factory.FASTAParser;
+import marina.parser.FASTAParser;
 
 /**
  * A Group is a collection of FASTA sequences, i.e. promoter sequences.
