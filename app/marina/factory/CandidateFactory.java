@@ -102,9 +102,7 @@ public class CandidateFactory {
 			System.out.println(cm.getBindingSite());
 			cm.debug();
 			System.out.println(cm.getSum());
-			System.out.println();
 		}
-		
 		return matrices;
 	}
 

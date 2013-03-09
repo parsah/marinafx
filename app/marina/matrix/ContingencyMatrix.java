@@ -60,6 +60,32 @@ public class ContingencyMatrix extends Matrix {
 		return this.getColumn(1);
 	}
 	
+	/**
+	 * A Contingency Matrix represents frequency counts. Such a 
+	 * representation is beneficial, however oftentimes, a specific segment
+	 * of the matrix is to be represented as a probability. By having a
+	 * ContingencyIndex enumeration, the locations of each variable as well
+	 * as its respective group are preset. As a result, such indices can be
+	 * easily retrieved and represented as frequencies or probabilities. This
+	 * ensures an additional class is not created to solely work with
+	 * probabilities.
+	 * @param ContingencyIndex enumeration which represents a specific index.
+	 * @return double representing probability of contingency matrix index.
+	 * */
+	public double getProbability(ContingencyIndex idx) {
+		double freq = this.getData()[idx.getRow()][idx.getColumn()];
+		return freq / this.getSum();
+	}
+	
+	/**
+	 * Retrieve the actual value in the contingency matrix as-is and without
+	 * any pre-computed probability.
+	 * @return double representing the contingency matrix value.
+	 * */
+	public double getFrequency(ContingencyIndex idx) {
+		return this.getData()[idx.getRow()][idx.getColumn()];
+	}
+	
 	public double getSupport() {
 		// TODO implement support
 		return 0;
