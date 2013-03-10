@@ -17,7 +17,7 @@ import marina.parser.DNAMotifParser;
 import marina.parser.FASTAParser;
 import marina.parser.PWMParser;
 import marina.quantification.AbundanceInference;
-import marina.quantification.GroupPairContraster;
+import marina.quantification.CandidateMatrixBuilder;
 
 /**
  * Performs the core-logic when a clickable item is pressed by the user.
@@ -90,11 +90,9 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				else if (menuItem.getId().equals("quantify")) {
 					if (params.isAlignmentSuccess()) {
 						// contrast TFBS abundances between two groups
-						GroupPairContraster con = new GroupPairContraster(
-										params.getQuery(), params.getBaseline());
-						AbundanceInference infer = new AbundanceInference(
-								con.generateCandidates());
-
+						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
+						AbundanceInference infer = new AbundanceInference(mb);
+						infer.representedMatrices();
 					}
 					else {
 						String msg = "Alignment must be performed first.";

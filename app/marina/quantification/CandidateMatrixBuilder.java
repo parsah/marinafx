@@ -10,6 +10,7 @@ import marina.bindingsite.BindingSite;
 import marina.group.FASTASequence;
 import marina.group.Group;
 import marina.group.GroupAbundanceWrapper;
+import marina.gui.MarinaGUI;
 import marina.matrix.ContingencyMatrix;
 
 /**
@@ -20,11 +21,16 @@ import marina.matrix.ContingencyMatrix;
  * data-structure frequently used to model multivariate abundances.
  * @author Parsa Hosseini
  * */
-public class GroupPairContraster {
+public class CandidateMatrixBuilder {
 	private Group query;
 	private Group baseline;
 	
-	public GroupPairContraster(Group query, Group baseline) {
+	public CandidateMatrixBuilder() {
+		this.setBaseline(MarinaGUI.get().getParameterMap().getBaseline());
+		this.setQuery(MarinaGUI.get().getParameterMap().getQuery());
+	}
+	
+	public CandidateMatrixBuilder(Group query, Group baseline) {
 		this.setBaseline(baseline);
 		this.setQuery(query);
 	}
@@ -61,7 +67,7 @@ public class GroupPairContraster {
 	 * @param notG wrapper for the baseline group, !G.
 	 * @return ContingencyMatrix; potential over-represented binding site.
 	 * */
-	private static ContingencyMatrix buildCandidateMatrix(BindingSite tfbs, 
+	public ContingencyMatrix build(BindingSite tfbs, 
 			GroupAbundanceWrapper g, GroupAbundanceWrapper notG) {
 		Integer numX_G = g.getMaps().get(tfbs); // i.e. n(X, G)
 		Integer numX_NotG = notG.getMaps().get(tfbs); // i.e. n(X, !G)
@@ -91,17 +97,16 @@ public class GroupPairContraster {
 	 * @return list of ContingencyMatrix objects.
 	 * @throws IOException 
 	 * */
-	public List<ContingencyMatrix> generateCandidates() throws IOException {
+	public List<ContingencyMatrix> build() throws IOException {
 		List<ContingencyMatrix> matrices = new ArrayList<ContingencyMatrix>();
 		GroupAbundanceWrapper wrapBase = this.getBaseline().mappingWrapper();
 		GroupAbundanceWrapper wrapQuery = this.getQuery().mappingWrapper();
 		for (BindingSite tfbs: this.union()) {
-			matrices.add(GroupPairContraster.buildCandidateMatrix(
-					tfbs, wrapQuery, wrapBase));
+			matrices.add(this.build(tfbs, wrapQuery, wrapBase));
 		}
 		if (matrices.size() == 0) {
 			throw new IOException("No binding-sites shared between groups.");
-		}		
+		}
 		return matrices;
 	}
 

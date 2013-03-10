@@ -1,5 +1,6 @@
 package marina.quantification;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,12 +20,10 @@ import marina.parameter.ParameterName;
  * @author Parsa Hosseini
  * */
 public class AbundanceInference {
-	private List<ContingencyMatrix> unfilteredMatrices;
-	private List<ContingencyMatrix> filteredMatrices; // over-represented
+	private CandidateMatrixBuilder builder;
 	
-	public AbundanceInference(List<ContingencyMatrix> candidates) {
-		this.setUnfilteredMatrices(candidates);
-		this.setFilteredMatrices(new ArrayList<ContingencyMatrix>());
+	public AbundanceInference(CandidateMatrixBuilder builder) {
+		this.setCandidateBuilder(builder);
 	}
 
 	/**
@@ -73,27 +72,19 @@ public class AbundanceInference {
 	}
 	
 	/**
-	 * Get number-difference between filtered and un-filtered collection
-	 * of contingency matrices.
-	 * @return integer representing change between un/filtered matrices.
-	 * */
-	public int getChange() {
-		return this.getUnfilteredMatrices().size() - 
-				this.getFilteredMatrices().size();
-	}
-	
-	/**
 	 * Feed all candidate contingency matrices through a set of filters
 	 * as defined from the Options dialog. These options determine whether a
 	 * contingency matrix (and resultant binding site) will be rendered 
 	 * over-represented or not. Those contingency matrices which remain
 	 * will take the place of the candidate binding sites as they are now
 	 * viable for being over-represented.
+	 * @return 
 	 * @return whether over-represented binding-sites were identified.
+	 * @throws IOException 
 	 * */
-	public boolean applyFilters() {
+	public List<ContingencyMatrix> representedMatrices() throws IOException {
 		List<ContingencyMatrix> valid = new ArrayList<ContingencyMatrix>();
-		for (ContingencyMatrix cm: this.getUnfilteredMatrices()) {
+		for (ContingencyMatrix cm: this.getCandidateBuilder().build()) {
 			boolean passDiff = this.isPassDifference(cm);
 			boolean passLaplace = this.isPassLaplace(cm);
 			boolean passSupport = this.isPassSupport(cm);
@@ -101,38 +92,24 @@ public class AbundanceInference {
 				valid.add(cm);
 			}
 		}
-		if (valid.size() > 0) {
-			this.setFilteredMatrices(valid); // now over-represented.
-			return true;
+		if (valid.size() == 0) {
+			String msg = "No binding sites rendered over-represented.";
+			throw new IOException(msg);
 		}
-		return false;
+		return valid;
 	}
 
 	/**
-	 * @return the unfilteredMatrices
+	 * @return the candidateBuilder
 	 */
-	public List<ContingencyMatrix> getUnfilteredMatrices() {
-		return unfilteredMatrices;
+	private CandidateMatrixBuilder getCandidateBuilder() {
+		return builder;
 	}
 
 	/**
-	 * @param unfiltered the unfilteredMatrices to set
+	 * @param builder the candidateBuilder to set
 	 */
-	private void setUnfilteredMatrices(List<ContingencyMatrix> unfiltered) {
-		this.unfilteredMatrices = unfiltered;
-	}
-
-	/**
-	 * @return the filteredMatrices
-	 */
-	public List<ContingencyMatrix> getFilteredMatrices() {
-		return filteredMatrices;
-	}
-
-	/**
-	 * @param filtered the filteredMatrices to set
-	 */
-	private void setFilteredMatrices(List<ContingencyMatrix> filtered) {
-		this.filteredMatrices = filtered;
+	private void setCandidateBuilder(CandidateMatrixBuilder builder) {
+		this.builder = builder;
 	}
 }
