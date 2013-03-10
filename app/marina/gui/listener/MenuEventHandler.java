@@ -92,7 +92,8 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						// contrast TFBS abundances between two groups
 						GroupPairContraster con = new GroupPairContraster(
 										params.getQuery(), params.getBaseline());
-						AbundanceInference infer = new AbundanceInference(con);
+						AbundanceInference infer = new AbundanceInference(
+								con.generateCandidates());
 
 					}
 					else {

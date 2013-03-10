@@ -1,5 +1,6 @@
 package marina.quantification;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -60,9 +61,8 @@ public class GroupPairContraster {
 	 * @param notG wrapper for the baseline group, !G.
 	 * @return ContingencyMatrix; potential over-represented binding site.
 	 * */
-	private static ContingencyMatrix build(BindingSite tfbs, 
+	private static ContingencyMatrix buildCandidateMatrix(BindingSite tfbs, 
 			GroupAbundanceWrapper g, GroupAbundanceWrapper notG) {
-		
 		Integer numX_G = g.getMaps().get(tfbs); // i.e. n(X, G)
 		Integer numX_NotG = notG.getMaps().get(tfbs); // i.e. n(X, !G)
 		if (numX_G == null) { // if TFBS not found in group, count is 0
@@ -89,21 +89,19 @@ public class GroupPairContraster {
 	 * must therefore get contrasted so that their respective counts can be
 	 * statistically quantified.
 	 * @return list of ContingencyMatrix objects.
+	 * @throws IOException 
 	 * */
-	public List<ContingencyMatrix> generateCandidates() {
+	public List<ContingencyMatrix> generateCandidates() throws IOException {
 		List<ContingencyMatrix> matrices = new ArrayList<ContingencyMatrix>();
 		GroupAbundanceWrapper wrapBase = this.getBaseline().mappingWrapper();
 		GroupAbundanceWrapper wrapQuery = this.getQuery().mappingWrapper();
 		for (BindingSite tfbs: this.union()) {
-			matrices.add(GroupPairContraster.build(tfbs, wrapQuery, wrapBase));
+			matrices.add(GroupPairContraster.buildCandidateMatrix(
+					tfbs, wrapQuery, wrapBase));
 		}
-		
-		for (ContingencyMatrix cm: matrices) {
-			System.out.println(cm.getBindingSite());
-			cm.debug();
-			System.out.println(cm.getSum());
-			System.out.println();
-		}
+		if (matrices.size() == 0) {
+			throw new IOException("No binding-sites shared between groups.");
+		}		
 		return matrices;
 	}
 

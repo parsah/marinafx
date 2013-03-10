@@ -5,7 +5,7 @@ public class DoubleParameter extends Parameter {
 	private double minValue;
 	private double maxValue;
 	
-	public DoubleParameter(String name, double arg, double min, 
+	public DoubleParameter(ParameterName name, double arg, double min, 
 			double max) {
 		super(name);
 		this.setArgument(arg);

@@ -14,17 +14,21 @@ import java.util.List;
 public class BaseWeightParameter extends Parameter {
 	private List<DoubleParameter> arguments;
 
-	public BaseWeightParameter(String name) {
+	public BaseWeightParameter(ParameterName name) {
 		super(name);
 		this.setArguments(new ArrayList<DoubleParameter>());
 		this.assignDefaultWeights();
 	}
 	
 	private void assignDefaultWeights() {
-		this.getArguments().add(new DoubleParameter("A", 0.25, 0, 1));
-		this.getArguments().add(new DoubleParameter("T", 0.25, 0, 1));
-		this.getArguments().add(new DoubleParameter("G", 0.25, 0, 1));
-		this.getArguments().add(new DoubleParameter("C", 0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_A, 
+				0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_T, 
+				0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_G, 
+				0.25, 0, 1));
+		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_C, 
+				0.25, 0, 1));
 	}
 
 	/**

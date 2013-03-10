@@ -1,24 +1,23 @@
 package marina.parameter;
 
 public abstract class Parameter {
-	private String name;
+	private ParameterName name;
 	
-	public Parameter(String name) {
+	public Parameter(ParameterName name) {
 		this.setName(name);
 	}
 	
 	/**
 	 * @return the name
 	 */
-	public String getName() {
+	public ParameterName getName() {
 		return name;
 	}
 
 	/**
 	 * @param name the name to set
 	 */
-	private void setName(String name) {
+	private void setName(ParameterName name) {
 		this.name = name;
 	}
-
 }

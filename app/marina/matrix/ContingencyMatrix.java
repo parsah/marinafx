@@ -72,7 +72,7 @@ public class ContingencyMatrix extends Matrix {
 	 * @param ContingencyMatrixCell a value in the contingency matrix.
 	 * @return double representing probability of contingency matrix index.
 	 * */
-	public double getProb(ContingencyMatrixCell idx) {
+	public double getProbability(ContingencyMatrixCell idx) {
 		double freq = this.getData()[idx.getRow()][idx.getColumn()];
 		return freq / this.getSum();
 	}
@@ -83,7 +83,7 @@ public class ContingencyMatrix extends Matrix {
 	 * @param ContingencyMatrixCell a value in the contingency matrix.
 	 * @return double representing the contingency matrix value.
 	 * */
-	public double getFreq(ContingencyMatrixCell idx) {
+	public double getFrequency(ContingencyMatrixCell idx) {
 		return this.getData()[idx.getRow()][idx.getColumn()];
 	}
 
@@ -94,7 +94,7 @@ public class ContingencyMatrix extends Matrix {
 	 * @return double representing contingency matrix support.
 	 * */
 	public double getSupport() {
-		return this.getProb(ContingencyMatrixCell.X_AND_G) * 100;
+		return this.getProbability(ContingencyMatrixCell.X_AND_G) * 100;
 	}
 
 	/**
@@ -104,10 +104,10 @@ public class ContingencyMatrix extends Matrix {
 	 * for f(1, 0) and f(0, 1) will however be (N/2) - x.
 	 * */
 	public void ipf() {
-		double xAndG = this.getFreq(ContingencyMatrixCell.X_AND_G);
-		double notXNotG = this.getFreq(ContingencyMatrixCell.NOT_X_AND_NOT_G);
-		double notXAndG = this.getFreq(ContingencyMatrixCell.NOT_X_AND_G);
-		double xAndNotG = this.getFreq(ContingencyMatrixCell.X_AND_NOT_G);
+		double xAndG = this.getFrequency(ContingencyMatrixCell.X_AND_G);
+		double notXNotG = this.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G);
+		double notXAndG = this.getFrequency(ContingencyMatrixCell.NOT_X_AND_G);
+		double xAndNotG = this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
 		// create variables to perform IPF normalization
 		double numer = this.getSum() * Math.sqrt(xAndG * notXNotG);
 		double denom = 2 * (Math.sqrt(notXAndG * xAndG) + 
@@ -126,8 +126,13 @@ public class ContingencyMatrix extends Matrix {
 	 * @return difference of variable X across groups G and not-G (!G).
 	 * */
 	public double getDifference() {
-		return Math.abs(this.getFreq(ContingencyMatrixCell.X_AND_G) - 
-				this.getFreq(ContingencyMatrixCell.X_AND_NOT_G));
+		return Math.abs(this.getFrequency(ContingencyMatrixCell.X_AND_G) - 
+				this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G));
+	}
+	
+	public double getLaplace() {
+		return (this.getFrequency(ContingencyMatrixCell.X_AND_G) + 1) /
+				(Matrix.computeSum(this.getX()) + 2);
 	}
 
 	/**

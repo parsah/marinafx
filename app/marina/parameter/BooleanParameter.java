@@ -3,8 +3,8 @@ package marina.parameter;
 public class BooleanParameter extends Parameter {
 	private boolean argument;
 	
-	public BooleanParameter(String paramName, boolean arg) {
-		super(paramName);
+	public BooleanParameter(ParameterName name, boolean arg) {
+		super(name);
 		this.setArgument(arg);
 	}
 

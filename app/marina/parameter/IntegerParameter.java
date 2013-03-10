@@ -5,7 +5,7 @@ public class IntegerParameter extends Parameter {
 	private int minValue;
 	private int maxValue;
 	
-	public IntegerParameter(String name, int arg, int min, int max) {
+	public IntegerParameter(ParameterName name, int arg, int min, int max) {
 		super(name);
 		this.setMaxValue(max);
 		this.setArgument(arg);

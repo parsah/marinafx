@@ -27,6 +27,7 @@ import marina.parameter.DoubleParameter;
 import marina.parameter.IntegerParameter;
 import marina.parameter.Parameter;
 import marina.parameter.ParameterMap;
+import marina.parameter.ParameterName;
 
 /**
  * Represents the stage for-which the user can tweak parameters which will
@@ -68,31 +69,31 @@ public class ParameterStage extends Stage {
 	private void positionAdjustments() {
 		ParameterMap paramSet = MarinaGUI.get().getParameterMap();
 		int rowNum = 0; // for each parameter, add it to the layout
-		for (String name: paramSet.keySet()) { // create widgets per parameter
+		for (ParameterName name: paramSet.keySet()) { // create widgets per parameter
 			Parameter p = paramSet.get(name);
 			if (p instanceof DoubleParameter) { // create sliders
 				DoubleParameter np = (DoubleParameter)p;
-				BigDecimalField slider = this.createDoubleSlider(np);
+				BigDecimalField slider = this.buildDoubleSlider(np);
 				this.getLayout().add(slider, 1, rowNum);
-				this.getLayout().add(new Label(p.getName()), 0, rowNum);
+				this.getLayout().add(new Label(p.getName().get()), 0, rowNum);
 			}
 			if (p instanceof IntegerParameter) { // create sliders
 				IntegerParameter ip = (IntegerParameter)p;
-				ListSpinner<Integer> slider = this.createIntegerSlider(ip);
+				ListSpinner<Integer> slider = this.buildIntegerSlider(ip);
 				this.getLayout().add(slider, 1, rowNum);
-				this.getLayout().add(new Label(p.getName()), 0, rowNum);
+				this.getLayout().add(new Label(p.getName().get()), 0, rowNum);
 			}
 			if (p instanceof BooleanParameter) { // create checkbox
-				CheckBox cb = this.createCheckBox((BooleanParameter)p);
+				CheckBox cb = this.buildCheckBox((BooleanParameter)p);
 				this.getLayout().add(cb, 1, rowNum);
 			}
 			if (p instanceof BaseWeightParameter) { // base weights
-				GridPane weights = this.createWeightsPane((BaseWeightParameter)p);
+				GridPane weights = this.buildWeightsPane((BaseWeightParameter)p);
 				this.getLayout().add(weights, 0, rowNum, 2, 1);
 			}
 			rowNum += 1;
 		}
-		this.getLayout().add(this.createButtons(), 0, rowNum, 2, 1);
+		this.getLayout().add(this.buildButtons(), 0, rowNum, 2, 1);
 	}
 
 	/**
@@ -100,7 +101,7 @@ public class ParameterStage extends Stage {
 	 * maximum range.
 	 * @return slider object preset to a specified range.
 	 * */
-	private BigDecimalField createDoubleSlider(final DoubleParameter p) {
+	private BigDecimalField buildDoubleSlider(final DoubleParameter p) {
 		BigDecimalField field = new BigDecimalField();
 		field.setSkin(new BigDecimalFieldSkin(field));
 		field.setMinValue(new BigDecimal(p.getMinValue()));
@@ -122,7 +123,7 @@ public class ParameterStage extends Stage {
 	 * maximum range.
 	 * @return slider object preset to a specified range.
 	 * */
-	private ListSpinner<Integer> createIntegerSlider(final IntegerParameter p) {
+	private ListSpinner<Integer> buildIntegerSlider(final IntegerParameter p) {
 		ListSpinner<Integer> spinner = new ListSpinner<Integer>(
 				p.getMinValue(), p.getMaxValue());
 		spinner.setValue(p.getArgument());
@@ -142,9 +143,9 @@ public class ParameterStage extends Stage {
 	 * scenario is especially true in the case of IPF standardization.
 	 * @return CheckBox object.
 	 * */
-	private CheckBox createCheckBox(final BooleanParameter p) {
-		CheckBox cb = new CheckBox(p.getName());
-		cb.setId(p.getName());
+	private CheckBox buildCheckBox(final BooleanParameter p) {
+		CheckBox cb = new CheckBox(p.getName().get());
+		cb.setId(p.getName().get());
 		cb.selectedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> repr,
@@ -160,14 +161,14 @@ public class ParameterStage extends Stage {
 	 * The user can adjust weights for these nucleotides individually,
 	 * resulting in different PWM computations.
 	 * */
-	private GridPane createWeightsPane(BaseWeightParameter p) {
+	private GridPane buildWeightsPane(BaseWeightParameter p) {
 		GridPane grid = new GridPane();
 		grid.setHgap(10);
 		grid.setAlignment(Pos.CENTER);
 		for (int i = 0; i < p.getArguments().size(); i++) {
 			DoubleParameter np = p.getArguments().get(i);
-			BigDecimalField field = this.createDoubleSlider(np);
-			grid.add(new Label(np.getName()), 0, i); // name on row i
+			BigDecimalField field = this.buildDoubleSlider(np);
+			grid.add(new Label(np.getName().get()), 0, i); // name on row i
 			grid.add(field, 1, i); // name on row i+1
 		}
 		return grid;
@@ -178,7 +179,7 @@ public class ParameterStage extends Stage {
 	 * corresponding actions be performed.
 	 * @return HBox button layout.
 	 * */
-	private HBox createButtons() {
+	private HBox buildButtons() {
 		final Button ok = new Button("OK");
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

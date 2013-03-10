@@ -47,6 +47,20 @@ public class Matrix {
 		}
 		this.setSum(sum);
 	}
+	
+	/**
+	 * Compute sum of a given array; useful in cases where a column or row
+	 * is returned.
+	 * @param array of values.
+	 * @return sum of the provided list.
+	 * */
+	public static double computeSum(double[] vals) {
+		double sum = 0;
+		for (int i = 0; i < vals.length; i++) {
+			sum += vals[i];
+		}
+		return sum;
+	}
 
 	/**
 	 * Get a specific row from the Matrix given its row index.
