@@ -74,7 +74,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 				else if (menuItem.getId().equals("run")) {
 					this.loadDemoGroups();
-					this.loadDemoPWMs();
+					this.loadDemoMotifs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
@@ -124,16 +124,16 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 		MarinaGUI.get().getParameterMap().setQuery(queryGroup);
 	}
 
+	@SuppressWarnings("unused")
 	private void loadDemoPWMs() throws IOException {
 		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
 		parser.parse();
 		MarinaGUI.get().getParameterMap().setPWMParser(parser);
 	}
 
-	@SuppressWarnings("unused")
 	private void loadDemoMotifs() throws IOException {
-		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
+		DNAMotifParser parser = new DNAMotifParser(new File("./demo/sample_motifs.txt"));
 		parser.parse();
-		MarinaGUI.get().getParameterMap().setPWMParser(parser);
+		MarinaGUI.get().getParameterMap().setMotifParser(parser);
 	}
 }
