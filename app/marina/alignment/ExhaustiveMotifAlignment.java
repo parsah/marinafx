@@ -13,13 +13,13 @@ public class ExhaustiveMotifAlignment extends AbstractAlignment {
 	private DNAMotifParser parser;
 	
 	public ExhaustiveMotifAlignment() {
-		this.setParser(MarinaGUI.get().getParameterMap().getMotifParser());
+		this.setParser(MarinaGUI.get().parameterMap().getMotifParser());
 		this.setName("Rabin-Karp");
 	}
 	
 	@Override
 	public void align() throws IOException {
-		ParameterMap param = MarinaGUI.get().getParameterMap(); // get options
+		ParameterMap param = MarinaGUI.get().parameterMap(); // get options
 		Group[] groups = new Group[]{param.getQuery(), param.getBaseline()};
 		for (int i = 0; i < groups.length; i++) { // for each group ...
 			Group group = groups[i];

@@ -33,7 +33,7 @@ public class AbundanceInference {
 	 * @return boolean whether the matrix passes the support cutoff.
 	 * */
 	public boolean isPassSupport(ContingencyMatrix cm) {
-		Parameter p = MarinaGUI.get().getParameterMap().get(ParameterName.SUPPORT);
+		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.SUPPORT);
 		double userSupport = ((DoubleParameter)(p)).getArgument();
 		if (cm.getSupport() >= userSupport) {
 			return true;
@@ -48,7 +48,7 @@ public class AbundanceInference {
 	 * @return boolean whether the matrix passes the difference cutoff.
 	 * */
 	public boolean isPassDifference(ContingencyMatrix cm) {
-		Parameter p = MarinaGUI.get().getParameterMap().get(ParameterName.DIFF);
+		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.DIFF);
 		int userDiff = ((IntegerParameter)(p)).getArgument();
 		if (cm.getDifference() >= userDiff) {
 			return true;
@@ -63,7 +63,7 @@ public class AbundanceInference {
 	 * @return boolean whether a matrix passes the Laplace correction cutoff.
 	 * */
 	public boolean isPassLaplace(ContingencyMatrix cm) {
-		Parameter p = MarinaGUI.get().getParameterMap().get(ParameterName.LAPL);
+		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.LAPL);
 		double userLaplace = ((DoubleParameter)(p)).getArgument();
 		if (cm.getLaplace() >= userLaplace) {
 			return true;

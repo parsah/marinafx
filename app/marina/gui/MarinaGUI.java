@@ -210,7 +210,10 @@ public class MarinaGUI extends Application {
 	/**
 	 * @return the runtimeArgs
 	 */
-	public ParameterMap getParameterMap() {
+	public ParameterMap parameterMap() {
+		if (this.parameterMap == null) {
+			this.setParameterMap(new ParameterMap());
+		}
 		return parameterMap;
 	}
 

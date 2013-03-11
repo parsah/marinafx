@@ -40,7 +40,7 @@ public final class AlignmentAction extends Task<Void> {
 	 * @return the parameters
 	 */
 	private ParameterMap getParameters() {
-		return MarinaGUI.get().getParameterMap();
+		return MarinaGUI.get().parameterMap();
 	}
 
 	@Override

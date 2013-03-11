@@ -2,7 +2,11 @@ package marina.bindingsite;
 
 import java.io.IOException;
 
+import marina.gui.MarinaGUI;
 import marina.matrix.Matrix;
+import marina.parameter.BaseWeightParameter;
+import marina.parameter.DoubleParameter;
+import marina.parameter.ParameterName;
 
 /**
  * A Position Weight Matrix (PWM) is a special type of Matrix in-that it is
@@ -39,6 +43,36 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Given base-specific weights, the matrix is to be put into an
+	 * information function. In doing so, the matrix becomes one which is
+	 * weighted rather than frequency-based.
+	 * @throws IOException 
+	 * */
+	public void information() throws IOException {
+		double[][] origFreqMatrix = this.getData().clone();
+		// compute matrix information content given the original matrix.
+		for (int c = 0; c < this.getHeight(); c++) {
+			for (int r = 0; r < this.getWidth(); r++) {
+				double value = origFreqMatrix[c][r] / this.getColumnSums()[c];
+				this.getData()[c][r] = PositionWeightMatrix.information(value);
+			}
+		}
+		this.updateColumnSums(); // update matrix-sum after information added.
+		// next, apply base-specific weights onto the information matrix
+		for (int c = 0; c < this.getHeight(); c++) {
+			for (int r = 0; r < this.getWidth(); r++) {
+//				double noWeight = origFreqMatrix[c][r] * this.getColumnSums()[r];
+//				this.getRows()this.getColumnSums()[c];
+			}
+		}
+		
+//		for (DoubleParameter p: ((BaseWeightParameter)MarinaGUI.get().parameterMap().get(ParameterName.WEIGHTS)).getArguments()) {
+//			System.out.println(p.getName().get()+"\t"+p.getArgument());
+//		}
+		
 	}
 
 	/**

@@ -117,5 +117,19 @@ public class PositionWeightMatrixTest {
 		this.pwm.jitter();
 		assertFalse(this.pwm.contains(0));
 	}
+	
+	/**
+	 * Test that column sums of a weighted matrix sum to entire matrix sum.
+	 * @throws IOException 
+	 * */
+	@Test
+	public void testWeightedSumEquality() throws IOException {
+		this.pwm.jitter();
+		this.pwm.updateColumnSums(); // compute column sums
+		this.pwm.information();
+		this.pwm.updateMatrixSum();
+		double matrixSum = Matrix.summation(this.pwm.getColumnSums());
+		assertEquals(matrixSum, this.pwm.getSum(), 1);
+	}
 
 }

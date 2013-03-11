@@ -17,7 +17,7 @@ public class AlignmentTaskListener implements EventHandler<WorkerStateEvent> {
 		if (WorkerStateEvent.WORKER_STATE_SUCCEEDED != null) {
 			String msg = "Alignments OK. Ready for quantification.";
 			MarinaGUI.get().getStatusBar().setText(msg);
-			MarinaGUI.get().getParameterMap().setAlignmentSuccess(true);
+			MarinaGUI.get().parameterMap().setAlignmentSuccess(true);
 		}
 		if (WorkerStateEvent.WORKER_STATE_FAILED == null) {
 			String msg = "Alignment failure due to background thread.";

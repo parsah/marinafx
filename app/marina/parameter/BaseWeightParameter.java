@@ -21,13 +21,13 @@ public class BaseWeightParameter extends Parameter {
 	}
 	
 	private void assignDefaultWeights() {
-		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_A, 
+		this.getArguments().add(new DoubleParameter(ParameterName.A, 
 				0.25, 0, 1));
-		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_T, 
+		this.getArguments().add(new DoubleParameter(ParameterName.T, 
 				0.25, 0, 1));
-		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_G, 
+		this.getArguments().add(new DoubleParameter(ParameterName.G, 
 				0.25, 0, 1));
-		this.getArguments().add(new DoubleParameter(ParameterName.WEIGHT_C, 
+		this.getArguments().add(new DoubleParameter(ParameterName.C, 
 				0.25, 0, 1));
 	}
 

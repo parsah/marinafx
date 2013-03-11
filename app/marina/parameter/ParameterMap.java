@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import marina.group.Group;
+import marina.gui.MarinaGUI;
 import marina.parser.DNAMotifParser;
 import marina.parser.PWMParser;
 
@@ -50,10 +51,14 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 		DoubleParameter pVal = new DoubleParameter(ParameterName.P_VALUE, 0.05, 0, 1.0);
 		IntegerParameter worker = new IntegerParameter(ParameterName.WORKERS, 1, 1, numWorkers);
 		BooleanParameter ipf = new BooleanParameter(ParameterName.IPF, false);
-		BaseWeightParameter weights = new BaseWeightParameter(ParameterName.WEIGHTS);
+		DoubleParameter weightA = new DoubleParameter(ParameterName.A, 0.25, 0, 1.0);
+		DoubleParameter weightT = new DoubleParameter(ParameterName.T, 0.25, 0, 1.0);
+		DoubleParameter weightG = new DoubleParameter(ParameterName.G, 0.25, 0, 1.0);
+		DoubleParameter weightC = new DoubleParameter(ParameterName.C, 0.25, 0, 1.0);
 		List<Parameter> paramSet = new ArrayList<Parameter>();
+		// add parameters to global-set
 		Collections.addAll(paramSet, diff, len, count, supp, pwm, lapl, 
-				pVal, worker, ipf, weights); // add parameters to global-set
+				pVal, worker, ipf, weightA, weightT, weightG, weightC); 
 		for (Parameter p: paramSet) {
 			this.put(p.getName(), p);
 		}
@@ -66,11 +71,11 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 	 * @return boolean whether all four weights sum to 1.0.
 	 * */
 	public boolean hasValidWeights() {
-		BaseWeightParameter w = (BaseWeightParameter)this.get(ParameterName.WEIGHTS);
-		double sum = 0;
-		for (DoubleParameter np: w.getArguments()) {
-			sum += np.getArgument();
-		}
+		double sum = 
+				ParameterMap.toDouble(ParameterName.A) +
+				ParameterMap.toDouble(ParameterName.T) +
+				ParameterMap.toDouble(ParameterName.G) +
+				ParameterMap.toDouble(ParameterName.C);
 		if (sum == 1.0) {
 			return true;
 		}
@@ -90,6 +95,36 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 		boolean hasFASTA = (this.getQuery() != null && 
 				this.getBaseline() != null);
 		return hasFASTA && hasParser; // both clauses must be met to continue
+	}
+	
+	/**
+	 * Converts a specific parameter to type-double.
+	 * @return double representing the specific parameter
+	 * */
+	public static double toDouble(ParameterName name) {
+		ParameterMap paramMap = MarinaGUI.get().parameterMap();
+		DoubleParameter param = (DoubleParameter)paramMap.get(name);
+		return param.getArgument();
+	}
+	
+	/**
+	 * Converts a specific parameter to type-integer.
+	 * @return integer representing the specific parameter
+	 * */
+	public static int toInteger(ParameterName name) {
+		ParameterMap paramMap = MarinaGUI.get().parameterMap();
+		IntegerParameter param = (IntegerParameter)paramMap.get(name);
+		return param.getArgument();
+	}
+	
+	/**
+	 * Converts a specific parameter to type-boolean.
+	 * @return boolean representing the specific parameter
+	 * */
+	public static boolean toBoolean(ParameterName name) {
+		ParameterMap paramMap = MarinaGUI.get().parameterMap();
+		BooleanParameter param = (BooleanParameter)paramMap.get(name);
+		return param.getArgument();
 	}
 
 	/**

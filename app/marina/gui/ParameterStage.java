@@ -67,7 +67,7 @@ public class ParameterStage extends Stage {
 	 * length, PWM, and Laplace-cutoff selection, amongst others.
 	 * */
 	private void positionAdjustments() {
-		ParameterMap paramSet = MarinaGUI.get().getParameterMap();
+		ParameterMap paramSet = MarinaGUI.get().parameterMap();
 		int rowNum = 0; // for each parameter, add it to the layout
 		for (ParameterName name: paramSet.keySet()) { // create widgets per parameter
 			Parameter p = paramSet.get(name);
@@ -184,7 +184,7 @@ public class ParameterStage extends Stage {
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if (MarinaGUI.get().getParameterMap().hasValidWeights()) {
+				if (MarinaGUI.get().parameterMap().hasValidWeights()) {
 					hide();
 				}
 				else {

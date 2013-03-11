@@ -26,8 +26,8 @@ public class CandidateMatrixBuilder {
 	private Group baseline;
 	
 	public CandidateMatrixBuilder() {
-		this.setBaseline(MarinaGUI.get().getParameterMap().getBaseline());
-		this.setQuery(MarinaGUI.get().getParameterMap().getQuery());
+		this.setBaseline(MarinaGUI.get().parameterMap().getBaseline());
+		this.setQuery(MarinaGUI.get().parameterMap().getQuery());
 	}
 	
 	public CandidateMatrixBuilder(Group query, Group baseline) {

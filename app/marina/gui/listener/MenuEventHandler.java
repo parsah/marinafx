@@ -31,7 +31,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 			Object source = event.getSource();
 			if (source instanceof MenuItem ) { // actions per menu item.
 				MenuItem menuItem = (MenuItem)source;
-				ParameterMap params = MarinaGUI.get().getParameterMap();
+				ParameterMap params = MarinaGUI.get().parameterMap();
 				if (menuItem.getId().equals("showSchema")) {
 					SchemaStage dialog = new SchemaStage();
 					dialog.show();
@@ -117,24 +117,24 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 		FASTAParser p = new FASTAParser(new File("./demo/most_induced.fasta"));
 		p.parse();
 		Group controlGroup = new Group(p);
-		MarinaGUI.get().getParameterMap().setBaseline(controlGroup);
+		MarinaGUI.get().parameterMap().setBaseline(controlGroup);
 		// load demo query
 		FASTAParser j = new FASTAParser(new File("./demo/most_suppressed.fasta"));
 		j.parse();
 		Group queryGroup = new Group(j);
-		MarinaGUI.get().getParameterMap().setQuery(queryGroup);
+		MarinaGUI.get().parameterMap().setQuery(queryGroup);
 	}
 
 	private void loadDemoPWMs() throws IOException {
 		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
 		parser.parse();
-		MarinaGUI.get().getParameterMap().setPWMParser(parser);
+		MarinaGUI.get().parameterMap().setPWMParser(parser);
 	}
 	
 	@SuppressWarnings("unused")
 	private void loadDemoMotifs() throws IOException {
 		DNAMotifParser parser = new DNAMotifParser(new File("./demo/sample_motifs.txt"));
 		parser.parse();
-		MarinaGUI.get().getParameterMap().setMotifParser(parser);
+		MarinaGUI.get().parameterMap().setMotifParser(parser);
 	}
 }

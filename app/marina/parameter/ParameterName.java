@@ -10,11 +10,10 @@ public enum ParameterName {
 	P_VALUE("p-value"),
 	WORKERS("#/workers"),
 	IPF("IPF-standardize"),
-	WEIGHTS("Weights"), // encapsulates all the four weights
-	WEIGHT_A("A"), // these are nucleotide-specific weights
-	WEIGHT_T("T"),
-	WEIGHT_G("G"),
-	WEIGHT_C("C");
+	A("A"), // nucleotide-specific weights
+	T("T"),
+	G("G"),
+	C("C");
 	
 	private String name;
 	
