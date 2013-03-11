@@ -1,5 +1,7 @@
 package marina.bindingsite;
 
+import java.io.IOException;
+
 import marina.group.DNASequence;
 
 /**
@@ -26,7 +28,7 @@ public class LinearDNAMotif extends DNASequence implements BindingSite {
 	}
 
 	@Override
-	public boolean sanityCheck() {
+	public boolean sanityCheck() throws IOException{
 		return false;
 	}
 

@@ -1,6 +1,6 @@
 package marina.matrix;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The core Marina data-structure associated with storing and 
@@ -14,8 +14,9 @@ import java.util.HashMap;
 public class Matrix {
 	private double[][] data;
 	private String[] columns;
-	private HashMap<String, Integer> rows; // row name references row number.
+	private Map<String, Integer> rows; // row name references row number.
 	private double sum;
+	private String name;
 
 	/**
 	 * Create a Matrix object given a pre-populated array of values.
@@ -24,6 +25,7 @@ public class Matrix {
 		this.setData(data);
 		this.setColumns(null);
 		this.setRows(null);
+		this.setName(null);
 		this.computeSum();
 	}
 
@@ -135,14 +137,14 @@ public class Matrix {
 	/**
 	 * @return the rows
 	 */
-	public HashMap<String, Integer> getRows() {
+	public Map<String, Integer> getRows() {
 		return rows;
 	}
 
 	/**
 	 * @param rows the rows to set
 	 */
-	public void setRows(HashMap<String, Integer> rows) {
+	public void setRows(Map<String, Integer> rows) {
 		this.rows = rows;
 	}
 
@@ -158,5 +160,19 @@ public class Matrix {
 	 */
 	private void setSum(double sum) {
 		this.sum = sum;
+	}
+
+	/**
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
 	}
 }

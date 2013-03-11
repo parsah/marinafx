@@ -1,5 +1,7 @@
 package marina.bindingsite;
 
+import java.io.IOException;
+
 /**
  * A BindingSite provides the ability to work with both DNA motifs or a PWM.
  * In doing so, both these objects can be classified using one data-structure
@@ -13,6 +15,6 @@ public interface BindingSite {
 	 * of sound composition or not.
 	 * @return whether the BindingSite object is valid.
 	 * */
-	public boolean sanityCheck();
+	public boolean sanityCheck() throws IOException;
 
 }

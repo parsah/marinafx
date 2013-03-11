@@ -142,10 +142,10 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 	}
 
 	/**
-	 * @param pwmParser the pwmParser to set
+	 * @param parser the pwmParser to set
 	 */
-	public void setPWMParser(PWMParser pwmParser) {
-		this.pwmParser = pwmParser;
+	public void setPWMParser(PWMParser parser) {
+		this.pwmParser = parser;
 	}
 
 	/**

@@ -64,6 +64,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					PWMParser parser = new PWMParser();
 					parser.showNoFilterPrompt();
 					parser.parse(); // TODO implement PWM parsing
+					params.setPWMParser(parser);
 				}
 				else if (menuItem.getId().equals("loadMotifs")) {
 					DNAMotifParser parser = new DNAMotifParser();
@@ -72,7 +73,8 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					params.setMotifParser(parser);
 				}
 				else if (menuItem.getId().equals("run")) {
-					this.loadDemoFiles();
+					this.loadDemoGroups();
+					this.loadDemoPWMs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
@@ -110,7 +112,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 	 * Solely for demonstration purposes; loads the demo files and saves time
 	 * explicitly loading them at runtime.
 	 * */
-	private void loadDemoFiles() throws IOException {
+	private void loadDemoGroups() throws IOException {
 		FASTAParser p = new FASTAParser(new File("./demo/most_induced.fasta"));
 		p.parse();
 		Group controlGroup = new Group(p);
@@ -120,8 +122,18 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 		j.parse();
 		Group queryGroup = new Group(j);
 		MarinaGUI.get().getParameterMap().setQuery(queryGroup);
-		DNAMotifParser parser = new DNAMotifParser(new File("./demo/sample_motifs.txt"));
+	}
+
+	private void loadDemoPWMs() throws IOException {
+		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
 		parser.parse();
-		MarinaGUI.get().getParameterMap().setMotifParser(parser);
+		MarinaGUI.get().getParameterMap().setPWMParser(parser);
+	}
+
+	@SuppressWarnings("unused")
+	private void loadDemoMotifs() throws IOException {
+		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
+		parser.parse();
+		MarinaGUI.get().getParameterMap().setPWMParser(parser);
 	}
 }

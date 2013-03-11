@@ -1,5 +1,7 @@
 package marina.bindingsite;
 
+import java.io.IOException;
+
 import marina.matrix.Matrix;
 
 /**
@@ -20,9 +22,8 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 	}
 
 	@Override
-	public boolean sanityCheck() {
+	public boolean sanityCheck() throws IOException{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }
