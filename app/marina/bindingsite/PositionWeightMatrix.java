@@ -26,4 +26,18 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	/**
+	 * The P-MATCH information function.
+	 * @param double representing PWM weight
+	 * @return double representing information content
+	 * @throws IOException 
+	 * */
+	public static double information(double value) throws IOException {
+		if (value <= 0) {
+			String m = "PWM information f(x) requires positive matrix values.";
+			throw new IOException(m);
+		}
+		return value * Math.log(4*value);
+	}
 }

@@ -48,4 +48,25 @@ public class FASTASequence extends DNASequence {
 	private void setMappings(HashMap<BindingSite, List<Integer>> mappings) {
 		this.mappings = mappings;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if(obj instanceof FASTASequence) { // equality based on header
+			FASTASequence other = (FASTASequence)obj;
+			return (this.getHeader().equals(other.getHeader()) &&
+					this.getSequence().equals(other.getSequence()));
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() { // FASTA header is set to be unique
+		return this.getHeader().hashCode();
+	}
 }

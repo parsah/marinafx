@@ -47,20 +47,20 @@ public class PWMParser extends Parser {
 				Paths.get(this.getFile().toString()), cs)) {
 			String line = null;
 			TextualPWMWrapper pwmWrapper = null;
-			List<TextualPWMWrapper> wraps = new ArrayList<TextualPWMWrapper>();
+			List<TextualPWMWrapper> pwms = new ArrayList<TextualPWMWrapper>();
 			while ((line = reader.readLine()) != null) {
 				if (line.length() != 0) { // exit upon a blank line
 					if (line.startsWith(">")) {
 						pwmWrapper = new TextualPWMWrapper();
 						pwmWrapper.setHeader(line.substring(1, line.length()));
-						wraps.add(pwmWrapper);
+						pwms.add(pwmWrapper);
 					}
 					else {
 						pwmWrapper.getRawRows().add(line);
 					}
 				}
 			}
-			this.toPWM(wraps);
+			this.toPWM(pwms);
 		}
 		String msg = this.getMatrices().size() + " PWMs parsed.";
 		MarinaGUI.get().getStatusBar().setText(msg);
