@@ -19,7 +19,10 @@ public final class AlignmentAction extends Task<Void> {
 	 * @return boolean whether only DNA motifs will be run.
 	 * */
 	public boolean isUsingMotifs() {
-		return this.getParameters().getMotifParser() != null;
+		if (this.getParameters() != null) {
+			return this.getParameters().getMotifParser() != null;
+		}
+		return false;
 	}
 
 	/**
@@ -27,7 +30,10 @@ public final class AlignmentAction extends Task<Void> {
 	 * @return boolean whether only PWMs will be run.
 	 * */
 	public boolean isUsingPWMs() {
-		return this.getParameters().getPWMParser() != null;
+		if (this.getParameters() != null) {
+			return this.getParameters().getPWMParser() != null;
+		}
+		return false;
 	}
 
 	/**
@@ -40,11 +46,12 @@ public final class AlignmentAction extends Task<Void> {
 	@Override
 	protected Void call() throws Exception {
 		if (isUsingMotifs()) {
-			ExhaustiveMotifAlignment factory = new ExhaustiveMotifAlignment();
-			factory.align();
+			ExhaustiveMotifAlignment motifAlign = new ExhaustiveMotifAlignment();
+			motifAlign.align();
 		}
 		if (isUsingPWMs()) {
-			// TODO implement PWM alignment factory
+			ExhaustivePWMAlignment pwmAlign = new ExhaustivePWMAlignment();
+			pwmAlign.align(); // TODO implement PWM alignment factory
 		} // return nothing since Group objects are global.
 		return null;
 	}

@@ -117,7 +117,7 @@ public class ContingencyMatrix extends Matrix {
 		// adjust matrix counts for f(0, 1) and f(1, 0)
 		double diagValue = (this.getSum() / 2) - xAndG;
 		this.getData()[1][0] = this.getData()[0][1] = diagValue;
-		this.computeSum();
+		this.updateMatrixSum();
 	}
 
 	/**
@@ -130,11 +130,15 @@ public class ContingencyMatrix extends Matrix {
 				this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G));
 	}
 	
+	/**
+	 * Return the Laplace correction value for the respective matrix.
+	 * @return Laplace correction.
+	 * */
 	public double getLaplace() {
 		return (this.getFrequency(ContingencyMatrixCell.X_AND_G) + 1) /
-				(Matrix.computeSum(this.getX()) + 2);
+				(Matrix.summation(this.getX()) + 2);
 	}
-
+	
 	/**
 	 * @return the bindingSite
 	 */

@@ -1,6 +1,8 @@
 package marina.group;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -37,9 +39,17 @@ public class FASTASequenceTest {
 	 * Changing the FASTA sequence must change its sequence length.
 	 * */
 	@Test
-	public void testChangedSequenceLength() {
+	public void testCanUpdateSequenceLength() {
 		this.fasta.setSequence("TACGTGTCA");
 		assertEquals(this.fasta.getLength(), 9);
+	}
+	
+	/**
+	 * Test that the FASTA object is of type DNASequence
+	 * */
+	@Test
+	public void testIsBindingSite() {
+		assertTrue(this.fasta instanceof DNASequence);
 	}
 	
 	/**

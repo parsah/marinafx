@@ -26,10 +26,12 @@ public class PWMParser extends Parser {
 
 	public PWMParser(File file) {
 		super(file);
+		this.setMatrices(new ArrayList<PositionWeightMatrix>());
 	}
 
 	public PWMParser() {
 		super(null);
+		this.setMatrices(new ArrayList<PositionWeightMatrix>());
 	}
 	
 	public List<PositionWeightMatrix> toPWM(List<TextualPWMWrapper> wrappers) {
@@ -60,11 +62,10 @@ public class PWMParser extends Parser {
 					}
 				}
 			}
-			this.toPWM(pwms);
+			this.getMatrices().addAll(this.toPWM(pwms)); // add parsed PWMs
 		}
 		String msg = this.getMatrices().size() + " PWMs parsed.";
 		MarinaGUI.get().getStatusBar().setText(msg);
-
 	}
 
 	@Override

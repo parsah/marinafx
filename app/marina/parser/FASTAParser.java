@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import marina.group.FASTASequence;
-import marina.gui.MarinaGUI;
 
 /**
  * Provides the ability to parse user-provided FASTA files. The purpose of
@@ -57,8 +56,8 @@ public class FASTAParser extends Parser {
 			FASTASequence i = new FASTASequence(head, seqs.get(head).toString());
 			this.getSequences().add(i);
 		}
-		String msg = seqs.size() + " FASTA entries parsed successfully.";
-		MarinaGUI.get().getStatusBar().setText(msg);
+//		String msg = seqs.size() + " FASTA entries parsed successfully.";
+//		MarinaGUI.get().getStatusBar().setText(msg);
 	}
 
 	@Override

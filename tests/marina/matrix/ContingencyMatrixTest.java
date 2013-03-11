@@ -25,6 +25,14 @@ public class ContingencyMatrixTest {
 	}
 	
 	/**
+	 * Test that a ContingencyMatrix is a sub-class of the Matrix class.
+	 * */
+	@Test
+	public void testIsMatrix() {
+		assertTrue(this.cm instanceof Matrix);
+	}
+	
+	/**
 	 * By default, no column names are provided; often not needed.
 	 * */
 	@Test
@@ -55,7 +63,7 @@ public class ContingencyMatrixTest {
 	@Test
 	public void testRecomputingSumEquality() {
 		double oldSum = this.cm.getSum();
-		this.cm.computeSum();
+		this.cm.updateMatrixSum();
 		assertEquals(oldSum, this.cm.getSum(), 0);
 	}
 	
@@ -264,7 +272,7 @@ public class ContingencyMatrixTest {
 	public void testLaplace() {
 		double lapl = (this.cm.getFrequency(
 				ContingencyMatrixCell.X_AND_G) + 1) / 
-				(Matrix.computeSum(this.cm.getX()) + 2);
+				(Matrix.summation(this.cm.getX()) + 2);
 		assertEquals(lapl, 0.5399, 1);
 	}
 	
@@ -288,8 +296,8 @@ public class ContingencyMatrixTest {
 	public void testRowSumsFromIPF() {
 		this.cm.ipf();
 		assertEquals(
-				Matrix.computeSum(this.cm.getX()),
-				Matrix.computeSum(this.cm.getNotX()), 0);
+				Matrix.summation(this.cm.getX()),
+				Matrix.summation(this.cm.getNotX()), 0);
 	}
 	
 	/**
@@ -299,8 +307,8 @@ public class ContingencyMatrixTest {
 	public void testColumnSumsFromIPF() {
 		this.cm.ipf();
 		assertEquals(
-				Matrix.computeSum(this.cm.getG()),
-				Matrix.computeSum(this.cm.getNotG()), 0);
+				Matrix.summation(this.cm.getG()),
+				Matrix.summation(this.cm.getNotG()), 0);
 	}
 	
 	/**

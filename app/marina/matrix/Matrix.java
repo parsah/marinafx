@@ -16,7 +16,10 @@ public class Matrix {
 	private String[] columns;
 	private Map<String, Integer> rows; // row name references row number.
 	private double sum;
-	private String name;
+	private double min; // minimum value in matrix
+	private double max; // maximum value in matrix
+	private String name; // name to identify the matrix by.
+	private double[] columnSums; // list of column sums
 
 	/**
 	 * Create a Matrix object given a pre-populated array of values.
@@ -25,8 +28,7 @@ public class Matrix {
 		this.setData(data);
 		this.setColumns(null);
 		this.setRows(null);
-		this.setName(null);
-		this.computeSum();
+		this.updateMatrixSum();
 	}
 
 	/**
@@ -40,7 +42,7 @@ public class Matrix {
 	 * Compute sum of all the matrix values.
 	 * @return double representing Matrix sum.
 	 * */
-	public void computeSum() {
+	public void updateMatrixSum() {
 		double sum = 0;
 		for (int i = 0; i < this.getHeight(); i++) {
 			for (int j = 0; j < this.getWidth(); j++) {
@@ -51,12 +53,55 @@ public class Matrix {
 	}
 	
 	/**
+	 * Identification of matrix-wide minimum value
+	 * */
+	public void updateMin() {
+		double minValue = Double.MAX_VALUE;
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				double currValue = this.getData()[i][j]; 
+				if (currValue <= minValue) {
+					minValue = currValue;
+				}
+			}
+		}
+		this.setMin(minValue);
+	}
+	
+	/**
+	 * Identification of matrix-wide maximum value
+	 * */
+	public void updateMax() {
+		double maxValue = Double.MIN_VALUE;
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				double currValue = this.getData()[i][j]; 
+				if (currValue >= maxValue) {
+					maxValue = currValue;
+				}
+			}
+		}
+		this.setMax(maxValue);
+	}
+	
+	/**
+	 * Compute column-sums for each matrix.
+	 * */
+	public void updateColumnSums() {
+		double[] sums = new double[this.getWidth()];
+		for (int i=0; i < this.getWidth(); i++) {
+			sums[i] = Matrix.summation(this.getColumn(i));
+		}
+		this.setColumnSums(sums);
+	}
+	
+	/**
 	 * Compute sum of a given array; useful in cases where a column or row
 	 * is returned.
 	 * @param array of values.
 	 * @return sum of the provided list.
 	 * */
-	public static double computeSum(double[] vals) {
+	public static double summation(double[] vals) {
 		double sum = 0;
 		for (int i = 0; i < vals.length; i++) {
 			sum += vals[i];
@@ -82,6 +127,22 @@ public class Matrix {
 			col[i] = this.getData()[i][column];
 		}
 		return col;
+	}
+	
+	/**
+	 * Determines whether a specific value is found in the matrix.
+	 * @param double representing value to find.
+	 * @return boolean whether the value is present in the matrix.
+	 * */
+	public boolean contains(double value) {
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				if (value == this.getData()[i][j]) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -174,5 +235,47 @@ public class Matrix {
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	/**
+	 * @return the min
+	 */
+	public double getMin() {
+		return min;
+	}
+
+	/**
+	 * @param min the min to set
+	 */
+	private void setMin(double min) {
+		this.min = min;
+	}
+
+	/**
+	 * @return the max
+	 */
+	public double getMax() {
+		return max;
+	}
+
+	/**
+	 * @param max the max to set
+	 */
+	private void setMax(double max) {
+		this.max = max;
+	}
+
+	/**
+	 * @return the columnSums
+	 */
+	public double[] getColumnSums() {
+		return columnSums;
+	}
+
+	/**
+	 * @param columnSums the columnSums to set
+	 */
+	private void setColumnSums(double[] columnSums) {
+		this.columnSums = columnSums;
 	}
 }
