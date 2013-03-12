@@ -1,5 +1,6 @@
 package marina.parser;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,13 +29,14 @@ public class TextualPWMWrapper {
 	/**
 	 * Produces a PWM object given a PWM wrapper.
 	 * @return PWM object given the data and row information in the wrapper.
+	 * @throws IOException 
 	 * */
-	public PositionWeightMatrix toPWM() {
+	public PositionWeightMatrix toPWM() throws IOException {
 		PositionWeightMatrix m = new PositionWeightMatrix(this.generateData());
 		m.setRows(this.generateRows());
 		m.setColumns(this.generateColumns());
 		m.setName(this.getHeader());
-		m.jitter();
+		m.information();
 		return m;
 	}
 	
@@ -59,13 +61,13 @@ public class TextualPWMWrapper {
 	 * simply the column number represented as a String object.
 	 * @return array of Strings which represent PWM column names.
 	 * */
-	private String[] generateColumns() {
+	private int[] generateColumns() {
 		String aRow = this.getRawRows().get(0);
 		// subtract 1 from the columns since the first column is a string
 		int len = aRow.split(TextualPWMWrapper.DELIMITER).length-1;
-		String[] columns = new String[len];
+		int[] columns = new int[len];
 		for (int i = 0; i < len; i++) {
-			columns[i] = String.valueOf(i);
+			columns[i] = i;
 		}
 		return columns;
 	}

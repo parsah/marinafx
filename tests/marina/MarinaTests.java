@@ -3,11 +3,11 @@ package marina;
 import marina.alignment.AlignmentActionTest;
 import marina.alignment.RabinKarpTest;
 import marina.bindingsite.LinearDNAMotifTest;
+import marina.bindingsite.PositionWeightMatrixTest;
 import marina.group.FASTASequenceTest;
 import marina.group.GroupTest;
 import marina.matrix.ContingencyMatrixCellTest;
 import marina.matrix.ContingencyMatrixTest;
-import marina.matrix.PositionWeightMatrixTest;
 import marina.parser.FASTAParserTest;
 import marina.quantification.StatisticTest;
 

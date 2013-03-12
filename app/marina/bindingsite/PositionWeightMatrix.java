@@ -2,11 +2,7 @@ package marina.bindingsite;
 
 import java.io.IOException;
 
-import marina.gui.MarinaGUI;
 import marina.matrix.Matrix;
-import marina.parameter.BaseWeightParameter;
-import marina.parameter.DoubleParameter;
-import marina.parameter.ParameterName;
 
 /**
  * A Position Weight Matrix (PWM) is a special type of Matrix in-that it is
@@ -19,9 +15,15 @@ import marina.parameter.ParameterName;
  * @author Parsa Hosseini
  * */
 public class PositionWeightMatrix extends Matrix implements BindingSite {
-
+	private double columnMins;
+	
 	public PositionWeightMatrix(double[][] data) {
 		super(data);
+		this.jitter();
+		this.updateColumnSums();
+		this.updateMatrixSum();
+		this.updateMax();
+		this.updateMin();
 	}
 
 	@Override
@@ -45,6 +47,25 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 		}
 	}
 	
+	public void updateColumnMins() {
+		double[] mins = new double[this.getWidth()];
+		for (int col=0; col < this.getWidth(); col++) {
+			double min = Matrix.minimum(this.getColumn(col));
+			mins[col] = min;
+		}
+		this.setColumnMins(Matrix.summation(mins));
+	}
+	
+	private double[][] copyData() {
+		double[][] data = new double[this.getHeight()][this.getWidth()];
+		for (int r = 0; r < data.length; r++) {
+			for (int c = 0; c < data[r].length; c++) {
+				data[r][c] = this.getData()[r][c];
+			}
+		}
+		return data;
+	}
+	
 	/**
 	 * Given base-specific weights, the matrix is to be put into an
 	 * information function. In doing so, the matrix becomes one which is
@@ -52,27 +73,25 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 	 * @throws IOException 
 	 * */
 	public void information() throws IOException {
-		double[][] origFreqMatrix = this.getData().clone();
+		double[][] origFreqMatrix = this.copyData();
 		// compute matrix information content given the original matrix.
-		for (int c = 0; c < this.getHeight(); c++) {
-			for (int r = 0; r < this.getWidth(); r++) {
-				double value = origFreqMatrix[c][r] / this.getColumnSums()[c];
-				this.getData()[c][r] = PositionWeightMatrix.information(value);
+		for (int r = 0; r < this.getHeight(); r++) {
+			for (int c = 0; c < this.getWidth(); c++) {
+				double value = origFreqMatrix[r][c] / this.getColumnSums()[r];
+				this.getData()[r][c] = PositionWeightMatrix.information(value);
 			}
 		}
 		this.updateColumnSums(); // update matrix-sum after information added.
 		// next, apply base-specific weights onto the information matrix
-		for (int c = 0; c < this.getHeight(); c++) {
-			for (int r = 0; r < this.getWidth(); r++) {
-//				double noWeight = origFreqMatrix[c][r] * this.getColumnSums()[r];
-//				this.getRows()this.getColumnSums()[c];
+		for (int r = 0; r < this.getHeight(); r++) {
+			for (int c = 0; c < this.getWidth(); c++) {
+				double weighted = origFreqMatrix[r][c] * 
+						this.getColumnSums()[c] * 0.25;
+				this.getData()[r][c] = weighted;
 			}
 		}
-		
-//		for (DoubleParameter p: ((BaseWeightParameter)MarinaGUI.get().parameterMap().get(ParameterName.WEIGHTS)).getArguments()) {
-//			System.out.println(p.getName().get()+"\t"+p.getArgument());
-//		}
-		
+		this.updateColumnMins();
+		this.updateMatrixSum();
 	}
 
 	/**
@@ -87,5 +106,19 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 			throw new IOException(m);
 		}
 		return val * Math.log(4*val);
+	}
+
+	/**
+	 * @return the columnMins
+	 */
+	public double getColumnMins() {
+		return columnMins;
+	}
+
+	/**
+	 * @param columnMins the columnMins to set
+	 */
+	public void setColumnMins(double columnMins) {
+		this.columnMins = columnMins;
 	}
 }

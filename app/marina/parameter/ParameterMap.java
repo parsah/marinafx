@@ -1,5 +1,6 @@
 package marina.parameter;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -125,6 +126,24 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 		ParameterMap paramMap = MarinaGUI.get().parameterMap();
 		BooleanParameter param = (BooleanParameter)paramMap.get(name);
 		return param.getArgument();
+	}
+	
+	public static double toBaseWeight(String base) throws IOException {
+		if (base.equals(ParameterName.A.get())) {
+			return ParameterMap.toDouble(ParameterName.A);
+		}
+		else if (base.equals(ParameterName.T.get())) {
+			return ParameterMap.toDouble(ParameterName.T);
+		}
+		else if (base.equals(ParameterName.G.get())) {
+			return ParameterMap.toDouble(ParameterName.G);
+		}
+		else if (base.equals(ParameterName.C.get())) {
+			return ParameterMap.toDouble(ParameterName.C);
+		}
+		else {
+			throw new IOException("Invalid base in PWM.");
+		}
 	}
 
 	/**

@@ -13,7 +13,7 @@ import java.util.Map;
  * */
 public class Matrix {
 	private double[][] data;
-	private String[] columns;
+	private int[] columns;
 	private Map<String, Integer> rows; // row name references row number.
 	private double sum;
 	private double min; // minimum value in matrix
@@ -108,6 +108,16 @@ public class Matrix {
 		}
 		return sum;
 	}
+	
+	public static double minimum(double[] vals) {
+		double minValue = Double.MAX_VALUE;
+		for (int i=0; i < vals.length; i++) {
+			if (vals[i] <= minValue) {
+				minValue = vals[i];
+			}
+		}
+		return minValue;
+	}
 
 	/**
 	 * Get a specific row from the Matrix given its row index.
@@ -184,14 +194,14 @@ public class Matrix {
 	/**
 	 * @return the columns
 	 */
-	public String[] getColumns() {
+	public int[] getColumns() {
 		return columns;
 	}
 
 	/**
 	 * @param columns the columns to set
 	 */
-	public void setColumns(String[] columns) {
+	public void setColumns(int[] columns) {
 		this.columns = columns;
 	}
 

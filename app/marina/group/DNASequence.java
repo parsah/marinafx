@@ -38,5 +38,14 @@ public abstract class DNASequence {
 	public int getLength() {
 		return this.getSequence().length();
 	}
+	
+	/**
+	 * Returns a specific base-pair given its respective index.
+	 * @param integer representing the desired base.
+	 * @return String representing an individual base-pair.
+	 * */
+	public String getBase(int i) {
+		return this.getSequence().substring(i, i+1);
+	}
 
 }

@@ -1,7 +1,9 @@
 package marina.alignment;
 
 import java.io.IOException;
+import java.util.List;
 
+import marina.bindingsite.FASTAFragment;
 import marina.bindingsite.PositionWeightMatrix;
 import marina.group.FASTASequence;
 import marina.group.Group;
@@ -22,19 +24,21 @@ public class ExhaustivePWMAlignment extends AbstractAlignment {
 		ParameterMap param = MarinaGUI.get().parameterMap(); // get options
 		Group[] groups = new Group[]{param.getQuery(), param.getBaseline()};
 		// TODO implement weights now-that there is no WEIGHTS param
-		for (int i = 0; i < groups.length; i++) { // for each group ...
-			Group group = groups[i];
+		for (Group group: groups) {
 			System.out.println(group.getBasename());
-			for (int j = 0; j < group.getSize(); j++) { // for each sequence
-				FASTASequence seq = group.getParser().getSequences().get(j);
-				// align sequence and motif using P-MATCH algorithm.
-				System.out.println("\t" + seq.getHeader());
+			for (FASTASequence seq: group.getParser().getSequences()) {
+				System.out.println(seq.getHeader());
 				for (PositionWeightMatrix pwm: this.getParser().getMatrices()) {
-					System.out.println("\t\t" + pwm.getName());
-					System.out.println("\t\t" + pwm.getRows());
+					List<FASTAFragment> fragments = seq.toFragments(pwm.getWidth());
+					for (FASTAFragment fragment: fragments) {
+						// align fragment given a PWM using P-MATCH algorithm.
+						PMatch pMatch = new PMatch(fragment, pwm);
+						pMatch.extrapolate();
+					}
 				}
 			}
 		}
+		System.out.println("done");
 //		System.out.println(((DoubleParameter)MarinaGUI.get().parameterMap().get(ParameterName.A)).getArgument());
 //		System.out.println(ParameterName.valueOf("A").get());
 	}

@@ -34,7 +34,7 @@ public class PWMParser extends Parser {
 		this.setMatrices(new ArrayList<PositionWeightMatrix>());
 	}
 	
-	public List<PositionWeightMatrix> toPWM(List<TextualPWMWrapper> wrappers) {
+	public List<PositionWeightMatrix> toPWM(List<TextualPWMWrapper> wrappers) throws IOException {
 		List<PositionWeightMatrix> pwms = new ArrayList<PositionWeightMatrix>();
 		for (TextualPWMWrapper pwmWrapper: wrappers) {
 			pwms.add(pwmWrapper.toPWM());

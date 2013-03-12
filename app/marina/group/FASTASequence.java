@@ -1,9 +1,11 @@
 package marina.group;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import marina.bindingsite.BindingSite;
+import marina.bindingsite.FASTAFragment;
 
 /**
  * All input promoter sequences are represented as FASTA files. In such a
@@ -14,14 +16,14 @@ import marina.bindingsite.BindingSite;
 public class FASTASequence extends DNASequence {
 	private String header;
 	private HashMap<BindingSite, List<Integer>> mappings; // TFBS mappings
-	
+
 	public FASTASequence(String header, String sequence) {
 		super();
 		this.setHeader(header);
 		this.setSequence(sequence);
 		this.setMappings(new HashMap<BindingSite, List<Integer>>());
 	}
-	
+
 	/**
 	 * @return the header
 	 */
@@ -48,7 +50,23 @@ public class FASTASequence extends DNASequence {
 	private void setMappings(HashMap<BindingSite, List<Integer>> mappings) {
 		this.mappings = mappings;
 	}
-	
+
+	/**
+	 * Splits a FASTA object into chunks of a preset length.
+	 * @param size length of each new substring.
+	 * */
+	public List<FASTAFragment> toFragments(int size) {
+		List<FASTAFragment> frags = new ArrayList<FASTAFragment>();
+		for (int i=0; i<this.getLength(); i+=size) {
+			String sub = this.getSequence().substring(i, Math.min(this.getLength(), (i + size)));
+			FASTAFragment f = new FASTAFragment(this, this.getHeader(), sub, i);
+			if (f.getLength() == size) {
+				frags.add(f);
+			}
+		}
+		return frags;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -64,7 +82,7 @@ public class FASTASequence extends DNASequence {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public int hashCode() { // FASTA header is set to be unique
 		return this.getHeader().hashCode();
