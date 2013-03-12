@@ -53,7 +53,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testMatrixSummation() {
-		assertEquals(this.cm.getSum(), 2377, 0); 
+		assertEquals(this.cm.sum(), 2377, 0); 
 	}
 	
 	/**
@@ -62,9 +62,8 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testRecomputingSumEquality() {
-		double oldSum = this.cm.getSum();
-		this.cm.updateMatrixSum();
-		assertEquals(oldSum, this.cm.getSum(), 0);
+		double oldSum = this.cm.sum();
+		assertEquals(oldSum, this.cm.sum(), 0);
 	}
 	
 	/**
@@ -205,7 +204,7 @@ public class ContingencyMatrixTest {
 	public void testXAndGProbability() {
 		assertTrue(
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_G) ==
-				this.cm.getData()[0][0] / this.cm.getSum());
+				this.cm.getData()[0][0] / this.cm.sum());
 	}
 	
 	/**
@@ -215,7 +214,7 @@ public class ContingencyMatrixTest {
 	public void testXAndNotGProbability() {
 		assertTrue(
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_NOT_G) ==
-				this.cm.getData()[0][1] / this.cm.getSum());
+				this.cm.getData()[0][1] / this.cm.sum());
 	}
 	
 	/**
@@ -226,7 +225,7 @@ public class ContingencyMatrixTest {
 	public void testNotXAndGProbability() {
 		assertTrue(
 				this.cm.getProbability(ContingencyMatrixCell.NOT_X_AND_G) ==
-				this.cm.getData()[1][0] / this.cm.getSum());
+				this.cm.getData()[1][0] / this.cm.sum());
 	}
 	
 	/**
@@ -236,7 +235,7 @@ public class ContingencyMatrixTest {
 	public void testNotXAndNotGProbability() {
 		assertTrue(
 				this.cm.getProbability(ContingencyMatrixCell.NOT_X_AND_NOT_G) ==
-				this.cm.getData()[1][1] / this.cm.getSum());
+				this.cm.getData()[1][1] / this.cm.sum());
 	}
 	
 	/**
@@ -249,7 +248,7 @@ public class ContingencyMatrixTest {
 				this.cm.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G) +
 				this.cm.getFrequency(ContingencyMatrixCell.X_AND_G) +
 				this.cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
-		assertTrue(sumProbability == this.cm.getSum());
+		assertTrue(sumProbability == this.cm.sum());
 	}
 	
 	/**

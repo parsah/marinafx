@@ -36,7 +36,7 @@ public class TextualPWMWrapper {
 		m.setRows(this.generateRows());
 		m.setColumns(this.generateColumns());
 		m.setName(this.getHeader());
-		m.information();
+		m.buildInformation();
 		return m;
 	}
 	

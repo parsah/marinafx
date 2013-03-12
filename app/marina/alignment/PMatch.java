@@ -21,10 +21,14 @@ public class PMatch {
 	 * considering that there are weights per base at each column. 
 	 * */
 	public void toProbability(double score) {
-		double prob = (score - this.getPWM().getColumnMins()) /
-				(this.getPWM().getSum() - this.getPWM().getColumnMins());
+		double prob = (score - this.getPWM().sumColumnMins()) /
+				(this.getPWM().sum() - this.getPWM().sumColumnMins());
 		if (prob >= ParameterMap.toDouble(ParameterName.PWM_CUTOFF)) {
-//			this.pwm.debug();
+			if (this.getPWM().getName().equals("2QHB_3DTF")) {
+				System.out.println(prob+"\t" + this.getFragment().toString()+"\t" + this.pwm.getName());
+				this.pwm.debug();
+				System.out.println();				
+			}
 			// TODO add index to parent sequence
 //			System.out.println("\t"+this.getFragment().getSequence()+"\t" + prob);
 		}

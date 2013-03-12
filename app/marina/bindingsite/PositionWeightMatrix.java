@@ -15,15 +15,10 @@ import marina.matrix.Matrix;
  * @author Parsa Hosseini
  * */
 public class PositionWeightMatrix extends Matrix implements BindingSite {
-	private double columnMins;
 	
 	public PositionWeightMatrix(double[][] data) {
 		super(data);
 		this.jitter();
-		this.updateColumnSums();
-		this.updateMatrixSum();
-		this.updateMax();
-		this.updateMin();
 	}
 
 	@Override
@@ -46,16 +41,7 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 			}
 		}
 	}
-	
-	public void updateColumnMins() {
-		double[] mins = new double[this.getWidth()];
-		for (int col=0; col < this.getWidth(); col++) {
-			double min = Matrix.minimum(this.getColumn(col));
-			mins[col] = min;
-		}
-		this.setColumnMins(Matrix.summation(mins));
-	}
-	
+		
 	private double[][] copyData() {
 		double[][] data = new double[this.getHeight()][this.getWidth()];
 		for (int r = 0; r < data.length; r++) {
@@ -72,28 +58,32 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 	 * weighted rather than frequency-based.
 	 * @throws IOException 
 	 * */
-	public void information() throws IOException {
+	public PositionWeightMatrix buildInformation() throws IOException {
 		double[][] origFreqMatrix = this.copyData();
+		double[][] infoData = new double[this.getHeight()][this.getWidth()];
 		// compute matrix information content given the original matrix.
 		for (int r = 0; r < this.getHeight(); r++) {
 			for (int c = 0; c < this.getWidth(); c++) {
-				double value = origFreqMatrix[r][c] / this.getColumnSums()[r];
-				this.getData()[r][c] = PositionWeightMatrix.information(value);
+				double currValue = origFreqMatrix[r][c];
+				double currColSum = this.columnSums()[c];
+				// feed data into the information-function
+				double infoValue = (currValue / currColSum) * 
+						PositionWeightMatrix.information(currValue / currColSum);
+				infoData[r][c] = infoValue;
 			}
 		}
-		this.updateColumnSums(); // update matrix-sum after information added.
-		// next, apply base-specific weights onto the information matrix
-		for (int r = 0; r < this.getHeight(); r++) {
-			for (int c = 0; c < this.getWidth(); c++) {
+		PositionWeightMatrix infoMat = new PositionWeightMatrix(infoData);
+		double[] columnSums = infoMat.columnSums();
+		for (int r = 0; r < infoMat.getHeight(); r++) {
+			for (int c = 0; c < infoMat.getWidth(); c++) {
 				double weighted = origFreqMatrix[r][c] * 
-						this.getColumnSums()[c] * 0.25;
-				this.getData()[r][c] = weighted;
+						columnSums[c] * 0.25; // base-specific weights
+				infoMat.getData()[r][c] = weighted;
 			}
 		}
-		this.updateColumnMins();
-		this.updateMatrixSum();
+		return infoMat;
 	}
-
+	
 	/**
 	 * The P-MATCH information function.
 	 * @param double representing PWM weight
@@ -105,20 +95,6 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 			String m = "PWM information f(x) requires positive matrix values.";
 			throw new IOException(m);
 		}
-		return val * Math.log(4*val);
-	}
-
-	/**
-	 * @return the columnMins
-	 */
-	public double getColumnMins() {
-		return columnMins;
-	}
-
-	/**
-	 * @param columnMins the columnMins to set
-	 */
-	public void setColumnMins(double columnMins) {
-		this.columnMins = columnMins;
+		return Math.log(4*val);
 	}
 }

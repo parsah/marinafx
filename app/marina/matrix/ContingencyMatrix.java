@@ -74,7 +74,7 @@ public class ContingencyMatrix extends Matrix {
 	 * */
 	public double getProbability(ContingencyMatrixCell idx) {
 		double freq = this.getData()[idx.getRow()][idx.getColumn()];
-		return freq / this.getSum();
+		return freq / this.sum();
 	}
 
 	/**
@@ -109,15 +109,15 @@ public class ContingencyMatrix extends Matrix {
 		double notXAndG = this.getFrequency(ContingencyMatrixCell.NOT_X_AND_G);
 		double xAndNotG = this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
 		// create variables to perform IPF normalization
-		double numer = this.getSum() * Math.sqrt(xAndG * notXNotG);
+		double numer = this.sum() * Math.sqrt(xAndG * notXNotG);
 		double denom = 2 * (Math.sqrt(notXAndG * xAndG) + 
 				Math.sqrt(xAndNotG * notXAndG));
 		// adjust matrix counts for f(0, 0) and f(1, 1)
 		this.getData()[1][1] = this.getData()[0][0] = (numer / denom);
 		// adjust matrix counts for f(0, 1) and f(1, 0)
-		double diagValue = (this.getSum() / 2) - xAndG;
+		double diagValue = (this.sum() / 2) - xAndG;
 		this.getData()[1][0] = this.getData()[0][1] = diagValue;
-		this.updateMatrixSum();
+		this.sum();
 	}
 
 	/**
