@@ -1,6 +1,7 @@
 package marina.alignment;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import marina.bindingsite.FASTAFragment;
 import marina.bindingsite.PositionWeightMatrix;
@@ -8,14 +9,14 @@ import marina.parameter.ParameterMap;
 import marina.parameter.ParameterName;
 
 public class PMatch {
-	private FASTAFragment fragment;
+	private FASTAFragment frag;
 	private PositionWeightMatrix pwm;
 
 	public PMatch(FASTAFragment fragment, PositionWeightMatrix pwm) {
 		this.setFragment(fragment);
 		this.setPWM(pwm);
 	}
-	
+
 	/**
 	 * The alignment score must be converted to an alignment probability
 	 * considering that there are weights per base at each column. 
@@ -24,13 +25,10 @@ public class PMatch {
 		double prob = (score - this.getPWM().sumColumnMins()) /
 				(this.getPWM().sum() - this.getPWM().sumColumnMins());
 		if (prob >= ParameterMap.toDouble(ParameterName.PWM_CUTOFF)) {
-			if (this.getPWM().getName().equals("2QHB_3DTF")) {
-				System.out.println(prob+"\t" + this.getFragment().toString()+"\t" + this.pwm.getName());
-				this.pwm.debug();
-				System.out.println();				
+			if (!this.frag.getParent().getMappings().containsKey(this.pwm)) {
+				this.frag.getParent().getMappings().put(this.pwm, new ArrayList<Integer>());
 			}
-			// TODO add index to parent sequence
-//			System.out.println("\t"+this.getFragment().getSequence()+"\t" + prob);
+			this.frag.getParent().getMappings().get(this.pwm).add(this.frag.getLocation());
 		}
 	}
 
@@ -64,14 +62,14 @@ public class PMatch {
 	 * @return the fragment
 	 */
 	private FASTAFragment getFragment() {
-		return fragment;
+		return frag;
 	}
 
 	/**
 	 * @param fragment the fragment to set
 	 */
 	private void setFragment(FASTAFragment fragment) {
-		this.fragment = fragment;
+		this.frag = fragment;
 	}
 
 	/**

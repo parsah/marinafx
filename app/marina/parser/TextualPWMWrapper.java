@@ -17,7 +17,7 @@ import marina.bindingsite.PositionWeightMatrix;
  * @author Parsa Hosseini
  * */
 public class TextualPWMWrapper {
-	private static String DELIMITER = "\t"; // what separates PWM columns.
+	private static String DELIMITER = "\\s+"; // what separates PWM columns.
 	private String header; // what the PWM will be eventually named as.
 	private List<String> rawRows; // initial String-rows from flat-file.
 	
@@ -33,10 +33,13 @@ public class TextualPWMWrapper {
 	 * */
 	public PositionWeightMatrix toPWM() throws IOException {
 		PositionWeightMatrix m = new PositionWeightMatrix(this.generateData());
-		m.setRows(this.generateRows());
+		m.setRows(this.generateRowNames());
 		m.setColumns(this.generateColumns());
 		m.setName(this.getHeader());
-		m.buildInformation();
+		if (m.sum() == 0) {
+			String msg = "File is FASTA however PWM cells must be tab-delimited.";
+			throw new IOException(msg);
+		}
 		return m;
 	}
 	
@@ -45,13 +48,13 @@ public class TextualPWMWrapper {
 	 * base (from the DNA alphabet) and its respective row number.
 	 * @return Map representing base and row-number mappings.
 	 * */
-	private Map<String, Integer> generateRows() {
+	private Map<String, Integer> generateRowNames() {
 		// row names must be in the same order as they are in the PWM.
 		Map<String, Integer> rowNames = new LinkedHashMap<String, Integer>();
 		for (int rowNum=0; rowNum < this.getRawRows().size(); rowNum++) {
-			String[] row = this.getRawRows().get(rowNum).split(
-					TextualPWMWrapper.DELIMITER);
-			rowNames.put(row[0], rowNum);
+			String row = this.getRawRows().get(rowNum);
+			row = row.replaceAll(TextualPWMWrapper.DELIMITER, "\t");
+			rowNames.put(row.split("\t")[0], rowNum);
 		}
 		return rowNames;
 	}
@@ -81,8 +84,8 @@ public class TextualPWMWrapper {
 	private double[][] generateData() {
 		double[][] data = new double[4][];
 		for (int rowNum=0; rowNum < this.getRawRows().size(); rowNum++) {
-			String[] strRow = this.getRawRows().get(rowNum).split(
-					TextualPWMWrapper.DELIMITER);
+			String[] strRow = this.getRawRows().get(rowNum).replaceAll(
+					TextualPWMWrapper.DELIMITER, "\t").split("\t");
 			double[] row = new double[strRow.length-1];
 			// start at index 1 since index 0 is the string row-name
 			for (int colNum = 1; colNum < strRow.length; colNum++) {

@@ -73,6 +73,9 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 			}
 		}
 		PositionWeightMatrix infoMat = new PositionWeightMatrix(infoData);
+		infoMat.setRows(this.getRows());
+		infoMat.setColumns(this.getColumns());
+		infoMat.setName(this.getName());
 		double[] columnSums = infoMat.columnSums();
 		for (int r = 0; r < infoMat.getHeight(); r++) {
 			for (int c = 0; c < infoMat.getWidth(); c++) {
@@ -96,5 +99,33 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 			throw new IOException(m);
 		}
 		return Math.log(4*val);
+	}
+	
+	/**
+	 * Return a string-representation of the current PWM.
+	 * */
+	@Override
+	public String toString() {
+		return this.getName();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if(obj instanceof PositionWeightMatrix) { // equality based on name
+			PositionWeightMatrix other = (PositionWeightMatrix)obj;
+			return this.getName().equals(other.getName());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() { // Gene name is unique.
+		return this.getName().hashCode();
 	}
 }

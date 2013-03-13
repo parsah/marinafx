@@ -9,11 +9,7 @@ public enum ParameterName {
 	LAPL("Laplace"),
 	P_VALUE("p-value"),
 	WORKERS("#/workers"),
-	IPF("IPF-standardize"),
-	A("A"), // nucleotide-specific weights
-	T("T"),
-	G("G"),
-	C("C");
+	IPF("IPF-standardize");
 	
 	private String name;
 	

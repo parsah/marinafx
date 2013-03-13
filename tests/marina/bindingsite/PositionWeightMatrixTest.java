@@ -1,14 +1,12 @@
 package marina.bindingsite;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 
 import marina.matrix.Matrix;
+import marina.parser.PWMParser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -18,13 +16,9 @@ public class PositionWeightMatrixTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		// provide a known and valid PWM
-		double[][] data = new double[][]{
-				{70,1,	0,	31,	86,	1,	5,	3},
-				{6,	21,	1,	12,	0,	49,	61,	8},
-				{6,	0,	86,	3,	1,	2,	13,	4},
-				{5,	65,	0,	41,	0,	35,	8,	72}};
-		this.pwm = new PositionWeightMatrix(data);
+		PWMParser parser = new PWMParser(new File("./demo/unittest_pwm.txt"));
+		parser.parse();
+		this.pwm = parser.getMatrices().get(0); // only get 1 PWM
 	}
 	
 	/**
@@ -153,5 +147,13 @@ public class PositionWeightMatrixTest {
 	public void testInfoAndPWMSumsUnequal() throws IOException {
 		PositionWeightMatrix infoMatrix = this.pwm.buildInformation();
 		assertNotSame(infoMatrix.sum(), this.pwm.sum());
+	}
+	
+	/**
+	 * The number of rows must equal its height.
+	 * */
+	@Test
+	public void testHasRows() {
+		assertTrue(this.pwm.getRows().size() == this.pwm.getHeight());
 	}
 }

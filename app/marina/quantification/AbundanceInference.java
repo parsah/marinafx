@@ -36,8 +36,10 @@ public class AbundanceInference {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.SUPPORT);
 		double userSupport = ((DoubleParameter)(p)).getArgument();
 		if (cm.getSupport() >= userSupport) {
+			System.out.println("\t" + cm.getName()+" passed support");
 			return true;
 		}
+		System.out.println("\t" + cm.getName()+" failed support");
 		return false;
 	}
 
@@ -51,8 +53,10 @@ public class AbundanceInference {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.DIFF);
 		int userDiff = ((IntegerParameter)(p)).getArgument();
 		if (cm.getDifference() >= userDiff) {
+			System.out.println("\t" + cm.getName()+" passed diff");
 			return true;
 		}
+		System.out.println("\t" + cm.getName()+" failed diff");
 		return false;
 	}
 
@@ -66,8 +70,10 @@ public class AbundanceInference {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.LAPL);
 		double userLaplace = ((DoubleParameter)(p)).getArgument();
 		if (cm.getLaplace() >= userLaplace) {
+			System.out.println("\t" + cm.getName()+" passed laplace");
 			return true;
 		}
+		System.out.println("\t" + cm.getName()+" failed laplace");
 		return false;
 	}
 	
@@ -83,20 +89,25 @@ public class AbundanceInference {
 	 * @throws IOException 
 	 * */
 	public List<ContingencyMatrix> representedMatrices() throws IOException {
-		List<ContingencyMatrix> valid = new ArrayList<ContingencyMatrix>();
+		List<ContingencyMatrix> cms = new ArrayList<ContingencyMatrix>();
+		System.out.println("over-represented TFBSs:");
 		for (ContingencyMatrix cm: this.getCandidateBuilder().build()) {
+			System.out.println(cm.getName());
+			cm.debug();
 			boolean passDiff = this.isPassDifference(cm);
 			boolean passLaplace = this.isPassLaplace(cm);
 			boolean passSupport = this.isPassSupport(cm);
-			if (passDiff && passLaplace && passSupport) {
-				valid.add(cm);
+			if ((passDiff && passLaplace) || passSupport) {
+				System.out.println("=>"+cm.getName()+" passed");
+				cms.add(cm);
 			}
+			System.out.println();
 		}
-		if (valid.size() == 0) {
+		if (cms.size() == 0) {
 			String msg = "No binding sites rendered over-represented.";
 			throw new IOException(msg);
 		}
-		return valid;
+		return cms; // return a list of over-represented binding-sites
 	}
 
 	/**

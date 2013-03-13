@@ -94,7 +94,11 @@ public class ContingencyMatrix extends Matrix {
 	 * @return double representing contingency matrix support.
 	 * */
 	public double getSupport() {
-		return this.getProbability(ContingencyMatrixCell.X_AND_G) * 100;
+		double suppG = this.getProbability(
+				ContingencyMatrixCell.X_AND_G) * 100;
+		double suppNotG = this.getProbability(
+				ContingencyMatrixCell.X_AND_NOT_G) * 100;
+		return Math.max(suppG, suppNotG);
 	}
 
 	/**

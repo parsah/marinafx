@@ -1,6 +1,5 @@
 package marina.parameter;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -42,45 +41,21 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 	 * why this process is not made public.
 	 * */
 	private void mapDefaultArguments() {
-		int numWorkers = Runtime.getRuntime().availableProcessors();
 		IntegerParameter diff = new IntegerParameter(ParameterName.DIFF, 4, 0, 100);
 		IntegerParameter len = new IntegerParameter(ParameterName.LENGTH, 6, 0, 100);
-		IntegerParameter count = new IntegerParameter(ParameterName.COUNT, 3, 0, 100);
+		IntegerParameter count = new IntegerParameter(ParameterName.COUNT, 0, 0, 100);
 		DoubleParameter supp = new DoubleParameter(ParameterName.SUPPORT, 0, 0, 100);
-		DoubleParameter pwm = new DoubleParameter(ParameterName.PWM_CUTOFF, 0.8, 0, 1.0);
+		DoubleParameter pwm = new DoubleParameter(ParameterName.PWM_CUTOFF, 0.70, 0, 1.0);
 		DoubleParameter lapl = new DoubleParameter(ParameterName.LAPL, 0.3, 0, 1.0);
 		DoubleParameter pVal = new DoubleParameter(ParameterName.P_VALUE, 0.05, 0, 1.0);
-		IntegerParameter worker = new IntegerParameter(ParameterName.WORKERS, 1, 1, numWorkers);
 		BooleanParameter ipf = new BooleanParameter(ParameterName.IPF, false);
-		DoubleParameter weightA = new DoubleParameter(ParameterName.A, 0.25, 0, 1.0);
-		DoubleParameter weightT = new DoubleParameter(ParameterName.T, 0.25, 0, 1.0);
-		DoubleParameter weightG = new DoubleParameter(ParameterName.G, 0.25, 0, 1.0);
-		DoubleParameter weightC = new DoubleParameter(ParameterName.C, 0.25, 0, 1.0);
 		List<Parameter> paramSet = new ArrayList<Parameter>();
 		// add parameters to global-set
 		Collections.addAll(paramSet, diff, len, count, supp, pwm, lapl, 
-				pVal, worker, ipf, weightA, weightT, weightG, weightC); 
+				pVal, ipf); 
 		for (Parameter p: paramSet) {
 			this.put(p.getName(), p);
 		}
-	}
-	
-	/**
-	 * Determines if all the weight-sums equal to one (1). If this sum does
-	 * not equal to one, the user cannot progress. By default, all four
-	 * weights are assigned a weight of 0.25 each.
-	 * @return boolean whether all four weights sum to 1.0.
-	 * */
-	public boolean hasValidWeights() {
-		double sum = 
-				ParameterMap.toDouble(ParameterName.A) +
-				ParameterMap.toDouble(ParameterName.T) +
-				ParameterMap.toDouble(ParameterName.G) +
-				ParameterMap.toDouble(ParameterName.C);
-		if (sum == 1.0) {
-			return true;
-		}
-		return false;
 	}
 	
 	/**
@@ -126,24 +101,6 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 		ParameterMap paramMap = MarinaGUI.get().parameterMap();
 		BooleanParameter param = (BooleanParameter)paramMap.get(name);
 		return param.getArgument();
-	}
-	
-	public static double toBaseWeight(String base) throws IOException {
-		if (base.equals(ParameterName.A.get())) {
-			return ParameterMap.toDouble(ParameterName.A);
-		}
-		else if (base.equals(ParameterName.T.get())) {
-			return ParameterMap.toDouble(ParameterName.T);
-		}
-		else if (base.equals(ParameterName.G.get())) {
-			return ParameterMap.toDouble(ParameterName.G);
-		}
-		else if (base.equals(ParameterName.C.get())) {
-			return ParameterMap.toDouble(ParameterName.C);
-		}
-		else {
-			throw new IOException("Invalid base in PWM.");
-		}
 	}
 
 	/**

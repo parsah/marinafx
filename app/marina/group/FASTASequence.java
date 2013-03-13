@@ -57,7 +57,7 @@ public class FASTASequence extends DNASequence {
 	 * */
 	public List<FASTAFragment> toFragments(int size) {
 		List<FASTAFragment> frags = new ArrayList<FASTAFragment>();
-		for (int i=0; i<this.getLength(); i+=size) {
+		for (int i=0; i < this.getLength(); i++) {
 			String sub = this.getSequence().substring(i, Math.min(this.getLength(), (i + size)));
 			FASTAFragment f = new FASTAFragment(this, this.getHeader(), sub, i);
 			if (f.getLength() == size) {

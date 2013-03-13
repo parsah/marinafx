@@ -86,6 +86,7 @@ public class CandidateMatrixBuilder {
 				{numNotX_G, numNotX_NotG}}; // n(X, !G), n(!X, !G), respectively.
 		ContingencyMatrix cm = new ContingencyMatrix(data);
 		cm.setBindingSite(tfbs);
+		cm.setName(tfbs.toString());
 		return cm;
 	}
 	

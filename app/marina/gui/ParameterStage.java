@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
@@ -21,7 +20,6 @@ import jfxtras.labs.internal.scene.control.skin.BigDecimalFieldSkin;
 import jfxtras.labs.internal.scene.control.skin.ListSpinnerCaspianSkin;
 import jfxtras.labs.scene.control.BigDecimalField;
 import jfxtras.labs.scene.control.ListSpinner;
-import marina.parameter.BaseWeightParameter;
 import marina.parameter.BooleanParameter;
 import marina.parameter.DoubleParameter;
 import marina.parameter.IntegerParameter;
@@ -86,10 +84,6 @@ public class ParameterStage extends Stage {
 			if (p instanceof BooleanParameter) { // create checkbox
 				CheckBox cb = this.buildCheckBox((BooleanParameter)p);
 				this.getLayout().add(cb, 1, rowNum);
-			}
-			if (p instanceof BaseWeightParameter) { // base weights
-				GridPane weights = this.buildWeightsPane((BaseWeightParameter)p);
-				this.getLayout().add(weights, 0, rowNum, 2, 1);
 			}
 			rowNum += 1;
 		}
@@ -157,24 +151,6 @@ public class ParameterStage extends Stage {
 	}
 
 	/**
-	 * Contains weights for each of the 4 bases; A, T, G, C, respectively.
-	 * The user can adjust weights for these nucleotides individually,
-	 * resulting in different PWM computations.
-	 * */
-	private GridPane buildWeightsPane(BaseWeightParameter p) {
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setAlignment(Pos.CENTER);
-		for (int i = 0; i < p.getArguments().size(); i++) {
-			DoubleParameter np = p.getArguments().get(i);
-			BigDecimalField field = this.buildDoubleSlider(np);
-			grid.add(new Label(np.getName().get()), 0, i); // name on row i
-			grid.add(field, 1, i); // name on row i+1
-		}
-		return grid;
-	}
-
-	/**
 	 * Creates a layout so that useful buttons can be pressed and 
 	 * corresponding actions be performed.
 	 * @return HBox button layout.
@@ -184,13 +160,7 @@ public class ParameterStage extends Stage {
 		ok.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if (MarinaGUI.get().parameterMap().hasValidWeights()) {
-					hide();
-				}
-				else {
-					ok.setTooltip(new Tooltip("All weights must sum to 1.0"));
-					ok.setStyle("-fx-border-color: red; -fx-border-width:3");
-				}
+				hide();
 			}
 		});
 		HBox layout = new HBox(20);

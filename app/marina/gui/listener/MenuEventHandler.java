@@ -73,8 +73,8 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					params.setMotifParser(parser);
 				}
 				else if (menuItem.getId().equals("run")) {
-					this.loadDemoGroups();
-					this.loadDemoPWMs();
+//					this.loadDemoGroups();
+//					this.loadDemoPWMs();
 //					this.loadDemoMotifs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();

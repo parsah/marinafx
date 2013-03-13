@@ -31,7 +31,7 @@ public class ExhaustiveMotifAlignment extends AbstractAlignment {
 					rk.align(seq, motif);
 				}
 				this.updateGUI(this.getName() + " - " + seq.getHeader());
-				this.updateGUI(j, group.getSize());
+				this.updateGUI(j, group.getSize()); // update progress-bar
 			}
 		}
 	}

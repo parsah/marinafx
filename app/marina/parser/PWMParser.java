@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import marina.bindingsite.PositionWeightMatrix;
-import marina.gui.MarinaGUI;
 
 /**
  * Position Weight Matrices (PWMs) are matrices which represent frequencies
@@ -58,14 +57,21 @@ public class PWMParser extends Parser {
 						pwms.add(pwmWrapper);
 					}
 					else {
-						pwmWrapper.getRawRows().add(line);
+						if (pwmWrapper != null) {
+							pwmWrapper.getRawRows().add(line);
+						}
+						else {
+							String msg = "File not formatted to represent PWMs.";
+							throw new IOException(msg);
+						}
 					}
 				}
 			}
 			this.getMatrices().addAll(this.toPWM(pwms)); // add parsed PWMs
 		}
-		String msg = this.getMatrices().size() + " PWMs parsed.";
-		MarinaGUI.get().getStatusBar().setText(msg);
+		// TODO update UI as-to the number of parsed sequences
+//		String msg = this.getMatrices().size() + " PWMs parsed.";
+//		MarinaGUI.get().getStatusBar().setText(msg);
 	}
 
 	@Override

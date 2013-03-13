@@ -23,24 +23,22 @@ public class ExhaustivePWMAlignment extends AbstractAlignment {
 	public void align() throws IOException {
 		ParameterMap param = MarinaGUI.get().parameterMap(); // get options
 		Group[] groups = new Group[]{param.getQuery(), param.getBaseline()};
-		// TODO implement weights now-that there is no WEIGHTS param
 		for (Group group: groups) {
-			System.out.println(group.getBasename());
-			for (FASTASequence seq: group.getParser().getSequences()) {
-				System.out.println(seq.getHeader());
+			for (int j=0; j < group.getSize(); j++) {
+				FASTASequence seq = group.getParser().getSequences().get(j);
 				for (PositionWeightMatrix pwm: this.getParser().getMatrices()) {
 					List<FASTAFragment> fragments = seq.toFragments(pwm.getWidth());
 					for (FASTAFragment fragment: fragments) {
+//						System.out.println(seq.getHeader()+"\t" + fragment.getSequence());
 						// align fragment given a PWM using P-MATCH algorithm.
 						PMatch pMatch = new PMatch(fragment, pwm);
 						pMatch.extrapolate();
 					}
 				}
+				this.updateGUI(j, group.getSize()); // update progress-bar
+				this.updateGUI(this.getName() + " - " + seq.getHeader());
 			}
 		}
-		System.out.println("done");
-//		System.out.println(((DoubleParameter)MarinaGUI.get().parameterMap().get(ParameterName.A)).getArgument());
-//		System.out.println(ParameterName.valueOf("A").get());
 	}
 
 	/**
@@ -56,5 +54,4 @@ public class ExhaustivePWMAlignment extends AbstractAlignment {
 	private void setParser(PWMParser parser) {
 		this.parser = parser;
 	}
-
 }
