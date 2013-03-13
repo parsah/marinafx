@@ -45,7 +45,7 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 		IntegerParameter len = new IntegerParameter(ParameterName.LENGTH, 6, 0, 100);
 		IntegerParameter count = new IntegerParameter(ParameterName.COUNT, 0, 0, 100);
 		DoubleParameter supp = new DoubleParameter(ParameterName.SUPPORT, 0, 0, 100);
-		DoubleParameter pwm = new DoubleParameter(ParameterName.PWM_CUTOFF, 0.70, 0, 1.0);
+		DoubleParameter pwm = new DoubleParameter(ParameterName.PWM_CUTOFF, 0.80, 0, 1.0);
 		DoubleParameter lapl = new DoubleParameter(ParameterName.LAPL, 0.3, 0, 1.0);
 		DoubleParameter pVal = new DoubleParameter(ParameterName.P_VALUE, 0.05, 0, 1.0);
 		BooleanParameter ipf = new BooleanParameter(ParameterName.IPF, false);

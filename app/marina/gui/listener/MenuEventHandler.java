@@ -73,8 +73,8 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					params.setMotifParser(parser);
 				}
 				else if (menuItem.getId().equals("run")) {
-//					this.loadDemoGroups();
-//					this.loadDemoPWMs();
+					this.loadDemoGroups();
+					this.loadDemoPWMs();
 //					this.loadDemoMotifs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
@@ -104,7 +104,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 			}
 		} catch (IOException | IndexOutOfBoundsException | 
-				NullPointerException e) {
+				NullPointerException | NumberFormatException e ) {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());
 		}
 	}
@@ -113,26 +113,32 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 	 * Solely for demonstration purposes; loads the demo files and saves time
 	 * explicitly loading them at runtime.
 	 * */
-	private void loadDemoGroups() throws IOException {
-		FASTAParser p = new FASTAParser(new File("./demo/most_induced.fasta"));
+	protected void loadDemoGroups() throws IOException {
+		// baseline dataset
+		FASTAParser p = new FASTAParser(new File("./demo/most_suppressed.fasta"));
 		p.parse();
 		Group controlGroup = new Group(p);
 		MarinaGUI.get().parameterMap().setBaseline(controlGroup);
-		// load demo query
-		FASTAParser j = new FASTAParser(new File("./demo/most_suppressed.fasta"));
+		
+		// query dataset
+		FASTAParser j = new FASTAParser(new File("./demo/most_induced.fasta"));
 		j.parse();
 		Group queryGroup = new Group(j);
 		MarinaGUI.get().parameterMap().setQuery(queryGroup);
 	}
-
-	private void loadDemoPWMs() throws IOException {
+	
+	/**
+	 * Implemented for purposes of loading sample / demonstration PWMs.
+	 * */
+	protected void loadDemoPWMs() throws IOException {
 		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
 		parser.parse();
 		MarinaGUI.get().parameterMap().setPWMParser(parser);
 	}
-	
-	@SuppressWarnings("unused")
-	private void loadDemoMotifs() throws IOException {
+	/**
+	 * Implemented for purposes of loading sample / demonstration DNA motifs.
+	 * */	
+	protected void loadDemoMotifs() throws IOException {
 		DNAMotifParser parser = new DNAMotifParser(new File("./demo/sample_motifs.txt"));
 		parser.parse();
 		MarinaGUI.get().parameterMap().setMotifParser(parser);

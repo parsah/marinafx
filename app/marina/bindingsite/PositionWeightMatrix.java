@@ -29,14 +29,14 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 	
 	/**
 	 * Jitter represents the process of replacing zero-values with that
-	 * close to zero (i.e. 1e-4).
+	 * close to zero (i.e. 1e-10).
 	 * */
 	public void jitter() {
 		for (int i = 0; i < this.getHeight(); i++) {
 			for (int j = 0; j < this.getWidth(); j++) {
 				double currValue = this.getData()[i][j]; 
 				if (currValue == 0) {
-					this.getData()[i][j] = 1e-4;
+					this.getData()[i][j] = 1e-10;
 				}
 			}
 		}

@@ -22,7 +22,8 @@ public class PMatchTest {
 	public void setUp() throws Exception {
 		PWMParser parser = new PWMParser(new File("./demo/unittest_pwm.txt"));
 		parser.parse(); // contains only 1x PWM, hence get index 0.
-		this.pwm = parser.getMatrices().get(0).buildInformation();
+		this.pwm = parser.getMatrices().get(0);
+		this.pwm.jitter();
 		// a parent FASTA sequence being to one of its sub-sequences.
 		FASTASequence seq = new FASTASequence("header", "TGACTGATGTACCTTGACG");
 		this.frag = new FASTAFragment(seq, "header", "ATGTACCT", 6);
@@ -83,7 +84,6 @@ public class PMatchTest {
 	public void testProbabilityBoundaries() throws IOException {
 		this.pmatch.extrapolate();
 		assertTrue(this.pwm.sum() > this.pwm.sumColumnMins());
-
 	}
 
 	/**

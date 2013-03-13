@@ -101,16 +101,18 @@ public class PositionWeightMatrixTest {
 	}
 		
 	/**
-	 * Once the information-function has been applied to the matrix,
-	 * minimal values will have smaller weights than their original
-	 * original frequency-matrix counterpart.
+	 * The process of adding jitter to the matrix translates all zero
+	 * values to another value close zero to ensure no divide-by-zero
+	 * exceptions. Before this process, the value (0) is therefore
+	 * smaller than the jittered value because this jitter adds a small
+	 * value slightly larger than zero.
 	 * */
 	@Test
 	public void testSmallerMinOnceInfoBuilt() throws IOException {
 		double oldMin = this.pwm.min();
 		this.pwm.jitter();
 		this.pwm.buildInformation();
-		assertTrue(this.pwm.min() <= oldMin);
+		assertTrue(this.pwm.min() > oldMin);
 	}
 	
 	/**
@@ -127,6 +129,7 @@ public class PositionWeightMatrixTest {
 	 * */
 	@Test
 	public void testInfoAndPWMHeight() throws IOException {
+		this.pwm.jitter();
 		PositionWeightMatrix infoMatrix = this.pwm.buildInformation();
 		assertEquals(infoMatrix.getHeight(), this.pwm.getHeight(), 0);
 	}
@@ -136,6 +139,7 @@ public class PositionWeightMatrixTest {
 	 * */
 	@Test
 	public void testInfoAndPWMWidth() throws IOException {
+		this.pwm.jitter();
 		PositionWeightMatrix infoMatrix = this.pwm.buildInformation();
 		assertEquals(infoMatrix.getWidth(), this.pwm.getWidth(), 0);
 	}
@@ -145,6 +149,7 @@ public class PositionWeightMatrixTest {
 	 * */
 	@Test
 	public void testInfoAndPWMSumsUnequal() throws IOException {
+		this.pwm.jitter();
 		PositionWeightMatrix infoMatrix = this.pwm.buildInformation();
 		assertNotSame(infoMatrix.sum(), this.pwm.sum());
 	}

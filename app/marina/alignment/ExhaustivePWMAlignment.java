@@ -29,7 +29,6 @@ public class ExhaustivePWMAlignment extends AbstractAlignment {
 				for (PositionWeightMatrix pwm: this.getParser().getMatrices()) {
 					List<FASTAFragment> fragments = seq.toFragments(pwm.getWidth());
 					for (FASTAFragment fragment: fragments) {
-//						System.out.println(seq.getHeader()+"\t" + fragment.getSequence());
 						// align fragment given a PWM using P-MATCH algorithm.
 						PMatch pMatch = new PMatch(fragment, pwm);
 						pMatch.extrapolate();

@@ -1,5 +1,6 @@
 package marina.matrix;
 
+import java.text.DecimalFormat;
 import java.util.Map;
 
 /**
@@ -48,8 +49,14 @@ public class Matrix {
 		return sum;
 	}
 	
-	public void addData(double data, int i, int j) {
-		this.data[i][j] = data;
+	public void round() {
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				DecimalFormat f = new DecimalFormat("#.####");
+				String val = f.format(this.getData()[i][j]);
+				this.getData()[i][j] = Double.valueOf(val).doubleValue();
+			}
+		}
 	}
 	
 	/**

@@ -40,6 +40,8 @@ public class TextualPWMWrapper {
 			String msg = "File is FASTA however PWM cells must be tab-delimited.";
 			throw new IOException(msg);
 		}
+		m = m.buildInformation();
+		m.round(); // round matrix to 4 significant figures
 		return m;
 	}
 	
@@ -81,17 +83,22 @@ public class TextualPWMWrapper {
 	 * the multi-dimensional array of row values is produced.
 	 * @return array of data-points to comprise the PWM.
 	 * */
-	private double[][] generateData() {
+	private double[][] generateData() throws NumberFormatException {
 		double[][] data = new double[4][];
-		for (int rowNum=0; rowNum < this.getRawRows().size(); rowNum++) {
-			String[] strRow = this.getRawRows().get(rowNum).replaceAll(
-					TextualPWMWrapper.DELIMITER, "\t").split("\t");
-			double[] row = new double[strRow.length-1];
-			// start at index 1 since index 0 is the string row-name
-			for (int colNum = 1; colNum < strRow.length; colNum++) {
-				row[colNum-1] = Double.valueOf(strRow[colNum]);
+		try {
+			for (int rowNum=0; rowNum < this.getRawRows().size(); rowNum++) {
+				String[] strRow = this.getRawRows().get(rowNum).replaceAll(
+						TextualPWMWrapper.DELIMITER, "\t").split("\t");
+				double[] row = new double[strRow.length-1];
+				// start at index 1 since index 0 is the string row-name
+				for (int colNum = 1; colNum < strRow.length; colNum++) {
+					row[colNum-1] = Double.valueOf(strRow[colNum]);
+				}
+				data[rowNum] = row;
 			}
-			data[rowNum] = row;
+		} catch (NumberFormatException e) {
+			String msg = "Invalid number in PWM (" + e.getMessage() + ")";
+			throw new NumberFormatException(msg);
 		}
 		return data;
 	}
