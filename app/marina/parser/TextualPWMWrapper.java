@@ -50,9 +50,9 @@ public class TextualPWMWrapper {
 	 * base (from the DNA alphabet) and its respective row number.
 	 * @return Map representing base and row-number mappings.
 	 * */
-	private Map<String, Integer> generateRowNames() {
+	private Map<Object, Integer> generateRowNames() {
 		// row names must be in the same order as they are in the PWM.
-		Map<String, Integer> rowNames = new LinkedHashMap<String, Integer>();
+		Map<Object, Integer> rowNames = new LinkedHashMap<Object, Integer>();
 		for (int rowNum=0; rowNum < this.getRawRows().size(); rowNum++) {
 			String row = this.getRawRows().get(rowNum);
 			row = row.replaceAll(TextualPWMWrapper.DELIMITER, "\t");

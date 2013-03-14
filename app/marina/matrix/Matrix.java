@@ -14,8 +14,8 @@ import java.util.Map;
  * */
 public class Matrix {
 	private double[][] data;
-	private String[] columns;
-	private Map<String, Integer> rows; // row name references row number.
+	private Object[] columns;
+	private Map<Object, Integer> rows; // row name references row number.
 	private String name; // name to identify the matrix by.
 
 	/**
@@ -210,28 +210,28 @@ public class Matrix {
 	/**
 	 * @return the columns
 	 */
-	public String[] getColumns() {
+	public Object[] getColumns() {
 		return columns;
 	}
 
 	/**
 	 * @param columns the columns to set
 	 */
-	public void setColumns(String[] columns) {
+	public void setColumns(Object[] columns) {
 		this.columns = columns;
 	}
 
 	/**
 	 * @return the rows
 	 */
-	public Map<String, Integer> getRows() {
+	public Map<Object, Integer> getRows() {
 		return rows;
 	}
 
 	/**
 	 * @param rows the rows to set
 	 */
-	public void setRows(Map<String, Integer> rows) {
+	public void setRows(Map<Object, Integer> rows) {
 		this.rows = rows;
 	}
 

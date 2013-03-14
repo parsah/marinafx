@@ -237,21 +237,8 @@ public class ContingencyMatrix extends Matrix {
 	 * Computes the hypergeometric p-value for the current contingency matrix.
 	 * @return double representing the contingency matrix p-value.
 	 * */
-
-	/*
-	 *         """
-        Computes a p-value from the hypergeometric probability distribution.
-        """
-        x = self.get_g_x()
-        N = self.size
-        M = self.get_x()
-        n = self.get_g_x()
-        m_give_x = combinatorial(M, x)
-        nm_give_nk = combinatorial(N - M, n - x)
-        n_give_n = combinatorial(N, n)
-        return (m_give_x * nm_give_nk) / n_give_n
-	 * */
 	public double getPValue() {
+		this.log(2);
 		double x = this.getFrequency(ContingencyMatrixCell.X_AND_G);
 		double N = this.sum();
 		double M = Matrix.summation(this.getX());
@@ -259,11 +246,7 @@ public class ContingencyMatrix extends Matrix {
 		double m_give_x = Statistic.combinatorial(M, x);
 		double nmGiveNx = Statistic.combinatorial(N - M, n - x);
 		double nGiveN = Statistic.combinatorial(N, n);
-		if (Double.isNaN(m_give_x) || Double.isNaN(nmGiveNx) ||
-				Double.isNaN(nGiveN)) {
-			return Double.MIN_VALUE;
-		}
-		return (m_give_x * (nmGiveNx)) / (nGiveN);
+		return (m_give_x * nmGiveNx) / (nGiveN);
 	}
 
 	/**
@@ -280,6 +263,28 @@ public class ContingencyMatrix extends Matrix {
 				(1 - Matrix.summation(prob.getX())) *
 				(1 - Matrix.summation(prob.getG()));
 		return top / Math.sqrt(bottom);
+	}
+	
+	/**
+	 * Converts a contingency matrix into log-base(n) format; useful in
+	 * instances where cells are considerably large and downstream
+	 * computations yield outputs unable to be assigned to primitive 
+	 * data-types.
+	 * @return 
+	 * */
+	public ContingencyMatrix log(int base) {
+		double[][] data = new double[this.getHeight()][this.getWidth()];
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				double val = Math.log(this.getData()[i][j]) / Math.log(base);
+				data[i][j] = val;
+			}
+		}
+		ContingencyMatrix cm = new ContingencyMatrix(data);
+		cm.setColumns(this.getColumns());
+		cm.setName(this.getName());
+		cm.setRows(this.getRows());
+		return cm;
 	}
 
 	public double[] metricValues() throws IOException {
@@ -308,7 +313,7 @@ public class ContingencyMatrix extends Matrix {
 				values[i] = this.getPhi();
 			}
 			else if (metric == MetricName.HYPER) {
-				values[i] = this.getPValue();
+				values[i] = this.log(2).getPValue();
 			}
 			else if (metric == MetricName.NUM_QUERY) {
 				values[i] = this.getFrequency(ContingencyMatrixCell.X_AND_G);

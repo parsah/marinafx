@@ -12,6 +12,7 @@ import marina.group.Group;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
+import marina.matrix.AbundanceMatrix;
 import marina.parameter.ParameterMap;
 import marina.parser.DNAMotifParser;
 import marina.parser.FASTAParser;
@@ -95,7 +96,8 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						// contrast TFBS abundances between two groups
 						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
 						AbundanceInference infer = new AbundanceInference(mb);
-						infer.buildAbundanceMatrix();
+						AbundanceMatrix matrix = infer.buildAbundanceMatrix();
+						matrix.rank();
 					}
 					else {
 						String msg = "Alignment must be performed first.";

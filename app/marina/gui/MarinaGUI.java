@@ -14,7 +14,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import marina.gui.listener.MenuEventHandler;
-import marina.matrix.ContingencyMatrix;
+import marina.output.RepresentedMatrixBean;
 import marina.parameter.ParameterMap;
 
 public class MarinaGUI extends Application {
@@ -22,7 +22,7 @@ public class MarinaGUI extends Application {
 	private BorderPane layout;
 	private StatusPane statusBar;
 	private ParameterMap parameterMap;
-	private TableView<ContingencyMatrix> table;
+	private TableView<RepresentedMatrixBean> table;
 	
 	/**
 	 * Represent the GUI as a singleton so that it can be accessible 
@@ -180,7 +180,7 @@ public class MarinaGUI extends Application {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
 		MarinaGUI.get().setStatusBar(new StatusPane());
-		MarinaGUI.get().setTable(new TableView<ContingencyMatrix>());
+		MarinaGUI.get().setTable(new TableView<RepresentedMatrixBean>());
 		MarinaGUI.get().placeMenuBar();
 		MarinaGUI.get().placeStatusBar();
 		MarinaGUI.get().placeTable();
@@ -244,14 +244,14 @@ public class MarinaGUI extends Application {
 	/**
 	 * @return the resultsTable
 	 */
-	public TableView<ContingencyMatrix> getTable() {
+	public TableView<RepresentedMatrixBean> getTable() {
 		return table;
 	}
 
 	/**
-	 * @param Table the resultsTable to set
+	 * @param table the resultsTable to set
 	 */
-	private void setTable(TableView<ContingencyMatrix> Table) {
-		this.table = Table;
+	private void setTable(TableView<RepresentedMatrixBean> table) {
+		this.table = table;
 	}
 }

@@ -2,8 +2,7 @@ package marina.quantification;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,10 +39,8 @@ public class AbundanceInference {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.SUPPORT);
 		double userSupport = ((DoubleParameter)(p)).getArgument();
 		if (cm.getSupport() >= userSupport) {
-			System.out.println("\t" + cm.getName()+" passed support");
 			return true;
 		}
-		System.out.println("\t" + cm.getName()+" failed support");
 		return false;
 	}
 
@@ -57,10 +54,8 @@ public class AbundanceInference {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.DIFF);
 		int userDiff = ((IntegerParameter)(p)).getArgument();
 		if (cm.getDifference() >= userDiff) {
-			System.out.println("\t" + cm.getName()+" passed diff");
 			return true;
 		}
-		System.out.println("\t" + cm.getName()+" failed diff");
 		return false;
 	}
 
@@ -74,10 +69,8 @@ public class AbundanceInference {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.LAPL);
 		double userLaplace = ((DoubleParameter)(p)).getArgument();
 		if (cm.getLaplace() >= userLaplace) {
-			System.out.println("\t" + cm.getName()+" passed laplace");
 			return true;
 		}
-		System.out.println("\t" + cm.getName()+" failed laplace");
 		return false;
 	}
 	
@@ -94,18 +87,13 @@ public class AbundanceInference {
 	 * */
 	public List<ContingencyMatrix> representedMatrices() throws IOException {
 		List<ContingencyMatrix> cms = new ArrayList<ContingencyMatrix>();
-		System.out.println("over-represented TFBSs:");
 		for (ContingencyMatrix cm: this.getCandidateBuilder().build()) {
-			System.out.println(cm.getName());
-			cm.debug();
 			boolean passDiff = this.isPassDifference(cm);
 			boolean passLaplace = this.isPassLaplace(cm);
 			boolean passSupport = this.isPassSupport(cm);
-			if ((passDiff && passLaplace) || passSupport) {
-				System.out.println("=>"+cm.getName()+" passed");
+			if (passDiff && passLaplace && passSupport) {
 				cms.add(cm);
 			}
-			System.out.println();
 		}
 		if (cms.size() == 0) {
 			String msg = "No binding sites rendered over-represented.";
@@ -126,18 +114,16 @@ public class AbundanceInference {
 	public AbundanceMatrix buildAbundanceMatrix() throws IOException {
 		List<ContingencyMatrix> overReps = this.representedMatrices();
 		double[][] data = new double[overReps.size()][MetricName.values().length];
-		Map<String, Integer> rowNames = new HashMap<String, Integer>();
+		Map<Object, Integer> rowNames = new LinkedHashMap<Object, Integer>();
 		for (int i=0; i < overReps.size(); i++) {
 			ContingencyMatrix cm = overReps.get(i);
 			data[i] = cm.metricValues();
 			rowNames.put(cm.getName(), i);
 		}
+		// java specification states enum values returned in declaration order.
 		AbundanceMatrix matrix = new AbundanceMatrix(data);
 		matrix.setRows(rowNames);
-		matrix.setColumns(MetricName.getNames());
-		
-		System.out.println(Arrays.toString(matrix.getColumns()));
-		matrix.debug();
+		matrix.setColumns(MetricName.values());
 		return matrix;
 	}
 

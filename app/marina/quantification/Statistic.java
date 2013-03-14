@@ -1,7 +1,8 @@
 package marina.quantification;
 
+
 public final class Statistic {
-	
+
 	/**
 	 * Computes the factorial for a given integer. To enable factorial
 	 * computation of large numbers, log-scaling summation is performed, with
@@ -10,13 +11,15 @@ public final class Statistic {
 	 * @return factorial result.
 	 * */
 	public static double factorial(double num) {
-		double sum = 0;
-		for (int i=1; i < num+1; i++) {
-			sum += Math.log(i);
+		if (num == 0) {
+			return 1.0;
 		}
-		return Math.exp(sum);
+		return Math.pow(num, num) *
+				Math.exp(-num) * 
+				Math.sqrt(2*Math.PI*num) *
+				(1 + (1/(12 * num)));
 	}
-	
+
 	/**
 	 * Computes the combinatorial value given n-choose-r integers.
 	 * @param n Total size
