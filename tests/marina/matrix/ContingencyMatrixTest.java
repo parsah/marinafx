@@ -1,6 +1,10 @@
 package marina.matrix;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
@@ -12,7 +16,7 @@ public class ContingencyMatrixTest {
 
 	@Before
 	public void setUp() throws Exception {
-		double[][] data = new double[][]{{715, 609}, {551, 502}};
+		double[][] data = new double[][]{{33, 15}, {1843, 1891}};
 		this.cm = new ContingencyMatrix(data);
 	}
 	
@@ -53,7 +57,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testMatrixSummation() {
-		assertEquals(this.cm.sum(), 2377, 0); 
+		assertEquals(this.cm.sum(), 3782, 0); 
 	}
 	
 	/**
@@ -92,7 +96,8 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testCorrectDifferenceValue() {
-		assertEquals(this.cm.getDifference(), 106, 0);
+		
+		assertEquals(this.cm.getDifference(), 18, 0);
 	}
 	
 	/**
@@ -101,7 +106,8 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testCorrectSupportValue() {
-		assertEquals(this.cm.getSupport(), 30.0799, 1);
+		// indeed this specific matrix yields poor support (is percentage)
+		assertEquals(this.cm.getSupport(), 0.87255, 1);
 	}
 	
 	/**
@@ -265,14 +271,72 @@ public class ContingencyMatrixTest {
 	}
 	
 	/**
-	 * Assert that Laplace correction is correctly computed.
+	 * The known Laplace correction was derived apriori; ensure valid output.
 	 * */
 	@Test
-	public void testLaplace() {
+	public void testIsCorrectLaplace() {
 		double lapl = (this.cm.getFrequency(
 				ContingencyMatrixCell.X_AND_G) + 1) / 
 				(Matrix.summation(this.cm.getX()) + 2);
 		assertEquals(lapl, 0.5399, 1);
+	}
+	
+	/**
+	 * The known lift was derived apriori; ensure valid output.
+	 * */
+	@Test
+	public void testIsCorrectLift() {
+		assertEquals(this.cm.getLift(), 1.38599, 0.1);
+	}
+	
+	/**
+	 * The known cosine was derived apriori; ensure valid output.
+	 * */
+	@Test
+	public void testIsCorrectCosine() {
+		assertEquals(this.cm.getCosine(), 0.10997, 0.1);
+	}
+	
+	/**
+	 * The known Jaccard measure was derived apriori; ensure valid output.
+	 * */
+	@Test
+	public void testIsCorrectJaccard() {
+		assertEquals(this.cm.getJaccard(), 0.01745108, 0.1);
+	}
+	
+	/**
+	 * The known confidence was derived apriori; ensure valid output.
+	 * */
+	@Test
+	public void testIsCorrectConfidence() {
+		assertEquals(this.cm.getConfidence(), 0.6875, 0.1);
+	}
+	
+	/**
+	 * The known Phi-coefficient was derived apriori; ensure valid output.
+	 * */
+	@Test
+	public void testIsCorrectPhiCoefficient() {
+		assertEquals(this.cm.getPhi(), 0.0434179, 0.1);
+	}
+
+	/**
+	 * The known Kappa coefficient was derived apriori; ensure valid output.
+	 * */
+	@Test
+	public void testIsCorrectKappaCoefficient() {
+		assertEquals(this.cm.getKappa(), 0.00979, 0.1);
+	}
+	
+	/**
+	 * Sometimes, the hypergeometric p-value is so small that it
+	 * is difficult to model. In such a case, return the 
+	 * smallest-possible value instead.
+	 * */
+	@Test
+	public void testIsCorrectPValueProduced() {
+		assertTrue(this.cm.getPValue() == Double.MIN_VALUE);
 	}
 	
 	/**
@@ -285,7 +349,7 @@ public class ContingencyMatrixTest {
 		double[] col1 = this.cm.getColumn(0);
 		double[] col2 = this.cm.getColumn(1);
 		Arrays.sort(col1); // IPF values are reciprocal of eachother.
-		assertArrayEquals(col1, col2, 0);
+		assertEquals(Matrix.summation(col1), Matrix.summation(col2), 0);
 	}
 	
 	/**
@@ -323,5 +387,37 @@ public class ContingencyMatrixTest {
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_NOT_G);
 		// IPF may represent 1.0 as 0.99999999999, hence set delta.
 		assertEquals(sumProbability, 1, 0.5);
+	}
+
+	/**
+	 * Test a not-null object is produced given a valid contingency matrix.
+	 * */
+	@Test
+	public void testToProbabilityNotNull() {
+		assertNotNull(this.cm.toProbability());
+	}
+	
+	/**
+	 * Test a produced probability-matrix sums to 1.0. 
+	 * */
+	@Test
+	public void testProbMatrixSumsToOne() {
+		assertEquals(this.cm.toProbability().sum(), 1.0, 0);
+	}
+	
+	/**
+	 * Test a probability-matrix has the same height as those which are not.
+	 * */
+	@Test
+	public void testProbMatrixSameHeight() {
+		assertTrue(this.cm.toProbability().getHeight() == this.cm.getHeight());
+	}
+	
+	/**
+	 * Test a probability-matrix has the same width as those which are not.
+	 * */
+	@Test
+	public void testProbMatrixSameWidth() {
+		assertTrue(this.cm.toProbability().getWidth() == this.cm.getWidth());
 	}
 }

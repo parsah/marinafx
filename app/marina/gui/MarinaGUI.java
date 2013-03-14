@@ -6,12 +6,15 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import marina.gui.listener.MenuEventHandler;
+import marina.matrix.ContingencyMatrix;
 import marina.parameter.ParameterMap;
 
 public class MarinaGUI extends Application {
@@ -19,6 +22,7 @@ public class MarinaGUI extends Application {
 	private BorderPane layout;
 	private StatusPane statusBar;
 	private ParameterMap parameterMap;
+	private TableView<ContingencyMatrix> table;
 	
 	/**
 	 * Represent the GUI as a singleton so that it can be accessible 
@@ -59,6 +63,18 @@ public class MarinaGUI extends Application {
 		MenuBar menuBar = new MenuBar();
 		menuBar.getMenus().addAll(this.fileMenu(), this.helpMenu());
 		MarinaGUI.get().getLayout().setTop(menuBar);
+	}
+	
+	/**
+	 * Helps place and give structure to the results-table.
+	 * */
+	private void placeTable() {
+		String msg = "No over-represented TFBSs.\n" +
+				"Quantify TFBS significance given 2x FASTA files and TFBS models.";
+		Text text = new Text(msg);
+		text.setTextAlignment(TextAlignment.CENTER);
+		this.getTable().setPlaceholder(text);
+		MarinaGUI.get().getLayout().setCenter(this.getTable());
 	}
 	
 	/**
@@ -164,13 +180,14 @@ public class MarinaGUI extends Application {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
 		MarinaGUI.get().setStatusBar(new StatusPane());
+		MarinaGUI.get().setTable(new TableView<ContingencyMatrix>());
 		MarinaGUI.get().placeMenuBar();
 		MarinaGUI.get().placeStatusBar();
+		MarinaGUI.get().placeTable();
 		MarinaGUI.get().reset();
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);
-		stage.setHeight(300);
 		stage.setWidth(520);
 		stage.show();
 	}
@@ -222,5 +239,19 @@ public class MarinaGUI extends Application {
 	 */
 	private void setParameterMap(ParameterMap params) {
 		this.parameterMap = params;
+	}
+
+	/**
+	 * @return the resultsTable
+	 */
+	public TableView<ContingencyMatrix> getTable() {
+		return table;
+	}
+
+	/**
+	 * @param Table the resultsTable to set
+	 */
+	private void setTable(TableView<ContingencyMatrix> Table) {
+		this.table = Table;
 	}
 }

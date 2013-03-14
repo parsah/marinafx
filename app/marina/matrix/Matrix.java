@@ -14,7 +14,7 @@ import java.util.Map;
  * */
 public class Matrix {
 	private double[][] data;
-	private int[] columns;
+	private String[] columns;
 	private Map<String, Integer> rows; // row name references row number.
 	private String name; // name to identify the matrix by.
 
@@ -210,14 +210,14 @@ public class Matrix {
 	/**
 	 * @return the columns
 	 */
-	public int[] getColumns() {
+	public String[] getColumns() {
 		return columns;
 	}
 
 	/**
 	 * @param columns the columns to set
 	 */
-	public void setColumns(int[] columns) {
+	public void setColumns(String[] columns) {
 		this.columns = columns;
 	}
 

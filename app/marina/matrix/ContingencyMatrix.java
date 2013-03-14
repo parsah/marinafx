@@ -1,6 +1,10 @@
 package marina.matrix;
 
+import java.io.IOException;
+
 import marina.bindingsite.BindingSite;
+import marina.quantification.MetricName;
+import marina.quantification.Statistic;
 
 
 /**
@@ -78,6 +82,26 @@ public class ContingencyMatrix extends Matrix {
 	}
 
 	/**
+	 * A Contingency Matrix contains frequency-counts, however retrieving
+	 * multiple probabilities can be difficult to track. To aide such efforts,
+	 * the current contingency matrix is converted to its equivalent 
+	 * probability-matrix.
+	 * @return ContingencyMatrix object where counts are probabilities.
+	 * */
+	public ContingencyMatrix toProbability() {
+		double[][] data = new double[this.getHeight()][this.getWidth()];
+		for (int i = 0; i < this.getHeight(); i++) {
+			for (int j = 0; j < this.getWidth(); j++) {
+				data[i][j] = this.getData()[i][j] / this.sum();
+			}
+		}
+		ContingencyMatrix prob = new ContingencyMatrix(data);
+		prob.setName(this.getName());
+		prob.setBindingSite(this.getBindingSite());
+		return prob;
+	}
+
+	/**
 	 * Retrieve the actual value in the contingency matrix as-is and without
 	 * any pre-computed probability.
 	 * @param ContingencyMatrixCell a value in the contingency matrix.
@@ -133,16 +157,172 @@ public class ContingencyMatrix extends Matrix {
 		return Math.abs(this.getFrequency(ContingencyMatrixCell.X_AND_G) - 
 				this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G));
 	}
-	
+
 	/**
-	 * Return the Laplace correction value for the respective matrix.
-	 * @return Laplace correction.
+	 * Return the Laplace (LP) correction value for the respective matrix.
+	 * @return double representing Laplace correction.
 	 * */
 	public double getLaplace() {
 		return (this.getFrequency(ContingencyMatrixCell.X_AND_G) + 1) /
 				(Matrix.summation(this.getX()) + 2);
 	}
-	
+
+	/**
+	 * Computes confidence (CI) measure for the current contingency matrix.
+	 * @return double representing the confidence measure.
+	 * */
+	public double getConfidence() {
+		return this.getProbability(ContingencyMatrixCell.X_AND_G) /
+				Matrix.summation(this.toProbability().getX());
+
+	}
+
+	/**
+	 * Computes the lift (LI) measure for the current contingency matrix.
+	 * @return double representing lift measure.
+	 * */
+	public double getLift() {
+		ContingencyMatrix prob = this.toProbability();
+		double numer = this.getProbability(ContingencyMatrixCell.X_AND_G);
+		double denom = Matrix.summation(prob.getX()) * 
+				Matrix.summation(prob.getG());
+		return numer / denom;
+	}
+
+	/**
+	 * Computes the Cosine (CO) measure for the current contingency matrix.
+	 * @return double representing the cosine measure.
+	 * */
+	public double getCosine() {			        		
+		ContingencyMatrix prob = this.toProbability();
+		double top = this.getProbability(ContingencyMatrixCell.X_AND_G);
+		double bottom = Math.sqrt(Matrix.summation(prob.getX()) *
+				Matrix.summation(prob.getG()));
+		return top / bottom;
+	}
+
+	/**
+	 * Computes the Jaccard (JAC) measure for the current contingency matrix.
+	 * @return double representing the Jaccard measure.
+	 * */
+	public double getJaccard() {
+		ContingencyMatrix prob = this.toProbability();
+		double numer = this.getProbability(ContingencyMatrixCell.X_AND_G);
+		double denom = Matrix.summation(prob.getX()) +
+				Matrix.summation(prob.getG()) -
+				this.getProbability(ContingencyMatrixCell.X_AND_G);
+		return numer / denom;
+	}
+
+	/**
+	 * Computes the Kappa coefficient (K) for the current contingency matrix.
+	 * @return double representing the Kappa coefficient measure.
+	 * */
+	public double getKappa() {
+		ContingencyMatrix prob = this.toProbability();
+		double numer = this.getProbability(ContingencyMatrixCell.X_AND_G) +
+				this.getProbability(ContingencyMatrixCell.NOT_X_AND_NOT_G) -
+				Matrix.summation(prob.getX()) *
+				Matrix.summation(prob.getG()) -
+				Matrix.summation(prob.getNotX()) *
+				Matrix.summation(prob.getNotG());
+		double denom = 1 - Matrix.summation(prob.getX()) *
+				Matrix.summation(prob.getG()) -
+				Matrix.summation(prob.getNotX()) *
+				Matrix.summation(prob.getNotG());
+		return numer / denom;
+	}
+
+	/**
+	 * Computes the hypergeometric p-value for the current contingency matrix.
+	 * @return double representing the contingency matrix p-value.
+	 * */
+
+	/*
+	 *         """
+        Computes a p-value from the hypergeometric probability distribution.
+        """
+        x = self.get_g_x()
+        N = self.size
+        M = self.get_x()
+        n = self.get_g_x()
+        m_give_x = combinatorial(M, x)
+        nm_give_nk = combinatorial(N - M, n - x)
+        n_give_n = combinatorial(N, n)
+        return (m_give_x * nm_give_nk) / n_give_n
+	 * */
+	public double getPValue() {
+		double x = this.getFrequency(ContingencyMatrixCell.X_AND_G);
+		double N = this.sum();
+		double M = Matrix.summation(this.getX());
+		double n = this.getFrequency(ContingencyMatrixCell.X_AND_G);
+		double m_give_x = Statistic.combinatorial(M, x);
+		double nmGiveNx = Statistic.combinatorial(N - M, n - x);
+		double nGiveN = Statistic.combinatorial(N, n);
+		if (Double.isNaN(m_give_x) || Double.isNaN(nmGiveNx) ||
+				Double.isNaN(nGiveN)) {
+			return Double.MIN_VALUE;
+		}
+		return (m_give_x * (nmGiveNx)) / (nGiveN);
+	}
+
+	/**
+	 * Computes the Phi coefficient (PHI) for the current contingency matrix.
+	 * @return double representing the Phi coefficient measure.
+	 * */
+	public double getPhi() {
+		ContingencyMatrix prob = this.toProbability();
+		double top = this.getProbability(ContingencyMatrixCell.X_AND_G) -
+				Matrix.summation(prob.getX()) *
+				Matrix.summation(prob.getG());
+		double bottom = Matrix.summation(prob.getX()) *
+				Matrix.summation(prob.getG()) *
+				(1 - Matrix.summation(prob.getX())) *
+				(1 - Matrix.summation(prob.getG()));
+		return top / Math.sqrt(bottom);
+	}
+
+	public double[] metricValues() throws IOException {
+		double[] values = new double[MetricName.values().length];
+		for (int i = 0; i < values.length; i++) {
+			MetricName metric = MetricName.values()[i];
+			if (metric == MetricName.LAPLACE) {
+				values[i] = this.getLaplace();
+			}
+			else if (metric == MetricName.CONFIDENCE) {
+				values[i] = this.getConfidence();
+			}
+			else if (metric == MetricName.LIFT) {
+				values[i] = this.getLift();
+			}
+			else if (metric == MetricName.COSINE) {
+				values[i] = this.getCosine();
+			}
+			else if (metric == MetricName.JACCARD) {
+				values[i] = this.getJaccard();
+			}
+			else if (metric == MetricName.KAPPA) {
+				values[i] = this.getKappa();
+			}
+			else if (metric == MetricName.PHI) {
+				values[i] = this.getPhi();
+			}
+			else if (metric == MetricName.HYPER) {
+				values[i] = this.getPValue();
+			}
+			else if (metric == MetricName.NUM_QUERY) {
+				values[i] = this.getFrequency(ContingencyMatrixCell.X_AND_G);
+			}
+			else if (metric == MetricName.NUM_BASELINE) {
+				values[i] = this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
+			}
+			else {
+				throw new IOException("Invalid measure.");
+			}
+		}
+		return values;
+	}
+
 	/**
 	 * @return the bindingSite
 	 */

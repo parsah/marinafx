@@ -2,9 +2,13 @@ package marina.quantification;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import marina.gui.MarinaGUI;
+import marina.matrix.AbundanceMatrix;
 import marina.matrix.ContingencyMatrix;
 import marina.parameter.DoubleParameter;
 import marina.parameter.IntegerParameter;
@@ -108,6 +112,33 @@ public class AbundanceInference {
 			throw new IOException(msg);
 		}
 		return cms; // return a list of over-represented binding-sites
+	}
+	
+	/**
+	 * An important function of inference is the ability to capture 
+	 * magnitude of abundance given inferred over-represented binding sites.
+	 * The resultant matrix wraps raw-measures from each of the various
+	 * metrics so that they can be efficiently sorted and ranked.
+	 * @return 
+	 * @return AbundanceMatrix measures per over-represented binding site.
+	 * @throws IOException 
+	 * */
+	public AbundanceMatrix buildAbundanceMatrix() throws IOException {
+		List<ContingencyMatrix> overReps = this.representedMatrices();
+		double[][] data = new double[overReps.size()][MetricName.values().length];
+		Map<String, Integer> rowNames = new HashMap<String, Integer>();
+		for (int i=0; i < overReps.size(); i++) {
+			ContingencyMatrix cm = overReps.get(i);
+			data[i] = cm.metricValues();
+			rowNames.put(cm.getName(), i);
+		}
+		AbundanceMatrix matrix = new AbundanceMatrix(data);
+		matrix.setRows(rowNames);
+		matrix.setColumns(MetricName.getNames());
+		
+		System.out.println(Arrays.toString(matrix.getColumns()));
+		matrix.debug();
+		return matrix;
 	}
 
 	/**

@@ -74,8 +74,8 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 				else if (menuItem.getId().equals("run")) {
 					this.loadDemoGroups();
-					this.loadDemoPWMs();
-//					this.loadDemoMotifs();
+//					this.loadDemoPWMs();
+					this.loadDemoMotifs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
@@ -95,7 +95,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						// contrast TFBS abundances between two groups
 						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
 						AbundanceInference infer = new AbundanceInference(mb);
-						infer.representedMatrices();
+						infer.buildAbundanceMatrix();
 					}
 					else {
 						String msg = "Alignment must be performed first.";

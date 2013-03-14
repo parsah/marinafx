@@ -66,13 +66,13 @@ public class TextualPWMWrapper {
 	 * simply the column number represented as a String object.
 	 * @return array of Strings which represent PWM column names.
 	 * */
-	private int[] generateColumns() {
+	private String[] generateColumns() {
 		String aRow = this.getRawRows().get(0);
 		// subtract 1 from the columns since the first column is a string
 		int len = aRow.split(TextualPWMWrapper.DELIMITER).length-1;
-		int[] columns = new int[len];
+		String[] columns = new String[len];
 		for (int i = 0; i < len; i++) {
-			columns[i] = i;
+			columns[i] = String.valueOf(i);
 		}
 		return columns;
 	}

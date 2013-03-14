@@ -9,12 +9,12 @@ public final class Statistic {
 	 * @param integer representing number to compute factorial of.
 	 * @return factorial result.
 	 * */
-	public static long factorial(int num) {
+	public static double factorial(double num) {
 		double sum = 0;
 		for (int i=1; i < num+1; i++) {
 			sum += Math.log(i);
 		}
-		return Math.round(Math.exp(sum));
+		return Math.exp(sum);
 	}
 	
 	/**
@@ -23,9 +23,9 @@ public final class Statistic {
 	 * @param r Selection size
 	 * @return combinatorial given n-choose-r.
 	 * */
-	public static long combinatorial(int n, int r) {
-		long numerator = Statistic.factorial(n);
-		long denominator = Statistic.factorial(r) * Statistic.factorial(n-r);
+	public static double combinatorial(double n, double r) {
+		double numerator = Statistic.factorial(n);
+		double denominator = Statistic.factorial(r) * Statistic.factorial(n-r);
 		return numerator / denominator;
 	}
 }
