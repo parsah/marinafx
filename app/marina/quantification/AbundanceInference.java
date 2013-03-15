@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.Map;
 
 import marina.gui.MarinaGUI;
-import marina.matrix.AbundanceMatrix;
+import marina.matrix.RankedAbundanceMatrix;
 import marina.matrix.ContingencyMatrix;
 import marina.parameter.DoubleParameter;
 import marina.parameter.IntegerParameter;
 import marina.parameter.Parameter;
+import marina.parameter.ParameterMap;
 import marina.parameter.ParameterName;
 
 /**
@@ -92,6 +93,9 @@ public class AbundanceInference {
 			boolean passLaplace = this.isPassLaplace(cm);
 			boolean passSupport = this.isPassSupport(cm);
 			if (passDiff && passLaplace && passSupport) {
+				if (ParameterMap.toBoolean(ParameterName.IPF)) {
+					cm.ipf(); // IPF-standardize matrix if selected.
+				}
 				cms.add(cm);
 			}
 		}
@@ -111,19 +115,20 @@ public class AbundanceInference {
 	 * @return AbundanceMatrix measures per over-represented binding site.
 	 * @throws IOException 
 	 * */
-	public AbundanceMatrix buildAbundanceMatrix() throws IOException {
+	public RankedAbundanceMatrix buildAbundanceMatrix() throws IOException {
 		List<ContingencyMatrix> overReps = this.representedMatrices();
 		double[][] data = new double[overReps.size()][MetricName.values().length];
 		Map<Object, Integer> rowNames = new LinkedHashMap<Object, Integer>();
 		for (int i=0; i < overReps.size(); i++) {
 			ContingencyMatrix cm = overReps.get(i);
 			data[i] = cm.metricValues();
-			rowNames.put(cm.getName(), i);
+			rowNames.put(cm, i); // reference entire matrix and binding site
 		}
 		// java specification states enum values returned in declaration order.
-		AbundanceMatrix matrix = new AbundanceMatrix(data);
+		RankedAbundanceMatrix matrix = new RankedAbundanceMatrix(data);
 		matrix.setRows(rowNames);
 		matrix.setColumns(MetricName.values());
+		matrix.rankMatrix();
 		return matrix;
 	}
 

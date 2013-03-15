@@ -13,8 +13,8 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import marina.bean.RepresentedMatrixBean;
 import marina.gui.listener.MenuEventHandler;
-import marina.output.RepresentedMatrixBean;
 import marina.parameter.ParameterMap;
 
 public class MarinaGUI extends Application {

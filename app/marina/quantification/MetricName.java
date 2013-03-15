@@ -1,7 +1,5 @@
 package marina.quantification;
 
-import marina.gui.MarinaGUI;
-
 public enum MetricName {
 	LAPLACE("LP", true),
 	CONFIDENCE("CF", true),
@@ -11,9 +9,9 @@ public enum MetricName {
 	KAPPA("KA", true),
 	PHI("PHI", true),
 	// these metrics are useful but they are neither ranked nor sorted.
-	HYPER("log2(PVAL)", false),
-	NUM_QUERY("n(" + MarinaGUI.get().parameterMap().getQuery().getBasename()+")", false),
-	NUM_BASELINE("n(" + MarinaGUI.get().parameterMap().getBaseline().getBasename()+")", false);
+	PVALUE("PVALUE", false),
+	NUM_QUERY("NUM_QUERY", false),
+	NUM_BASELINE("NUM_BASELINE", false);
 	
 	private String row;
 	private boolean isStat;

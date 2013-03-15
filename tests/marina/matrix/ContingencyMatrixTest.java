@@ -19,7 +19,7 @@ public class ContingencyMatrixTest {
 		double[][] data = new double[][]{{33, 15}, {1843, 1891}};
 		this.cm = new ContingencyMatrix(data);
 	}
-	
+
 	/**
 	 * By default, no binding site is provided
 	 * */
@@ -27,7 +27,7 @@ public class ContingencyMatrixTest {
 	public void testNoDefaultBindingSite() {
 		assertNull(this.cm.getBindingSite());
 	}
-	
+
 	/**
 	 * Test that a ContingencyMatrix is a sub-class of the Matrix class.
 	 * */
@@ -35,7 +35,7 @@ public class ContingencyMatrixTest {
 	public void testIsMatrix() {
 		assertTrue(this.cm instanceof Matrix);
 	}
-	
+
 	/**
 	 * By default, no column names are provided; often not needed.
 	 * */
@@ -43,7 +43,7 @@ public class ContingencyMatrixTest {
 	public void testNoDefaultColumns() {
 		assertNull(this.cm.getColumns());
 	}
-	
+
 	/**
 	 * By default, no row names are provided; often not needed.
 	 * */
@@ -51,7 +51,7 @@ public class ContingencyMatrixTest {
 	public void testNoDefaultRowNames() {
 		assertNull(this.cm.getRows());
 	}
-	
+
 	/**
 	 * Test the matrix sums to the correct known value
 	 * */
@@ -59,7 +59,7 @@ public class ContingencyMatrixTest {
 	public void testMatrixSummation() {
 		assertEquals(this.cm.sum(), 3782, 0); 
 	}
-	
+
 	/**
 	 * Test that recomputing matrix sum without prior modifications
 	 * yields the same sum as before.
@@ -69,7 +69,7 @@ public class ContingencyMatrixTest {
 		double oldSum = this.cm.sum();
 		assertEquals(oldSum, this.cm.sum(), 0);
 	}
-	
+
 	/**
 	 * Test that the difference of the matrix is sound.
 	 * */
@@ -80,7 +80,7 @@ public class ContingencyMatrixTest {
 				this.cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G), 
 				0);
 	}
-	
+
 	/**
 	 * Test that matrix support references the correct cells.
 	 * */
@@ -90,16 +90,16 @@ public class ContingencyMatrixTest {
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_G)*100, 
 				0);
 	}
-	
+
 	/**
 	 * Test that the known matrix yields the correct difference.
 	 * */
 	@Test
 	public void testCorrectDifferenceValue() {
-		
+
 		assertEquals(this.cm.getDifference(), 18, 0);
 	}
-	
+
 	/**
 	 * Test that the known matrix yields the correct support (represented
 	 * as a percentage)
@@ -109,7 +109,7 @@ public class ContingencyMatrixTest {
 		// indeed this specific matrix yields poor support (is percentage)
 		assertEquals(this.cm.getSupport(), 0.87255, 1);
 	}
-	
+
 	/**
 	 * Contingency matrices have a width of 2 columns only.
 	 * */
@@ -117,7 +117,7 @@ public class ContingencyMatrixTest {
 	public void testWidth() {
 		assertTrue(this.cm.getWidth() == 2);
 	}
-	
+
 	/**
 	 * Contingency matrices have a height of 2 rows only.
 	 * */
@@ -125,7 +125,7 @@ public class ContingencyMatrixTest {
 	public void testHeight() {
 		assertTrue(this.cm.getHeight() == 2);
 	}
-	
+
 	/**
 	 * Test that the not-variable X row is correctly identified.
 	 * */
@@ -134,7 +134,7 @@ public class ContingencyMatrixTest {
 		double[] x = this.cm.getData()[0];
 		assertArrayEquals(x, this.cm.getX(), 0);
 	}
-	
+
 	/**
 	 * Test that the variable X row is correctly identified.
 	 * */
@@ -152,7 +152,7 @@ public class ContingencyMatrixTest {
 		double[] groupG = this.cm.getColumn(0);
 		assertArrayEquals(groupG, this.cm.getG(), 0);
 	}
-	
+
 	/**
 	 * Test that the not-Group G column is correctly identified.
 	 * */
@@ -161,7 +161,7 @@ public class ContingencyMatrixTest {
 		double[] notGroupG = this.cm.getColumn(1);
 		assertArrayEquals(notGroupG, this.cm.getNotG(), 0);
 	}
-	
+
 	/**
 	 * Test the frequency at (0, 0) references X and group G
 	 * */
@@ -171,7 +171,7 @@ public class ContingencyMatrixTest {
 				this.cm.getFrequency(ContingencyMatrixCell.X_AND_G) ==
 				this.cm.getData()[0][0]);
 	}
-	
+
 	/**
 	 * Test the frequency at (0, 1) references X and not-group G
 	 * */	
@@ -181,18 +181,18 @@ public class ContingencyMatrixTest {
 				this.cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G) ==
 				this.cm.getData()[0][1]);
 	}
-	
+
 	/**
 	 * Test the frequency at (1, 0) references not-X and group G
 	 * */
-	
+
 	@Test
 	public void testNotXAndGFrequency() {
 		assertTrue(
 				this.cm.getFrequency(ContingencyMatrixCell.NOT_X_AND_G) ==
 				this.cm.getData()[1][0]);
 	}
-	
+
 	/**
 	 * Test the frequency at (1, 1) references not-X and not-group G
 	 * */
@@ -202,7 +202,7 @@ public class ContingencyMatrixTest {
 				this.cm.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G) ==
 				this.cm.getData()[1][1]);
 	}
-	
+
 	/**
 	 * Test the probability at (0, 0) references X and group G
 	 * */
@@ -212,7 +212,7 @@ public class ContingencyMatrixTest {
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_G) ==
 				this.cm.getData()[0][0] / this.cm.sum());
 	}
-	
+
 	/**
 	 * Test the probability at (0, 1) references X and not-group G
 	 * */	
@@ -222,18 +222,18 @@ public class ContingencyMatrixTest {
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_NOT_G) ==
 				this.cm.getData()[0][1] / this.cm.sum());
 	}
-	
+
 	/**
 	 * Test the probability at (1, 0) references not-X and group G
 	 * */
-	
+
 	@Test
 	public void testNotXAndGProbability() {
 		assertTrue(
 				this.cm.getProbability(ContingencyMatrixCell.NOT_X_AND_G) ==
 				this.cm.getData()[1][0] / this.cm.sum());
 	}
-	
+
 	/**
 	 * Test the frequency at (1, 1) references not-X and not-group G
 	 * */
@@ -243,7 +243,7 @@ public class ContingencyMatrixTest {
 				this.cm.getProbability(ContingencyMatrixCell.NOT_X_AND_NOT_G) ==
 				this.cm.getData()[1][1] / this.cm.sum());
 	}
-	
+
 	/**
 	 * Assert that sum-frequencies of entire matrix sums to pre-computed sum.
 	 * */
@@ -256,7 +256,7 @@ public class ContingencyMatrixTest {
 				this.cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
 		assertTrue(sumProbability == this.cm.sum());
 	}
-	
+
 	/**
 	 * Assert that sum-probabilities of the entire matrix sums to 1.0
 	 * */
@@ -269,7 +269,7 @@ public class ContingencyMatrixTest {
 				this.cm.getProbability(ContingencyMatrixCell.X_AND_NOT_G);
 		assertTrue(sumProbability == 1);
 	}
-	
+
 	/**
 	 * The known Laplace correction was derived apriori; ensure valid output.
 	 * */
@@ -280,7 +280,7 @@ public class ContingencyMatrixTest {
 				(Matrix.summation(this.cm.getX()) + 2);
 		assertEquals(lapl, 0.5399, 1);
 	}
-	
+
 	/**
 	 * The known lift was derived apriori; ensure valid output.
 	 * */
@@ -288,7 +288,7 @@ public class ContingencyMatrixTest {
 	public void testIsCorrectLift() {
 		assertEquals(this.cm.getLift(), 1.38599, 0.1);
 	}
-	
+
 	/**
 	 * The known cosine was derived apriori; ensure valid output.
 	 * */
@@ -296,7 +296,7 @@ public class ContingencyMatrixTest {
 	public void testIsCorrectCosine() {
 		assertEquals(this.cm.getCosine(), 0.10997, 0.1);
 	}
-	
+
 	/**
 	 * The known Jaccard measure was derived apriori; ensure valid output.
 	 * */
@@ -304,7 +304,7 @@ public class ContingencyMatrixTest {
 	public void testIsCorrectJaccard() {
 		assertEquals(this.cm.getJaccard(), 0.01745108, 0.1);
 	}
-	
+
 	/**
 	 * The known confidence was derived apriori; ensure valid output.
 	 * */
@@ -312,7 +312,7 @@ public class ContingencyMatrixTest {
 	public void testIsCorrectConfidence() {
 		assertEquals(this.cm.getConfidence(), 0.6875, 0.1);
 	}
-	
+
 	/**
 	 * The known Phi-coefficient was derived apriori; ensure valid output.
 	 * */
@@ -328,17 +328,7 @@ public class ContingencyMatrixTest {
 	public void testIsCorrectKappaCoefficient() {
 		assertEquals(this.cm.getKappa(), 0.00979, 0.1);
 	}
-	
-	/**
-	 * Sometimes, the hypergeometric p-value is so small that it
-	 * is difficult to model. In such a case, return the 
-	 * smallest-possible value instead.
-	 * */
-	@Test
-	public void testIsCorrectPValueProduced() {
-		assertTrue(this.cm.log(2).getPValue() <= 1.0);
-	}
-	
+
 	/**
 	 * Test that when IPF is performed, column values in the
 	 * contingency matrix are identical to one another.
@@ -351,7 +341,7 @@ public class ContingencyMatrixTest {
 		Arrays.sort(col1); // IPF values are reciprocal of eachother.
 		assertEquals(Matrix.summation(col1), Matrix.summation(col2), 0);
 	}
-	
+
 	/**
 	 * Test that upon IPF, row marginals equal column marignals.
 	 * */
@@ -362,7 +352,7 @@ public class ContingencyMatrixTest {
 				Matrix.summation(this.cm.getX()),
 				Matrix.summation(this.cm.getNotX()), 0);
 	}
-	
+
 	/**
 	 * Test that upon IPF, column sums equal one another.
 	 * */
@@ -373,7 +363,7 @@ public class ContingencyMatrixTest {
 				Matrix.summation(this.cm.getG()),
 				Matrix.summation(this.cm.getNotG()), 0);
 	}
-	
+
 	/**
 	 * Test that upon IPF, column sums equal one another.
 	 * */
@@ -396,7 +386,7 @@ public class ContingencyMatrixTest {
 	public void testToProbabilityNotNull() {
 		assertNotNull(this.cm.toProbability());
 	}
-	
+
 	/**
 	 * Test a produced probability-matrix sums to 1.0. 
 	 * */
@@ -404,7 +394,7 @@ public class ContingencyMatrixTest {
 	public void testProbMatrixSumsToOne() {
 		assertEquals(this.cm.toProbability().sum(), 1.0, 0);
 	}
-	
+
 	/**
 	 * Test a probability-matrix has the same height as those which are not.
 	 * */
@@ -412,12 +402,93 @@ public class ContingencyMatrixTest {
 	public void testProbMatrixSameHeight() {
 		assertTrue(this.cm.toProbability().getHeight() == this.cm.getHeight());
 	}
-	
+
 	/**
 	 * Test a probability-matrix has the same width as those which are not.
 	 * */
 	@Test
 	public void testProbMatrixSameWidth() {
 		assertTrue(this.cm.toProbability().getWidth() == this.cm.getWidth());
+	}
+
+	/**
+	 * Test that IPF computes correctly. To verify, IPF was manually derived
+	 * for an emprically-derived matrix.
+	 * */
+	@Test
+	public void testIPFYieldsSameXAndGIndices() {
+		double[][] data = new double[][]{{37, 47}, {1671, 1531}};
+		ContingencyMatrix cm = new ContingencyMatrix(data);
+		cm.ipf();
+		double[][] knownIPF = new double[][]{
+				{754.5464972658986, 888.4535027341014}, 
+				{888.4535027341014, 754.5464972658986}};
+		ContingencyMatrix ipfResult = new ContingencyMatrix(knownIPF);
+		assertEquals(cm.getFrequency(ContingencyMatrixCell.X_AND_G),
+				ipfResult.getFrequency(ContingencyMatrixCell.X_AND_G), 0.01);
+	}
+
+	/**
+	 * Test that IPF computes correctly. To verify, IPF was manually derived
+	 * for an emprically-derived matrix.
+	 * */
+	@Test
+	public void testIPFYieldsSameNotXAndGIndices() {
+		double[][] data = new double[][]{{37, 47}, {1671, 1531}};
+		ContingencyMatrix cm = new ContingencyMatrix(data);
+		cm.ipf();
+		double[][] knownIPF = new double[][]{
+				{754.5464972658986, 888.4535027341014}, 
+				{888.4535027341014, 754.5464972658986}};
+		ContingencyMatrix ipfResult = new ContingencyMatrix(knownIPF);
+		assertEquals(cm.getFrequency(ContingencyMatrixCell.NOT_X_AND_G),
+				ipfResult.getFrequency(ContingencyMatrixCell.NOT_X_AND_G), 0.01);
+	}
+
+	/**
+	 * Test that IPF computes correctly. To verify, IPF was manually derived
+	 * for an emprically-derived matrix.
+	 * */
+	@Test
+	public void testIPFYieldsSameNotXAndNotGIndices() {
+		double[][] data = new double[][]{{37, 47}, {1671, 1531}};
+		ContingencyMatrix cm = new ContingencyMatrix(data);
+		cm.ipf();
+		double[][] knownIPF = new double[][]{
+				{754.5464972658986, 888.4535027341014}, 
+				{888.4535027341014, 754.5464972658986}};
+		ContingencyMatrix ipfResult = new ContingencyMatrix(knownIPF);
+		assertEquals(cm.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G),
+				ipfResult.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G), 0.01);
+	}
+
+	/**
+	 * Test that IPF computes correctly. To verify, IPF was manually derived
+	 * for an emprically-derived matrix.
+	 * */
+	@Test
+	public void testIPFYieldsSameXAndNotGIndices() {
+		double[][] data = new double[][]{{37, 47}, {1671, 1531}};
+		ContingencyMatrix cm = new ContingencyMatrix(data);
+		cm.ipf();
+		double[][] knownIPF = new double[][]{
+				{754.5464972658986, 888.4535027341014}, 
+				{888.4535027341014, 754.5464972658986}};
+		ContingencyMatrix ipfResult = new ContingencyMatrix(knownIPF);
+		assertEquals(cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G),
+				ipfResult.getFrequency(ContingencyMatrixCell.X_AND_NOT_G), 0.01);
+	}
+
+	/**
+	 * If a binding site is induced, it must also be true after IPF.
+	 * */
+	@Test
+	public void testIPFMaintainsOverrepresentation() {
+		boolean beforeIPF = this.cm.getFrequency(ContingencyMatrixCell.X_AND_G) > 
+		this.cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
+		this.cm.ipf();
+		boolean afterIPF = this.cm.getFrequency(ContingencyMatrixCell.X_AND_G) >
+		this.cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
+		assertTrue(beforeIPF == afterIPF);
 	}
 }

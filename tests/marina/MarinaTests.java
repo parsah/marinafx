@@ -7,6 +7,7 @@ import marina.bindingsite.LinearDNAMotifTest;
 import marina.bindingsite.PositionWeightMatrixTest;
 import marina.group.FASTASequenceTest;
 import marina.group.GroupTest;
+import marina.matrix.RankedAbundanceMatrixTest;
 import marina.matrix.ContingencyMatrixCellTest;
 import marina.matrix.ContingencyMatrixTest;
 import marina.matrix.MatrixTest;
@@ -30,7 +31,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	AlignmentActionTest.class, GroupTest.class, FASTAParserTest.class,
 	PositionWeightMatrixTest.class, BooleanParameterTest.class,
 	MatrixTest.class, IntegerParameterTest.class, DoubleParameterTest.class,
-	PMatchTest.class
+	PMatchTest.class, RankedAbundanceMatrixTest.class,
 })
 public class MarinaTests {
 

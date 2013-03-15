@@ -131,20 +131,23 @@ public class ContingencyMatrix extends Matrix {
 	 * cells f(0, 0) and f(1, 1) will have the same value, x. Values 
 	 * for f(1, 0) and f(0, 1) will however be (N/2) - x.
 	 * */
-	public void ipf() {
-		double xAndG = this.getFrequency(ContingencyMatrixCell.X_AND_G);
-		double notXNotG = this.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G);
-		double notXAndG = this.getFrequency(ContingencyMatrixCell.NOT_X_AND_G);
-		double xAndNotG = this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
+	public void ipf() {		
 		// create variables to perform IPF normalization
-		double numer = this.sum() * Math.sqrt(xAndG * notXNotG);
-		double denom = 2 * (Math.sqrt(notXAndG * xAndG) + 
-				Math.sqrt(xAndNotG * notXAndG));
+		double oldSum = this.sum();
+		double numer = oldSum * Math.sqrt(
+				this.getFrequency(ContingencyMatrixCell.X_AND_G) * 
+				this.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G));
+		double denom = 2 * (Math.sqrt(this.getFrequency(ContingencyMatrixCell.NOT_X_AND_NOT_G) * 
+				this.getFrequency(ContingencyMatrixCell.X_AND_G)) + 
+				Math.sqrt(this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G) * 
+						this.getFrequency(ContingencyMatrixCell.NOT_X_AND_G)));
 		// adjust matrix counts for f(0, 0) and f(1, 1)
-		this.getData()[1][1] = this.getData()[0][0] = (numer / denom);
+		this.getData()[1][1] = (numer / denom);
+		this.getData()[0][0] = (numer / denom);
 		// adjust matrix counts for f(0, 1) and f(1, 0)
-		double diagValue = (this.sum() / 2) - xAndG;
-		this.getData()[1][0] = this.getData()[0][1] = diagValue;
+		double diagValue = (oldSum / 2) - this.getFrequency(ContingencyMatrixCell.X_AND_G);
+		this.getData()[1][0] = diagValue;
+		this.getData()[0][1] = diagValue;
 		this.sum();
 	}
 
@@ -312,7 +315,7 @@ public class ContingencyMatrix extends Matrix {
 			else if (metric == MetricName.PHI) {
 				values[i] = this.getPhi();
 			}
-			else if (metric == MetricName.HYPER) {
+			else if (metric == MetricName.PVALUE) {
 				values[i] = this.log(2).getPValue();
 			}
 			else if (metric == MetricName.NUM_QUERY) {
@@ -326,6 +329,14 @@ public class ContingencyMatrix extends Matrix {
 			}
 		}
 		return values;
+	}
+	
+	/**
+	 * Trivial String function for the contingency matrix.
+	 * */
+	@Override
+	public String toString() {
+		return this.getName();
 	}
 
 	/**

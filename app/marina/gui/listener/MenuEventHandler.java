@@ -8,11 +8,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import marina.alignment.AlignmentAction;
+import marina.bean.RepresentedBeanBuilder;
 import marina.group.Group;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
-import marina.matrix.AbundanceMatrix;
+import marina.matrix.RankedAbundanceMatrix;
 import marina.parameter.ParameterMap;
 import marina.parser.DNAMotifParser;
 import marina.parser.FASTAParser;
@@ -96,8 +97,10 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						// contrast TFBS abundances between two groups
 						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
 						AbundanceInference infer = new AbundanceInference(mb);
-						AbundanceMatrix matrix = infer.buildAbundanceMatrix();
-						matrix.rank();
+						RankedAbundanceMatrix matrix = infer.buildAbundanceMatrix();
+						RepresentedBeanBuilder builder = RepresentedBeanBuilder.get();
+						builder.build(matrix);
+						
 					}
 					else {
 						String msg = "Alignment must be performed first.";
