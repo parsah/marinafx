@@ -2,107 +2,181 @@ package marina.matrix;
 
 import static org.junit.Assert.*;
 
+import marina.quantification.Statistic;
+
+import org.junit.Before;
 import org.junit.Test;
 
 public class MatrixTest {
-
+	private Matrix matrix;
+	
+	@Before
+	public void setUp() {
+		double[][] data = new double[][]{
+				{0.22, 0.92, 0.112},
+				{1.00, 0.00, 0.212},
+				{6.01, -1.01, 2.12}};
+		this.matrix = new Matrix(data);
+	}
+	
 	/**
-	 * Test that vector summation works when array-values are all even
+	 * Test that the matrix sum equals the known empirical value.
 	 * */
 	@Test
-	public void testSummationEvenNumbers() {
-		double[] vals = new double[]{2, 4, 6, 8, 10}; // known sum is 30
-		assertTrue(Matrix.summation(vals) == 30);
+	public void testSumEqualsEmpirical() {
+		assertTrue(this.matrix.sum() == 9.584);
+	}
+	
+	/**
+	 * Test that the matrix minimum equals the known empirical value.
+	 * */
+	@Test
+	public void testMinEqualsEmpirical() {
+		assertTrue(this.matrix.min() == -1.01);
+	}
+	
+	/**
+	 * Test that the matrix maximum equals the known empirical value.
+	 * */
+	@Test
+	public void testMaxEqualsEmpirical() {
+		assertTrue(this.matrix.max() == 6.01);
 	}
 
 	/**
-	 * Test that vector summation works when array-values are all odd
+	 * Assert width of the matrix.
 	 * */
 	@Test
-	public void testSummationOddNumbers() {
-		double[] vals = new double[]{1, 3, 7, 9, 5}; // known sum is 25
-		assertTrue(Matrix.summation(vals) == 25);
+	public void testValidWidth() {
+		assertTrue(this.matrix.getWidth() == 3);
 	}
-
+	
 	/**
-	 * Test vector summation works when there is only one odd value.
+	 * Assert height of the matrix.
 	 * */
 	@Test
-	public void testSummationOneOddNumber() {
-		double[] vals = new double[]{121}; // known sum is 121
-		assertTrue(Matrix.summation(vals) == 121);
+	public void testValidHeight() {
+		assertTrue(this.matrix.getWidth() == 3);
 	}
-
+	
 	/**
-	 * Test vector summation works when there is only one even value.
+	 * Column-sums list-length must equal width of that respective matrix.
 	 * */
 	@Test
-	public void testSummationOneEvenNumber() {
-		double[] vals = new double[]{628}; // known sum is 628
-		assertTrue(Matrix.summation(vals) == 628);
+	public void testColumnSumsLengthEqualsWidth() {
+		assertTrue(this.matrix.columnSums().length == this.matrix.getWidth());
 	}
-
+	
 	/**
-	 * Test vector summation when array-values have mixed-signage.
+	 * The sum of the entire matrix-columns must equal the entire matrix.
 	 * */
 	@Test
-	public void testSummationMixedSign() {
-		double[] vals = new double[]{-2, -10, 7, 4}; // known sum is -1
-		assertTrue(Matrix.summation(vals) == -1);
+	public void testColumnSumsEqualMatrixSum() {
+		assertTrue(Statistic.summation(this.matrix.columnSums()) == 
+				this.matrix.sum());
 	}
-
+	
 	/**
-	 * Test that vector summation works when array-values are all odd
+	 * Assert that column-sums at a specific column yields emprical sum.
 	 * */
 	@Test
-	public void testSummationNoNumbers() {
-		double[] vals = new double[]{}; // no numbers
-		assertTrue(Matrix.summation(vals) == 0);
+	public void testColumnSumsEqualEmpiricalSum() {
+		int index = 1; // sum column at index 1
+		double sum = Statistic.summation(this.matrix.getColumn(index));
+		assertTrue(this.matrix.columnSums()[index] == sum);
 	}
-
-	// TODO from here
+	
 	/**
-	 * Test that vector minimum works when array-values are all even
+	 * Summing the minimum values within per column must be larger than the
+	 * singular minimum in the entire matrix (unless matrix is all zeros).
 	 * */
 	@Test
-	public void testMinimumEvenNumbers() {
-		double[] vals = new double[]{2, 4, 6, 8, 10}; // known min is 2
-		assertTrue(Matrix.minimum(vals) == 2);
+	public void sumColumnMinsGreaterThanMatrixMin() {
+		assertTrue(this.matrix.sumColumnMins() >= this.matrix.min());
 	}
-
+	
 	/**
-	 * Test that vector minimum works when array-values are all odd
+	 * Summing the minimum values within per column must be smaller than the
+	 * singular maximum in the entire matrix (unless matrix is all zeros).
 	 * */
 	@Test
-	public void testMinimumOddNumbers() {
-		double[] vals = new double[]{1, 3, 7, 9, 5}; // known min is 1
-		assertTrue(Matrix.minimum(vals) == 1);
+	public void sumColumnMinsLessThanMatrixMin() {
+		assertTrue(this.matrix.sumColumnMins() <= this.matrix.max());
 	}
-
+	
 	/**
-	 * Test vector minimum works when there is only one odd value.
+	 * Test that when a row is identified, it equals the matrix width.
 	 * */
 	@Test
-	public void testMinimumOneOddNumber() {
-		double[] vals = new double[]{7};
-		assertTrue(Matrix.minimum(vals) == 7);
+	public void testGetRowYieldsMatrixWidth() {
+		// take the first row as an example
+		assertTrue(this.matrix.getRow(0).length == this.matrix.getWidth());
 	}
-
+	
 	/**
-	 * Test vector summation works when there is only one even value.
+	 * Test that when a column is identified, it equals the matrix height.
 	 * */
 	@Test
-	public void testMinimumOneEvenNumber() {
-		double[] vals = new double[]{16};
-		assertTrue(Matrix.minimum(vals) == 16);
+	public void testGetColumnYieldsMatrixHeight() {
+		// take the first column as an example
+		assertTrue(this.matrix.getColumn(0).length == this.matrix.getHeight());
 	}
-
+	
 	/**
-	 * Test vector minimum when array-values have mixed-signage.
+	 * Test identification of an unknown valid in the matrix.
 	 * */
 	@Test
-	public void testMinimumMixedSign() {
-		double[] vals = new double[]{-7, -22, 16, 3}; // minimum is -22
-		assertTrue(Matrix.minimum(vals) == -22);
+	public void testDoesNotContainValue() {
+		assertFalse(this.matrix.contains(1002101)); // deliberately not in.
+	}
+	
+	/**
+	 * Test identification of a known valid in the matrix.
+	 * */
+	@Test
+	public void testContainsKnownValue() {
+		assertTrue(this.matrix.contains(0.212)); // deliberately in matrix.
+	}
+	
+	/**
+	 * Test that matrix width equals matrix row length.
+	 * */
+	@Test
+	public void testWidthEqualsRowLength() {
+		int length = this.matrix.getRow(1).length; // get row 1 for example.
+		assertTrue(length == this.matrix.getWidth());
+	}
+	
+	/**
+	 * Test that matrix height equals matrix column length.
+	 * */
+	@Test
+	public void testHeightEqualsColumnLength() {
+		int length = this.matrix.getColumn(1).length; // column 1 for example.
+		assertTrue(length == this.matrix.getHeight());
+	}
+	
+	/**
+	 * Test that no default row names are initially provided.
+	 * */
+	@Test
+	public void testNoDefaultRowNames() {
+		assertNull(this.matrix.getRows());
+	}
+	
+	/**
+	 * Test that no default column names are initially provided.
+	 * */
+	@Test
+	public void testNoDefaultColumnNames() {
+		assertNull(this.matrix.getColumns());
+	}
+	
+	/**
+	 * Test that no default matrix name is initially provided.
+	 * */
+	@Test
+	public void testNoDefaultName() {
+		assertNull(this.matrix.getName());
 	}
 }

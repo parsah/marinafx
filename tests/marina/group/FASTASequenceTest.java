@@ -48,7 +48,7 @@ public class FASTASequenceTest {
 	 * Test that the FASTA object is of type DNASequence
 	 * */
 	@Test
-	public void testIsBindingSite() {
+	public void testIsDNASequence() {
 		assertTrue(this.fasta instanceof DNASequence);
 	}
 	
@@ -86,7 +86,7 @@ public class FASTASequenceTest {
 	 * Test the FASTA entry has a basic motif mapped to it.
 	 * */
 	@Test
-	public void testMapPresence() {
+	public void testMapPresenceIfAlign() {
 		LinearDNAMotif motifA = new LinearDNAMotif("fam", "geneA", "TACTGCAGT");
 		this.fasta.getMappings().put(motifA, new ArrayList<Integer>());
 		assertTrue(this.fasta.getMappings().containsKey(motifA));
@@ -96,7 +96,7 @@ public class FASTASequenceTest {
 	 * Test equality if headers and sequence do not equal
 	 * */
 	@Test
-	public void testDiffHeaderAndSequence() {
+	public void testDiffHeaderAndSequenceUnEqual() {
 		FASTASequence other = new FASTASequence("head", "GTAGTCTGAC");
 		assertNotSame(this.fasta, other);
 	}

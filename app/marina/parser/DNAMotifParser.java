@@ -53,8 +53,8 @@ public class DNAMotifParser extends Parser {
 				}
 			}
 		}
-		String msg = this.getLinearMotifs().size() + " TFBSs parsed.";
-		MarinaGUI.get().getStatusBar().setText(msg);
+//		String msg = this.getLinearMotifs().size() + " TFBSs parsed.";
+//		MarinaGUI.get().getStatusBar().setText(msg);
 	}
 
 	@Override

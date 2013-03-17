@@ -3,6 +3,8 @@ package marina.matrix;
 import java.text.DecimalFormat;
 import java.util.Map;
 
+import marina.quantification.Statistic;
+
 /**
  * The core Marina data-structure associated with storing and 
  * manipulating values is a matrix. Matrix variants exist, such as
@@ -34,7 +36,7 @@ public class Matrix {
 	public double[][] getData() {
 		return data;
 	}
-	
+
 	/**
 	 * Compute sum of all the matrix values.
 	 * @return double representing Matrix sum.
@@ -48,7 +50,7 @@ public class Matrix {
 		}
 		return sum;
 	}
-	
+
 	public void round() {
 		for (int i = 0; i < this.getHeight(); i++) {
 			for (int j = 0; j < this.getWidth(); j++) {
@@ -58,7 +60,7 @@ public class Matrix {
 			}
 		}
 	}
-	
+
 	/**
 	 * Identification of matrix-wide minimum value
 	 * */
@@ -74,7 +76,7 @@ public class Matrix {
 		}
 		return minValue;
 	}
-	
+
 	/**
 	 * Identification of matrix-wide maximum value
 	 * */
@@ -90,49 +92,25 @@ public class Matrix {
 		}
 		return maxValue;
 	}
-	
+
 	/**
 	 * Compute column-sums for each matrix.
 	 * */
 	public double[] columnSums() {
 		double[] sums = new double[this.getWidth()];
 		for (int i=0; i < this.getWidth(); i++) {
-			sums[i] = Matrix.summation(this.getColumn(i));
+			sums[i] = Statistic.summation(this.getColumn(i));
 		}
 		return sums;
 	}
-	
+
 	public double sumColumnMins() {
 		double[] mins = new double[this.getWidth()];
 		for (int col=0; col < this.getWidth(); col++) {
-			double min = Matrix.minimum(this.getColumn(col));
+			double min = Statistic.minimum(this.getColumn(col));
 			mins[col] = min;
 		}
-		return Matrix.summation(mins);
-	}
-	
-	/**
-	 * Compute sum of a given array; useful in cases where a column or row
-	 * is returned.
-	 * @param array of values.
-	 * @return sum of the provided list.
-	 * */
-	public static double summation(double[] vals) {
-		double sum = 0;
-		for (int i = 0; i < vals.length; i++) {
-			sum += vals[i];
-		}
-		return sum;
-	}
-	
-	public static double minimum(double[] vals) {
-		double minValue = Double.MAX_VALUE;
-		for (int i=0; i < vals.length; i++) {
-			if (vals[i] <= minValue) {
-				minValue = vals[i];
-			}
-		}
-		return minValue;
+		return Statistic.summation(mins);
 	}
 
 	/**
@@ -154,7 +132,7 @@ public class Matrix {
 		}
 		return col;
 	}
-	
+
 	/**
 	 * Determines whether a specific value is found in the matrix.
 	 * @param double representing value to find.

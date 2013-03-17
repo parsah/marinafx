@@ -31,7 +31,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	AlignmentActionTest.class, GroupTest.class, FASTAParserTest.class,
 	PositionWeightMatrixTest.class, BooleanParameterTest.class,
 	MatrixTest.class, IntegerParameterTest.class, DoubleParameterTest.class,
-	PMatchTest.class, RankedAbundanceMatrixTest.class,
+	PMatchTest.class, RankedAbundanceMatrixTest.class,FASTAParserTest.class,
 })
 public class MarinaTests {
 

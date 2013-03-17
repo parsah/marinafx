@@ -1,7 +1,5 @@
 package marina.bean;
 
-import java.io.Serializable;
-
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import marina.bindingsite.BindingSite;
@@ -15,10 +13,8 @@ import marina.bindingsite.BindingSite;
  * without being concerned as-to how its computation was performed.
  * @author Parsa Hosseini
  * */
-public class RepresentedMatrixBean implements Serializable {
-	private static final long serialVersionUID = 1L;
-	
-	private SimpleObjectProperty<BindingSite> tfbs = new SimpleObjectProperty<BindingSite>();
+public class RepresentedMatrixBean {
+	private SimpleObjectProperty<BindingSite> site = new SimpleObjectProperty<BindingSite>();
 	private SimpleDoubleProperty laplace = new SimpleDoubleProperty();
 	private SimpleDoubleProperty confidence = new SimpleDoubleProperty();
 	private SimpleDoubleProperty lift = new SimpleDoubleProperty();
@@ -31,16 +27,17 @@ public class RepresentedMatrixBean implements Serializable {
 	private SimpleDoubleProperty numBaseline = new SimpleDoubleProperty();
 
 	public RepresentedMatrixBean() {
-		this.setConfidence(0);
-		this.setCosine(0);
-		this.setJaccard(0);
-		this.setKappa(0);
-		this.setLaplace(0);
-		this.setLift(0);
-		this.setNumBaseline(0);
-		this.setNumQuery(0);
-		this.setPhi(0);
-		this.setPvalue(0);
+		this.site.set(null);
+		this.confidence.set(0);
+		this.cosine.set(0);
+		this.jaccard.set(0);
+		this.kappa.set(0);
+		this.laplace.set(0);
+		this.lift.set(0);
+		this.numBaseline.set(0);
+		this.numQuery.set(0);
+		this.phi.set(0);
+		this.pvalue.set(0);
 	}
 
 	/**
@@ -167,15 +164,15 @@ public class RepresentedMatrixBean implements Serializable {
 	/**
 	 * @return the bindingSite
 	 */
-	public BindingSite getBindingSite() {
-		return tfbs.get();
+	public BindingSite getSite() {
+		return site.get();
 	}
 
 	/**
 	 * @param arg the bindingSite to set
 	 */
-	public void setBindingSite(BindingSite arg) {
-		this.tfbs.set(arg);	
+	public void setSite(BindingSite arg) {
+		this.site.set(arg);	
 	}
 
 }

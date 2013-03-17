@@ -8,6 +8,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
+import marina.quantification.Statistic;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -277,7 +279,7 @@ public class ContingencyMatrixTest {
 	public void testIsCorrectLaplace() {
 		double lapl = (this.cm.getFrequency(
 				ContingencyMatrixCell.X_AND_G) + 1) / 
-				(Matrix.summation(this.cm.getX()) + 2);
+				(Statistic.summation(this.cm.getX()) + 2);
 		assertEquals(lapl, 0.5399, 1);
 	}
 
@@ -339,7 +341,7 @@ public class ContingencyMatrixTest {
 		double[] col1 = this.cm.getColumn(0);
 		double[] col2 = this.cm.getColumn(1);
 		Arrays.sort(col1); // IPF values are reciprocal of eachother.
-		assertEquals(Matrix.summation(col1), Matrix.summation(col2), 0);
+		assertEquals(Statistic.summation(col1), Statistic.summation(col2), 0);
 	}
 
 	/**
@@ -349,8 +351,8 @@ public class ContingencyMatrixTest {
 	public void testRowSumsFromIPF() {
 		this.cm.ipf();
 		assertEquals(
-				Matrix.summation(this.cm.getX()),
-				Matrix.summation(this.cm.getNotX()), 0);
+				Statistic.summation(this.cm.getX()),
+				Statistic.summation(this.cm.getNotX()), 0);
 	}
 
 	/**
@@ -360,8 +362,8 @@ public class ContingencyMatrixTest {
 	public void testColumnSumsFromIPF() {
 		this.cm.ipf();
 		assertEquals(
-				Matrix.summation(this.cm.getG()),
-				Matrix.summation(this.cm.getNotG()), 0);
+				Statistic.summation(this.cm.getG()),
+				Statistic.summation(this.cm.getNotG()), 0);
 	}
 
 	/**

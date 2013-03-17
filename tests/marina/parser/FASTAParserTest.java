@@ -2,6 +2,7 @@ package marina.parser;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.IOException;
 
 import marina.parser.FASTAParser;
 
@@ -16,7 +17,6 @@ public class FASTAParserTest {
 	public void setUp() throws Exception {
 		// provide a known FASTA file
 		this.parser = new FASTAParser(new File("./demo/most_suppressed.fasta"));
-		this.parser.parse();
 	}
 	
 	/**
@@ -29,9 +29,19 @@ public class FASTAParserTest {
 	
 	/**
 	 * Test that all sequences in the file can be parsed.
+	 * @throws IOException 
 	 * */
 	@Test
-	public void testCanParse() {
+	public void testCanParse() throws IOException {
+		this.parser.parse();
 		assertTrue(this.parser.getSequences().size() == 585);
+	}
+	
+	/**
+	 * Assert that initially, no FASTA entries were parsed.
+	 * */
+	@Test
+	public void testNoParsingInitially() {
+		assertTrue(this.parser.getSequences().size() == 0);
 	}
 }

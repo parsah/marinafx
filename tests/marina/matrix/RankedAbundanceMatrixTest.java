@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.util.Arrays;
 
 import marina.quantification.MetricName;
+import marina.quantification.Statistic;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +39,7 @@ public class RankedAbundanceMatrixTest {
 	@Test
 	public void testColumnIsSorted() {
 		double[] column = new double[]{0.332, 0.112, -0.782, 1.192};
-		double[] values = this.matrix.sort(column);
+		double[] values = Statistic.sort(column);
 		boolean isSorted = false;
 		for (int i=1; i < values.length; i++) {
 			if (values[i-1] <= values[i]) {
@@ -53,8 +54,8 @@ public class RankedAbundanceMatrixTest {
 	 * */
 	@Test
 	public void testSortingDoesNotChangeSum() {
-		double sumSorted = Matrix.summation(this.matrix.sort(this.matrix.getColumn(0)));
-		double sumUnsorted = Matrix.summation(this.matrix.getColumn(0));
+		double sumSorted = Statistic.summation(Statistic.sort(this.matrix.getColumn(0)));
+		double sumUnsorted = Statistic.summation(this.matrix.getColumn(0));
 		assertTrue(sumSorted == sumUnsorted);
 	}
 
@@ -64,7 +65,7 @@ public class RankedAbundanceMatrixTest {
 	@Test
 	public void testSortingYieldsSameColumnSize() {
 		double[] column = new double[]{0.332, 0.112, -0.782, 1.192};
-		assertTrue(this.matrix.sort(column).length == column.length);
+		assertTrue(Statistic.sort(column).length == column.length);
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class RankedAbundanceMatrixTest {
 	@Test
 	public void testRankMinIsOne() {
 		double[] column = new double[]{0.332, 0.112, -0.782, 1.192};
-		int[] ranks = this.matrix.rank(column);
+		int[] ranks = Statistic.rank(column);
 		Arrays.sort(ranks); // sorting to make min-identification easier.
 		assertTrue(ranks[0] == 1);
 	}
@@ -84,7 +85,7 @@ public class RankedAbundanceMatrixTest {
 	@Test
 	public void testRankMaxIsColumnLength() {
 		double[] column = new double[]{0.332, 0.112, -0.782, 1.192};
-		int[] ranks = this.matrix.rank(column);
+		int[] ranks = Statistic.rank(column);
 		Arrays.sort(ranks); // sorting to make min-identification easier.
 		assertTrue(ranks[ranks.length-1] == ranks.length);
 	}
@@ -95,7 +96,7 @@ public class RankedAbundanceMatrixTest {
 	@Test
 	public void testColumnRankEquality() {
 		double[] column = new double[]{1.19, 0.93, 0.91, 0.98, 0.98};
-		int[] ranked = this.matrix.rank(column);
+		int[] ranked = Statistic.rank(column);
 		assertArrayEquals(ranked, new int[]{1, 4, 5, 3, 3});
 	}
 	

@@ -6,15 +6,14 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import marina.bean.RepresentedMatrixBean;
 import marina.gui.listener.MenuEventHandler;
+import marina.output.OutputTable;
 import marina.parameter.ParameterMap;
 
 public class MarinaGUI extends Application {
@@ -22,7 +21,7 @@ public class MarinaGUI extends Application {
 	private BorderPane layout;
 	private StatusPane statusBar;
 	private ParameterMap parameterMap;
-	private TableView<RepresentedMatrixBean> table;
+	private OutputTable table;
 	
 	/**
 	 * Represent the GUI as a singleton so that it can be accessible 
@@ -41,6 +40,7 @@ public class MarinaGUI extends Application {
 	public void reset() {
 		MarinaGUI.get().getStatusBar().reset();
 		MarinaGUI.get().setParameterMap(new ParameterMap());
+		MarinaGUI.get().getTable().getItems().clear();
 	}
 	
 	/**
@@ -180,7 +180,7 @@ public class MarinaGUI extends Application {
 		MarinaGUI.get().setLayout(new BorderPane());
 		// create all other GUI components
 		MarinaGUI.get().setStatusBar(new StatusPane());
-		MarinaGUI.get().setTable(new TableView<RepresentedMatrixBean>());
+		MarinaGUI.get().setTable(new OutputTable());
 		MarinaGUI.get().placeMenuBar();
 		MarinaGUI.get().placeStatusBar();
 		MarinaGUI.get().placeTable();
@@ -188,7 +188,6 @@ public class MarinaGUI extends Application {
 		Scene scene = new Scene(MarinaGUI.get().getLayout());
 		stage.setTitle("Marina v." + Marina.getVersion());
 		stage.setScene(scene);
-		stage.setWidth(520);
 		stage.show();
 	}
 	
@@ -242,16 +241,16 @@ public class MarinaGUI extends Application {
 	}
 
 	/**
-	 * @return the resultsTable
+	 * @return the table
 	 */
-	public TableView<RepresentedMatrixBean> getTable() {
+	public OutputTable getTable() {
 		return table;
 	}
 
 	/**
-	 * @param table the resultsTable to set
+	 * @param table the table to set
 	 */
-	private void setTable(TableView<RepresentedMatrixBean> table) {
+	private void setTable(OutputTable table) {
 		this.table = table;
 	}
 }

@@ -14,6 +14,7 @@ import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
 import marina.matrix.RankedAbundanceMatrix;
+import marina.output.OutputTable;
 import marina.parameter.ParameterMap;
 import marina.parser.DNAMotifParser;
 import marina.parser.FASTAParser;
@@ -97,10 +98,12 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						// contrast TFBS abundances between two groups
 						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
 						AbundanceInference infer = new AbundanceInference(mb);
-						RankedAbundanceMatrix matrix = infer.buildAbundanceMatrix();
-						RepresentedBeanBuilder builder = RepresentedBeanBuilder.get();
-						builder.build(matrix);
-						
+						// TODO implement metricrankfactory which takes
+						// an arbitrary matrix, orders it and produces a beanbuilder.
+						RankedAbundanceMatrix mat = infer.toRankedMatrix();
+						RepresentedBeanBuilder builder = mat.generateBeanFactory();
+						OutputTable table = MarinaGUI.get().getTable();
+						table.addObservables(builder.build());
 					}
 					else {
 						String msg = "Alignment must be performed first.";

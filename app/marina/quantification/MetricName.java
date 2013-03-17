@@ -1,24 +1,26 @@
 package marina.quantification;
 
 public enum MetricName {
-	LAPLACE("LP", true),
-	CONFIDENCE("CF", true),
-	LIFT("LI", true),
-	COSINE("CO", true),
-	JACCARD("JAC", true),
-	KAPPA("KA", true),
-	PHI("PHI", true),
+	LAPLACE("Laplace", "laplace", true),
+	CONFIDENCE("Confidence", "confidence", true),
+	LIFT("Lift", "lift", true),
+	COSINE("Cosine", "cosine", true),
+	JACCARD("Jaccard", "jaccard", true),
+	KAPPA("Kappa", "kappa", true),
+	PHI("Phi-Coefficient", "phi", true),
 	// these metrics are useful but they are neither ranked nor sorted.
-	PVALUE("PVALUE", false),
-	NUM_QUERY("NUM_QUERY", false),
-	NUM_BASELINE("NUM_BASELINE", false);
+	PVALUE("p-value", "pvalue", false),
+	NUM_QUERY("#/query", "numQuery", false),
+	NUM_BASELINE("#/baseline", "numBaseline",false);
 	
 	private String row;
+	private String value; // references the bean state.
 	private boolean isStat;
 	
-	private MetricName(String row, boolean isStat) {
+	private MetricName(String row, String value, boolean isStat) {
 		this.setRow(row);
 		this.setStat(isStat);
+		this.setValue(value);
 	}
 	
 	/**
@@ -47,6 +49,20 @@ public enum MetricName {
 	 */
 	private void setStat(boolean bool) {
 		this.isStat = bool;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public String getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	private void setValue(String value) {
+		this.value = value;
 	}
 	
 }

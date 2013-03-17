@@ -167,7 +167,7 @@ public class ContingencyMatrix extends Matrix {
 	 * */
 	public double getLaplace() {
 		return (this.getFrequency(ContingencyMatrixCell.X_AND_G) + 1) /
-				(Matrix.summation(this.getX()) + 2);
+				(Statistic.summation(this.getX()) + 2);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class ContingencyMatrix extends Matrix {
 	 * */
 	public double getConfidence() {
 		return this.getProbability(ContingencyMatrixCell.X_AND_G) /
-				Matrix.summation(this.toProbability().getX());
+				Statistic.summation(this.toProbability().getX());
 
 	}
 
@@ -187,8 +187,8 @@ public class ContingencyMatrix extends Matrix {
 	public double getLift() {
 		ContingencyMatrix prob = this.toProbability();
 		double numer = this.getProbability(ContingencyMatrixCell.X_AND_G);
-		double denom = Matrix.summation(prob.getX()) * 
-				Matrix.summation(prob.getG());
+		double denom = Statistic.summation(prob.getX()) * 
+				Statistic.summation(prob.getG());
 		return numer / denom;
 	}
 
@@ -199,8 +199,8 @@ public class ContingencyMatrix extends Matrix {
 	public double getCosine() {			        		
 		ContingencyMatrix prob = this.toProbability();
 		double top = this.getProbability(ContingencyMatrixCell.X_AND_G);
-		double bottom = Math.sqrt(Matrix.summation(prob.getX()) *
-				Matrix.summation(prob.getG()));
+		double bottom = Math.sqrt(Statistic.summation(prob.getX()) *
+				Statistic.summation(prob.getG()));
 		return top / bottom;
 	}
 
@@ -211,8 +211,8 @@ public class ContingencyMatrix extends Matrix {
 	public double getJaccard() {
 		ContingencyMatrix prob = this.toProbability();
 		double numer = this.getProbability(ContingencyMatrixCell.X_AND_G);
-		double denom = Matrix.summation(prob.getX()) +
-				Matrix.summation(prob.getG()) -
+		double denom = Statistic.summation(prob.getX()) +
+				Statistic.summation(prob.getG()) -
 				this.getProbability(ContingencyMatrixCell.X_AND_G);
 		return numer / denom;
 	}
@@ -225,14 +225,14 @@ public class ContingencyMatrix extends Matrix {
 		ContingencyMatrix prob = this.toProbability();
 		double numer = this.getProbability(ContingencyMatrixCell.X_AND_G) +
 				this.getProbability(ContingencyMatrixCell.NOT_X_AND_NOT_G) -
-				Matrix.summation(prob.getX()) *
-				Matrix.summation(prob.getG()) -
-				Matrix.summation(prob.getNotX()) *
-				Matrix.summation(prob.getNotG());
-		double denom = 1 - Matrix.summation(prob.getX()) *
-				Matrix.summation(prob.getG()) -
-				Matrix.summation(prob.getNotX()) *
-				Matrix.summation(prob.getNotG());
+				Statistic.summation(prob.getX()) *
+				Statistic.summation(prob.getG()) -
+				Statistic.summation(prob.getNotX()) *
+				Statistic.summation(prob.getNotG());
+		double denom = 1 - Statistic.summation(prob.getX()) *
+				Statistic.summation(prob.getG()) -
+				Statistic.summation(prob.getNotX()) *
+				Statistic.summation(prob.getNotG());
 		return numer / denom;
 	}
 
@@ -244,7 +244,7 @@ public class ContingencyMatrix extends Matrix {
 		this.log(2);
 		double x = this.getFrequency(ContingencyMatrixCell.X_AND_G);
 		double N = this.sum();
-		double M = Matrix.summation(this.getX());
+		double M = Statistic.summation(this.getX());
 		double n = this.getFrequency(ContingencyMatrixCell.X_AND_G);
 		double m_give_x = Statistic.combinatorial(M, x);
 		double nmGiveNx = Statistic.combinatorial(N - M, n - x);
@@ -259,15 +259,15 @@ public class ContingencyMatrix extends Matrix {
 	public double getPhi() {
 		ContingencyMatrix prob = this.toProbability();
 		double top = this.getProbability(ContingencyMatrixCell.X_AND_G) -
-				Matrix.summation(prob.getX()) *
-				Matrix.summation(prob.getG());
-		double bottom = Matrix.summation(prob.getX()) *
-				Matrix.summation(prob.getG()) *
-				(1 - Matrix.summation(prob.getX())) *
-				(1 - Matrix.summation(prob.getG()));
+				Statistic.summation(prob.getX()) *
+				Statistic.summation(prob.getG());
+		double bottom = Statistic.summation(prob.getX()) *
+				Statistic.summation(prob.getG()) *
+				(1 - Statistic.summation(prob.getX())) *
+				(1 - Statistic.summation(prob.getG()));
 		return top / Math.sqrt(bottom);
 	}
-	
+
 	/**
 	 * Converts a contingency matrix into log-base(n) format; useful in
 	 * instances where cells are considerably large and downstream
@@ -294,43 +294,42 @@ public class ContingencyMatrix extends Matrix {
 		double[] values = new double[MetricName.values().length];
 		for (int i = 0; i < values.length; i++) {
 			MetricName metric = MetricName.values()[i];
-			if (metric == MetricName.LAPLACE) {
-				values[i] = this.getLaplace();
-			}
-			else if (metric == MetricName.CONFIDENCE) {
-				values[i] = this.getConfidence();
-			}
-			else if (metric == MetricName.LIFT) {
-				values[i] = this.getLift();
-			}
-			else if (metric == MetricName.COSINE) {
-				values[i] = this.getCosine();
-			}
-			else if (metric == MetricName.JACCARD) {
-				values[i] = this.getJaccard();
-			}
-			else if (metric == MetricName.KAPPA) {
-				values[i] = this.getKappa();
-			}
-			else if (metric == MetricName.PHI) {
-				values[i] = this.getPhi();
-			}
-			else if (metric == MetricName.PVALUE) {
+			switch (metric) {
+			case PVALUE:
 				values[i] = this.log(2).getPValue();
-			}
-			else if (metric == MetricName.NUM_QUERY) {
-				values[i] = this.getFrequency(ContingencyMatrixCell.X_AND_G);
-			}
-			else if (metric == MetricName.NUM_BASELINE) {
+				break;
+			case CONFIDENCE:
+				values[i] = this.getConfidence();
+				break;
+			case COSINE:
+				values[i] = this.getCosine();
+				break;
+			case JACCARD:
+				values[i] = this.getJaccard();
+				break;
+			case KAPPA:
+				values[i] = this.getKappa();
+				break;
+			case LAPLACE:
+				values[i] = this.getLaplace();
+				break;
+			case LIFT:
+				values[i] = this.getLift();
+				break;
+			case NUM_BASELINE:
 				values[i] = this.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
-			}
-			else {
-				throw new IOException("Invalid measure.");
+				break;
+			case NUM_QUERY:
+				values[i] = this.getFrequency(ContingencyMatrixCell.X_AND_G);
+				break;
+			case PHI:
+				values[i] = this.getPhi();
+				break;
 			}
 		}
 		return values;
 	}
-	
+
 	/**
 	 * Trivial String function for the contingency matrix.
 	 * */

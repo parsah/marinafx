@@ -1,12 +1,16 @@
 package marina.bindingsite;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
 
-import marina.matrix.Matrix;
 import marina.parser.PWMParser;
+import marina.quantification.Statistic;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +55,7 @@ public class PositionWeightMatrixTest {
 	 * */
 	@Test
 	public void testColumnSumsEqualMatrixSum() {
-		double matrixSum = Matrix.summation(this.pwm.columnSums());
+		double matrixSum = Statistic.summation(this.pwm.columnSums());
 		assertEquals(matrixSum, this.pwm.sum(), 1);
 	}
 	
@@ -97,7 +101,7 @@ public class PositionWeightMatrixTest {
 	 * */
 	@Test
 	public void testSumMinsGreaterThanMatrixMin() {
-		assertTrue(Matrix.summation(this.pwm.columnSums()) > this.pwm.min());
+		assertTrue(Statistic.summation(this.pwm.columnSums()) > this.pwm.min());
 	}
 		
 	/**

@@ -1,12 +1,12 @@
 package marina.bean;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
-import marina.matrix.RankedAbundanceMatrix;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import marina.matrix.ContingencyMatrix;
+import marina.matrix.RankedAbundanceMatrix;
 import marina.quantification.MetricName;
 
 /**
@@ -16,10 +16,18 @@ import marina.quantification.MetricName;
  * @author Parsa Hosseini
  * */
 public class RepresentedBeanBuilder {
-	private static RepresentedBeanBuilder instance = new RepresentedBeanBuilder();
+	private RankedAbundanceMatrix matrix;
+	private MetricName[] metrics;
+	private ContingencyMatrix[] cms;
 
-	public static RepresentedBeanBuilder get() {
-		return RepresentedBeanBuilder.instance;
+	public RepresentedBeanBuilder(RankedAbundanceMatrix m) {
+		this.setMatrix(m);
+		this.setContingencyMatrices(Arrays.copyOf(
+				this.getMatrix().getRows().keySet().toArray(), 
+				this.getMatrix().getRows().keySet().toArray().length, 
+				ContingencyMatrix[].class));
+		this.setMetrics(Arrays.copyOf(this.getMatrix().getColumns(), 
+				this.getMatrix().getColumns().length, MetricName[].class));
 	}
 
 	/**
@@ -31,59 +39,96 @@ public class RepresentedBeanBuilder {
 	 * @return list of RepresentedMatrixBean objects.
 	 * @throws IOException 
 	 * */
-	public List<RepresentedMatrixBean> build(RankedAbundanceMatrix matrix) 
-			throws IOException {
-		List<RepresentedMatrixBean> beans = new ArrayList<RepresentedMatrixBean>();
-		// rows are represented as a linked-hashmap hence they are sorted.
-		ContingencyMatrix[] rowNames = Arrays.copyOf(
-				matrix.getRows().keySet().toArray(), 
-				matrix.getRows().keySet().toArray().length, 
-				ContingencyMatrix[].class);
-		MetricName[] columnNames = Arrays.copyOf(matrix.getColumns(), 
-				matrix.getColumns().length, MetricName[].class);
+	public ObservableList<RepresentedMatrixBean> build() throws IOException {
+		ObservableList<RepresentedMatrixBean> beans = FXCollections.observableArrayList();
+		if (this.getMetrics().length != this.getMatrix().getWidth()) {
+			String msg = "Ranked matrix must be same length as #/metrics.";
+			throw new IOException(msg);
+		}
 		// iterate over each row and column and set the specific bean measure.
-		for (int rowNum = 0; rowNum < matrix.getHeight(); rowNum++) {
-			RepresentedMatrixBean matBean = new RepresentedMatrixBean();
-			matBean.setBindingSite(rowNames[rowNum].getBindingSite());
-			for (int colNum = 0; colNum < matrix.getWidth(); colNum++) {
-				MetricName metric = columnNames[colNum];
-				double measure = matrix.getData()[rowNum][colNum];
-				if (metric == MetricName.LAPLACE) {
-					matBean.setLaplace(measure);
-				}
-				else if (metric == MetricName.CONFIDENCE) {
-					matBean.setConfidence(measure);
-				}
-				else if (metric == MetricName.LIFT) {
-					matBean.setLift(measure);
-				}
-				else if (metric == MetricName.COSINE) {
-					matBean.setCosine(measure);
-				}
-				else if (metric == MetricName.JACCARD) {
-					matBean.setJaccard(measure);
-				}
-				else if (metric == MetricName.KAPPA) {
-					matBean.setKappa(measure);
-				}
-				else if (metric == MetricName.PHI) {
-					matBean.setPhi(measure);
-				}
-				else if (metric == MetricName.PVALUE) {
-					matBean.setPvalue(measure);
-				}
-				else if (metric == MetricName.NUM_BASELINE) {
-					matBean.setNumBaseline(measure);
-				}
-				else if (metric == MetricName.NUM_QUERY) {
-					matBean.setNumQuery(measure);
-				}
-				else {
-					throw new IOException("Invalid metric.");
+		for (int rowNum = 0; rowNum < this.getMatrix().getHeight(); rowNum++) {
+			RepresentedMatrixBean bean = new RepresentedMatrixBean();
+			bean.setSite(this.getContingencyMatrices()[rowNum].getBindingSite());
+			for (int colNum = 0; colNum < this.getMatrix().getWidth(); colNum++) {
+				MetricName metric = this.getMetrics()[colNum];
+				double value = this.getMatrix().getData()[rowNum][colNum];
+				switch(metric) {
+				case CONFIDENCE: 
+					bean.setConfidence(value);
+					break;
+				case COSINE:
+					bean.setCosine(value);
+					break;
+				case JACCARD:
+					bean.setJaccard(value);
+					break;
+				case KAPPA:
+					bean.setKappa(value);
+					break;
+				case LAPLACE:
+					bean.setLaplace(value);
+					break;
+				case LIFT:
+					bean.setLift(value);
+					break;
+				case NUM_BASELINE:
+					bean.setNumBaseline(value);
+					break;
+				case NUM_QUERY:
+					bean.setNumQuery(value);
+					break;
+				case PHI:
+					bean.setPhi(value);
+					break;
+				case PVALUE:
+					bean.setPvalue(value);
+					break;
 				}
 			}
-			beans.add(matBean);
+			beans.add(bean);
 		}
 		return beans;
+	}
+
+	/**
+	 * @return the matrix
+	 */
+	private RankedAbundanceMatrix getMatrix() {
+		return matrix;
+	}
+
+	/**
+	 * @param matrix the matrix to set
+	 */
+	private void setMatrix(RankedAbundanceMatrix matrix) {
+		this.matrix = matrix;
+	}
+
+	/**
+	 * @return the rows
+	 */
+	private ContingencyMatrix[] getContingencyMatrices() {
+		return cms;
+	}
+
+	/**
+	 * @param args the rows to set
+	 */
+	private void setContingencyMatrices(ContingencyMatrix[] args) {
+		this.cms = args;
+	}
+
+	/**
+	 * @return the names
+	 */
+	private MetricName[] getMetrics() {
+		return metrics;
+	}
+
+	/**
+	 * @param arg the names to set
+	 */
+	private void setMetrics(MetricName[] arg) {
+		this.metrics = arg;
 	}
 }

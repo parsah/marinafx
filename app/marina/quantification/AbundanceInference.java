@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import marina.gui.MarinaGUI;
-import marina.matrix.RankedAbundanceMatrix;
 import marina.matrix.ContingencyMatrix;
+import marina.matrix.RankedAbundanceMatrix;
 import marina.parameter.DoubleParameter;
 import marina.parameter.IntegerParameter;
 import marina.parameter.Parameter;
@@ -115,7 +115,8 @@ public class AbundanceInference {
 	 * @return AbundanceMatrix measures per over-represented binding site.
 	 * @throws IOException 
 	 * */
-	public RankedAbundanceMatrix buildAbundanceMatrix() throws IOException {
+	public RankedAbundanceMatrix toRankedMatrix() 
+			throws IOException {
 		List<ContingencyMatrix> overReps = this.representedMatrices();
 		double[][] data = new double[overReps.size()][MetricName.values().length];
 		Map<Object, Integer> rowNames = new LinkedHashMap<Object, Integer>();
@@ -124,11 +125,12 @@ public class AbundanceInference {
 			data[i] = cm.metricValues();
 			rowNames.put(cm, i); // reference entire matrix and binding site
 		}
+		
 		// java specification states enum values returned in declaration order.
 		RankedAbundanceMatrix matrix = new RankedAbundanceMatrix(data);
 		matrix.setRows(rowNames);
 		matrix.setColumns(MetricName.values());
-		matrix.rankMatrix();
+//		matrix.order();
 		return matrix;
 	}
 
