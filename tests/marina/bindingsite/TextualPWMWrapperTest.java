@@ -1,4 +1,4 @@
-package marina.matrix;
+package marina.bindingsite;
 
 import static org.junit.Assert.*;
 

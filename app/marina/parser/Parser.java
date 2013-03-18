@@ -44,7 +44,6 @@ public abstract class Parser {
 	 * */
 	public void showNoFilterPrompt() {
 		FileChooser chooser = new FileChooser();
-		chooser.setInitialDirectory(new File("./demo/"));
 		File file = chooser.showOpenDialog(null);
 		if (file != null) {
 			this.setFile(file);
@@ -66,7 +65,6 @@ public abstract class Parser {
 		FileChooser.ExtensionFilter faFilter = 
 				new FileChooser.ExtensionFilter("FASTA (*.fa)", "*.fa");
 		FileChooser chooser = new FileChooser();
-		chooser.setInitialDirectory(new File("./demo/"));
 		chooser.getExtensionFilters().add(fastaFilter);
 		chooser.getExtensionFilters().add(faFilter);
 		File file = chooser.showOpenDialog(null);

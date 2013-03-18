@@ -32,7 +32,6 @@ public class ResultWriter {
 				new FileChooser.ExtensionFilter("Tab-delimited (*.tab)", "*.tab");
 		FileChooser chooser = new FileChooser();
 		chooser.getExtensionFilters().add(csvFilter);
-		chooser.setInitialDirectory(new File("./demo/"));
 		File file = chooser.showSaveDialog(null);
 		if (file != null) {
 			this.setFile(file);

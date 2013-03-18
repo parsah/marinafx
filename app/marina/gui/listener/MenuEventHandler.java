@@ -1,6 +1,5 @@
 package marina.gui.listener;
 
-import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -99,9 +98,6 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 							" motifs parsed.", false);
 				}
 				else if (menuItem.getId().equals("run")) {
-//					this.loadDemoGroups();
-//					this.loadDemoPWMs();
-//					this.loadDemoMotifs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
@@ -140,40 +136,5 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 		} catch (NullPointerException e) {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());
 		}
-	}
-
-	/**
-	 * Solely for demonstration purposes; loads the demo files and saves time
-	 * explicitly loading them at runtime.
-	 * */
-	protected void loadDemoGroups() throws IOException {
-		// baseline dataset
-		FASTAParser p = new FASTAParser(new File("./demo/most_suppressed.fasta"));
-		p.parse();
-		Group controlGroup = new Group(p);
-		MarinaGUI.get().parameterMap().setBaseline(controlGroup);
-		
-		// query dataset
-		FASTAParser j = new FASTAParser(new File("./demo/most_induced.fasta"));
-		j.parse();
-		Group queryGroup = new Group(j);
-		MarinaGUI.get().parameterMap().setQuery(queryGroup);
-	}
-	
-	/**
-	 * Implemented for purposes of loading sample / demonstration PWMs.
-	 * */
-	protected void loadDemoPWMs() throws IOException {
-		PWMParser parser = new PWMParser(new File("./demo/sample_pwms.txt"));
-		parser.parse();
-		MarinaGUI.get().parameterMap().setPWMParser(parser);
-	}
-	/**
-	 * Implemented for purposes of loading sample / demonstration DNA motifs.
-	 * */	
-	protected void loadDemoMotifs() throws IOException {
-		DNAMotifParser parser = new DNAMotifParser(new File("./demo/sample_motifs.txt"));
-		parser.parse();
-		MarinaGUI.get().parameterMap().setMotifParser(parser);
 	}
 }
