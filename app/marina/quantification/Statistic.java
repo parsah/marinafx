@@ -46,9 +46,15 @@ public final class Statistic {
 		double[] sorted = Statistic.sort(column);
 		int[] ranks = new int[column.length];
 		for (int i = 0; i < column.length; i++) {
-			int rank = Arrays.binarySearch(sorted, column[i]);
+			int rank = 0;
+			for (int j=0; j < sorted.length; j++) {
+				if (sorted[j] == column[i]) {
+					rank = j;
+					break;
+				}
+			}
 			// larger measures have higher ranks versus smaller measures.
-			ranks[i] = Math.abs(rank-column.length);
+			ranks[i] = Math.abs(column.length - rank);
 		}
 		return ranks;
 	}

@@ -32,6 +32,10 @@ public class TextualPWMWrapper {
 	 * @throws IOException 
 	 * */
 	public PositionWeightMatrix toPWM() throws IOException {
+		if (this.getRawRows().size() != 4) {
+			String msg = "PWMs must be 4-rows in height; a row per base";
+			throw new IOException(msg);
+		}
 		PositionWeightMatrix m = new PositionWeightMatrix(this.generateData());
 		m.setRows(this.generateRowNames());
 		m.setColumns(this.generateColumns());
@@ -106,7 +110,7 @@ public class TextualPWMWrapper {
 	/**
 	 * @return the header
 	 */
-	private String getHeader() {
+	public String getHeader() {
 		return header;
 	}
 

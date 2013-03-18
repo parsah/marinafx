@@ -1,6 +1,5 @@
-package marina.bindingsite;
+package marina.group;
 
-import marina.group.FASTASequence;
 
 public class FASTAFragment extends FASTASequence {
 	private FASTASequence parent; // FASTASequence object this comes from.

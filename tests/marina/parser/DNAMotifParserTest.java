@@ -20,7 +20,7 @@ public class DNAMotifParserTest {
 	 * Test that parsing a valid file yields multiple parsed motifs.
 	 * */
 	@Test
-	public void test() throws IOException {
+	public void testParsingYieldsExpectedMotifs() throws IOException {
 		this.parser.parse();
 		assertTrue(this.parser.getLinearMotifs().size() == 16);
 	}
@@ -47,6 +47,16 @@ public class DNAMotifParserTest {
 	@Test
 	public void testNoParsingInitially() {
 		assertTrue(this.parser.getLinearMotifs().size() == 0);
+	}
+	
+	/**
+	 * Test that parsing an invalid file throws an exception.
+	 * @throws IOException 
+	 * */
+	@Test(expected=IOException.class)
+	public void testWrongFileThrowsException() throws IndexOutOfBoundsException, IOException {
+		this.parser = new DNAMotifParser(new File("./demo/sample_pwms.txt"));
+		this.parser.parse();
 	}
 
 }

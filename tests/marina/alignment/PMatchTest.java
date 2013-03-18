@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.io.IOException;
 
-import marina.bindingsite.FASTAFragment;
 import marina.bindingsite.PositionWeightMatrix;
+import marina.group.FASTAFragment;
 import marina.group.FASTASequence;
 import marina.parser.PWMParser;
 

@@ -1,5 +1,6 @@
 package marina.quantification;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -197,5 +198,77 @@ public class StatisticTest {
 	public void testMaximumMixedSign() {
 		double[] vals = new double[]{-7, -22, 16, 3}; // maximum is 16
 		assertTrue(Statistic.maximum(vals) == 16);
+	}
+	
+	/**
+	 * Assert that sorting an array yields the correct sorting order.
+	 * */
+	@Test
+	public void testSortingMixedSignNumbers() {
+		double[] vals = new double[]{-7, -22, 16, 3};
+		double[] sorted = Statistic.sort(vals);
+		assertArrayEquals(sorted, new double[]{-22, -7, 3, 16}, 0);
+	}
+	
+	/**
+	 * Assert sorting an array with one number yields the original array.
+	 * */
+	@Test
+	public void testSortingOneNumber() {
+		double[] vals = new double[]{12};
+		double[] sorted = Statistic.sort(vals);
+		assertArrayEquals(sorted, new double[]{12}, 0);
+	}
+	
+	/**
+	 * Assert sorting an array of the same values yields the original array.
+	 * */
+	@Test
+	public void testSortingSameNumbers() {
+		double[] vals = new double[]{2, 2, 2, 2, 2, 2};
+		double[] sorted = Statistic.sort(vals);
+		assertArrayEquals(sorted, vals, 0);
+	}
+	
+	/**
+	 * Assert list-ranking given a mixed-sign array.
+	 * */
+	@Test
+	public void testRankGivenMixedSign() {
+		double[] vals = new double[]{-7, -22, 16, 3};
+		int[] ranked = Statistic.rank(vals);
+		assertArrayEquals(ranked, new int[]{3, 4 , 1 , 2});
+		
+	}
+	
+	/**
+	 * Assert list-ranking given an array with the same value.
+	 * */
+	@Test
+	public void testRankGivenSameValues() {
+		double[] vals = new double[]{2,2,2,2,2};
+		int[] ranked = Statistic.rank(vals);
+		assertArrayEquals(ranked, new int[]{5,5,5,5,5});
+	}
+	
+	/**
+	 * Assert that list-ranking works even when all values are positive.
+	 * */
+	@Test
+	public void testRanksGivenPositiveValues() {
+		double[] vals = new double[]{2, 1, 6, 10, 1}; // numbers 1 tie.
+		int[] ranked = Statistic.rank(vals);
+		assertArrayEquals(ranked, new int[]{3, 5, 2, 1, 5});
+	}
+	
+	/**
+	 * Assert that list-ranked length equals list-sorted length.
+	 * */
+	@Test
+	public void testRankLengthEqualsSortedLength() {
+		double[] vals = new double[]{2, 1, 6, 10, 1}; // numbers 1 tie.
+		int[] ranked = Statistic.rank(vals);
+		double[] sorted = Statistic.sort(vals);
+		assertTrue(ranked.length == sorted.length);
 	}
 }

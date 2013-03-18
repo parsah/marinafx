@@ -3,8 +3,8 @@ package marina.alignment;
 import java.io.IOException;
 import java.util.List;
 
-import marina.bindingsite.FASTAFragment;
 import marina.bindingsite.PositionWeightMatrix;
+import marina.group.FASTAFragment;
 import marina.group.FASTASequence;
 import marina.group.Group;
 import marina.gui.MarinaGUI;

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import marina.bindingsite.BindingSite;
-import marina.bindingsite.FASTAFragment;
 
 /**
  * All input promoter sequences are represented as FASTA files. In such a

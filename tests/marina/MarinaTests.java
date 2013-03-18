@@ -5,16 +5,19 @@ import marina.alignment.PMatchTest;
 import marina.alignment.RabinKarpTest;
 import marina.bindingsite.LinearDNAMotifTest;
 import marina.bindingsite.PositionWeightMatrixTest;
+import marina.group.FASTAFragmentTest;
 import marina.group.FASTASequenceTest;
 import marina.group.GroupTest;
-import marina.matrix.RankedAbundanceMatrixTest;
 import marina.matrix.ContingencyMatrixCellTest;
 import marina.matrix.ContingencyMatrixTest;
 import marina.matrix.MatrixTest;
+import marina.matrix.TextualPWMWrapperTest;
 import marina.parameter.BooleanParameterTest;
 import marina.parameter.DoubleParameterTest;
 import marina.parameter.IntegerParameterTest;
 import marina.parser.FASTAParserTest;
+import marina.parser.PWMParserTest;
+import marina.quantification.MetricNameTest;
 import marina.quantification.StatisticTest;
 
 import org.junit.runner.RunWith;
@@ -31,7 +34,10 @@ import org.junit.runners.Suite.SuiteClasses;
 	AlignmentActionTest.class, GroupTest.class, FASTAParserTest.class,
 	PositionWeightMatrixTest.class, BooleanParameterTest.class,
 	MatrixTest.class, IntegerParameterTest.class, DoubleParameterTest.class,
-	PMatchTest.class, RankedAbundanceMatrixTest.class,FASTAParserTest.class,
+	PMatchTest.class, FASTAParserTest.class, PWMParserTest.class,
+	TextualPWMWrapperTest.class, MetricNameTest.class, 
+	FASTAFragmentTest.class,
+	
 })
 public class MarinaTests {
 
