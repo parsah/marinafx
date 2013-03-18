@@ -29,6 +29,22 @@ public class Matrix {
 		this.setRows(null);
 		this.sum();
 	}
+	
+	/**
+	 * Copy-constructor which creates a new Matrix object. Such an object
+	 * references a new multi-dimensional matrix.
+	 * */
+	public Matrix(Matrix m) {
+		double[][] data = new double[m.getHeight()][m.getWidth()];
+		for (int i = 0; i < m.getHeight(); i++) {
+			for (int j = 0; j < m.getWidth(); j++) {
+				data[i][j] = m.getData()[i][j];
+			}
+		}
+		this.setData(data);
+		this.setColumns(m.getColumns());
+		this.setRows(m.getRows());
+	}
 
 	/**
 	 * @return the data
@@ -104,6 +120,10 @@ public class Matrix {
 		return sums;
 	}
 
+	/**
+	 * Produces the minimum-sum of each matrix column.
+	 * @return double sum of the minimum-values for all matrix columns.
+	 * */
 	public double sumColumnMins() {
 		double[] mins = new double[this.getWidth()];
 		for (int col=0; col < this.getWidth(); col++) {

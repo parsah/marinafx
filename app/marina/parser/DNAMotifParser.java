@@ -4,13 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 import marina.bindingsite.LinearDNAMotif;
-import marina.gui.MarinaGUI;
 
 /**
  * DNA motifs are represented as tab-delimited files whereby the first column
@@ -52,9 +52,9 @@ public class DNAMotifParser extends Parser {
 					this.getLinearMotifs().add(m);
 				}
 			}
+		} catch (MalformedInputException | IndexOutOfBoundsException e) {
+			throw new IOException("Malformed motifs input file.");
 		}
-//		String msg = this.getLinearMotifs().size() + " TFBSs parsed.";
-//		MarinaGUI.get().getStatusBar().setText(msg);
 	}
 
 	@Override

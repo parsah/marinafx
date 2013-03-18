@@ -6,7 +6,7 @@ import java.util.Arrays;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import marina.matrix.ContingencyMatrix;
-import marina.matrix.RankedAbundanceMatrix;
+import marina.matrix.Matrix;
 import marina.quantification.MetricName;
 
 /**
@@ -16,11 +16,11 @@ import marina.quantification.MetricName;
  * @author Parsa Hosseini
  * */
 public class RepresentedBeanBuilder {
-	private RankedAbundanceMatrix matrix;
+	private Matrix matrix;
 	private MetricName[] metrics;
 	private ContingencyMatrix[] cms;
 
-	public RepresentedBeanBuilder(RankedAbundanceMatrix m) {
+	public RepresentedBeanBuilder(Matrix m) {
 		this.setMatrix(m);
 		this.setContingencyMatrices(Arrays.copyOf(
 				this.getMatrix().getRows().keySet().toArray(), 
@@ -93,14 +93,14 @@ public class RepresentedBeanBuilder {
 	/**
 	 * @return the matrix
 	 */
-	private RankedAbundanceMatrix getMatrix() {
+	private Matrix getMatrix() {
 		return matrix;
 	}
 
 	/**
 	 * @param matrix the matrix to set
 	 */
-	private void setMatrix(RankedAbundanceMatrix matrix) {
+	private void setMatrix(Matrix matrix) {
 		this.matrix = matrix;
 	}
 

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.nio.charset.MalformedInputException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -68,10 +69,9 @@ public class PWMParser extends Parser {
 				}
 			}
 			this.getMatrices().addAll(this.toPWM(pwms)); // add parsed PWMs
+		} catch (MalformedInputException | IndexOutOfBoundsException e) {
+			throw new IOException("Malformed PWM input file.");
 		}
-		// TODO update UI as-to the number of parsed sequences
-//		String msg = this.getMatrices().size() + " PWMs parsed.";
-//		MarinaGUI.get().getStatusBar().setText(msg);
 	}
 
 	@Override

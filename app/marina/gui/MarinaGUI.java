@@ -91,15 +91,19 @@ public class MarinaGUI extends Application {
 	private Menu fileMenu() {
 		Menu menuFile = new Menu("File");
 		MenuItem itemNew = new MenuItem("New");
+		MenuItem itemSave = new MenuItem("Save");
 		MenuItem itemOptions = new MenuItem("Options");
 		MenuItem itemExit = new MenuItem("Exit");
 		menuFile.getItems().addAll(itemNew, this.fastaMenu(),
-				this.getTFBSMenu(), new SeparatorMenuItem(), itemOptions,
-				this.runMenu(), new SeparatorMenuItem(), itemExit);
+				this.getTFBSMenu(), itemSave, new SeparatorMenuItem(), 
+				itemOptions, this.runMenu(), new SeparatorMenuItem(), 
+				itemExit);
 		itemOptions.setId("showOptions");
 		itemExit.setId("exit");
 		itemNew.setId("new");
+		itemSave.setId("save");
 		itemNew.setOnAction(new MenuEventHandler());
+		itemSave.setOnAction(new MenuEventHandler());
 		itemOptions.setOnAction(new MenuEventHandler());
 		itemExit.setOnAction(new MenuEventHandler());
 		return menuFile;

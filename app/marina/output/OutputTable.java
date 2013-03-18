@@ -89,8 +89,8 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 	 * */
 	public void addObservables(ObservableList<RepresentedMatrixBean> beans) {
 		this.setItems(beans);
-		String finished = beans.size() + " over-represented TFBSs. " +
-				"IPF-standardization: " + 
+		String finished = "# / TFBSs: " + beans.size() + 
+				"; IPF-standardization: " + 
 				ParameterMap.toBoolean(ParameterName.IPF);
 		MarinaGUI.get().getStatusBar().setText(finished);		
 	}

@@ -4,17 +4,20 @@ import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import marina.alignment.AlignmentAction;
 import marina.bean.RepresentedBeanBuilder;
+import marina.bean.RepresentedMatrixBean;
 import marina.group.Group;
+import marina.gui.Dialog;
 import marina.gui.MarinaGUI;
 import marina.gui.ParameterStage;
 import marina.gui.SchemaStage;
-import marina.matrix.RankedAbundanceMatrix;
 import marina.output.OutputTable;
+import marina.output.ResultWriter;
 import marina.parameter.ParameterMap;
 import marina.parser.DNAMotifParser;
 import marina.parser.FASTAParser;
@@ -49,12 +52,26 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				else if (menuItem.getId().equals("new")) {
 					MarinaGUI.get().reset();
 				}
+				else if (menuItem.getId().equals("save")) {
+					if (MarinaGUI.get().getTable().getItems().size() > 0) {
+						ResultWriter writer = new ResultWriter();
+						writer.showSaveDialog();
+						writer.write();
+					}
+					else {
+						String msg = "Over-represented TFBSs must first " +
+								"be quantified.";
+						Dialog.show(msg, true);
+					}
+				}
 				else if (menuItem.getId().equals("loadQuery")) {
 					FASTAParser parser = new FASTAParser();
 					parser.showFASTAFilterPrompt();
 					parser.parse(); // set parser to the parameter-set
 					Group queryGroup = new Group(parser);
 					params.setQuery(queryGroup);
+					Dialog.show(queryGroup.getSize() + 
+							" sequences parsed.", false);
 				}
 				else if (menuItem.getId().equals("loadBaseline")) {
 					FASTAParser parser = new FASTAParser();
@@ -62,23 +79,29 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					parser.parse(); // set parser to the parameter-set
 					Group controlGroup = new Group(parser);
 					params.setBaseline(controlGroup);
+					Dialog.show(controlGroup.getSize() + 
+							" sequences parsed.", false);
 				}
 				else if (menuItem.getId().equals("loadPWMs")) {
 					PWMParser parser = new PWMParser();
 					parser.showNoFilterPrompt();
 					parser.parse();
 					params.setPWMParser(parser);
+					Dialog.show(parser.getMatrices().size() + 
+							" PWMs parsed.", false);
 				}
 				else if (menuItem.getId().equals("loadMotifs")) {
 					DNAMotifParser parser = new DNAMotifParser();
 					parser.showNoFilterPrompt();
 					parser.parse();
 					params.setMotifParser(parser);
+					Dialog.show(parser.getLinearMotifs().size()+
+							" motifs parsed.", false);
 				}
 				else if (menuItem.getId().equals("run")) {
-					this.loadDemoGroups();
+//					this.loadDemoGroups();
 //					this.loadDemoPWMs();
-					this.loadDemoMotifs();
+//					this.loadDemoMotifs();
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
@@ -98,12 +121,12 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						// contrast TFBS abundances between two groups
 						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
 						AbundanceInference infer = new AbundanceInference(mb);
-						// TODO implement metricrankfactory which takes
-						// an arbitrary matrix, orders it and produces a beanbuilder.
-						RankedAbundanceMatrix mat = infer.toRankedMatrix();
-						RepresentedBeanBuilder builder = mat.generateBeanFactory();
+						infer.bindAbundances();
+						RepresentedBeanBuilder builder = new 
+								RepresentedBeanBuilder(infer.getOrderedMatrix());
+						ObservableList<RepresentedMatrixBean> beans = builder.build();
 						OutputTable table = MarinaGUI.get().getTable();
-						table.addObservables(builder.build());
+						table.addObservables(beans);
 					}
 					else {
 						String msg = "Alignment must be performed first.";
@@ -111,8 +134,10 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					}
 				}
 			}
-		} catch (IOException | IndexOutOfBoundsException | 
-				NullPointerException | NumberFormatException e ) {
+		} catch (IOException | IndexOutOfBoundsException |
+				 NumberFormatException e ) {
+			Dialog.show(e.getMessage(), true);
+		} catch (NullPointerException e) {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());
 		}
 	}

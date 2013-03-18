@@ -8,7 +8,7 @@ import java.util.Map;
 
 import marina.gui.MarinaGUI;
 import marina.matrix.ContingencyMatrix;
-import marina.matrix.RankedAbundanceMatrix;
+import marina.matrix.Matrix;
 import marina.parameter.DoubleParameter;
 import marina.parameter.IntegerParameter;
 import marina.parameter.Parameter;
@@ -25,9 +25,13 @@ import marina.parameter.ParameterName;
  * */
 public class AbundanceInference {
 	private CandidateMatrixBuilder builder;
+	private Matrix unOrderedMatrix;
+	private Matrix orderedMatrix;
 	
 	public AbundanceInference(CandidateMatrixBuilder builder) {
 		this.setCandidateBuilder(builder);
+		this.setOrderedMatrix(null);
+		this.setUnOrderedMatrix(null);
 	}
 
 	/**
@@ -107,16 +111,17 @@ public class AbundanceInference {
 	}
 	
 	/**
-	 * An important function of inference is the ability to capture 
-	 * magnitude of abundance given inferred over-represented binding sites.
-	 * The resultant matrix wraps raw-measures from each of the various
-	 * metrics so that they can be efficiently sorted and ranked.
-	 * @return 
-	 * @return AbundanceMatrix measures per over-represented binding site.
+	 * Each contingency matrix is fed into a collection of various 
+	 * statistical metrics. In doing so, magnitude of abundance for the
+	 * contingency matrix can be ranked and made easier to interpret. 
+	 * To make this possible, output per statistical metric is saved into 
+	 * a centralized matrix object. This object can then be ordered 
+	 * so that most over-represented contingency matrices are ranked 
+	 * close to 1.0 and least over-represented are ranked farthest from 1.0.
+	 * An unordered matrix is also present if such ranking is not desired.
 	 * @throws IOException 
 	 * */
-	public RankedAbundanceMatrix toRankedMatrix() 
-			throws IOException {
+	public void bindAbundances() throws IOException {
 		List<ContingencyMatrix> overReps = this.representedMatrices();
 		double[][] data = new double[overReps.size()][MetricName.values().length];
 		Map<Object, Integer> rowNames = new LinkedHashMap<Object, Integer>();
@@ -125,13 +130,33 @@ public class AbundanceInference {
 			data[i] = cm.metricValues();
 			rowNames.put(cm, i); // reference entire matrix and binding site
 		}
-		
-		// java specification states enum values returned in declaration order.
-		RankedAbundanceMatrix matrix = new RankedAbundanceMatrix(data);
-		matrix.setRows(rowNames);
-		matrix.setColumns(MetricName.values());
-//		matrix.order();
-		return matrix;
+		// java states enumerations are returned in declaration order.
+		Matrix m = new Matrix(data);
+		m.setColumns(MetricName.values());
+		m.setRows(rowNames);
+		this.setUnOrderedMatrix(new Matrix(m));
+		this.setOrderedMatrix(new Matrix(m));
+		this.orderMatrix(); // rank matrix so it can be from 1 to N.
+	}
+	
+	/**
+	 * Ranks and sorts a matrix such that only those columns having
+	 * statistical metrics are processed. All other columns are not ranked.
+	 * @return 
+	 * */
+	private void orderMatrix() {
+		MetricName[] metrics = MetricName.values();
+		for (int colNum = 0; colNum < this.getUnOrderedMatrix().getWidth(); colNum++) {
+			double[] theColumn = this.getUnOrderedMatrix().getColumn(colNum);
+			MetricName col = metrics[colNum];
+			if (col.isStat()) {
+				int[] ranks = Statistic.rank(theColumn);
+				for (int rowNum = 0; rowNum < theColumn.length; rowNum++) {
+					this.getOrderedMatrix().getData()[rowNum][colNum] = 
+							ranks[rowNum];
+				}
+			}
+		}
 	}
 
 	/**
@@ -146,5 +171,33 @@ public class AbundanceInference {
 	 */
 	private void setCandidateBuilder(CandidateMatrixBuilder builder) {
 		this.builder = builder;
+	}
+
+	/**
+	 * @return the unOrderedMatrix
+	 */
+	public Matrix getUnOrderedMatrix() {
+		return unOrderedMatrix;
+	}
+
+	/**
+	 * @param unOrderedMatrix the unOrderedMatrix to set
+	 */
+	private void setUnOrderedMatrix(Matrix unOrderedMatrix) {
+		this.unOrderedMatrix = unOrderedMatrix;
+	}
+
+	/**
+	 * @return the orderedMatrix
+	 */
+	public Matrix getOrderedMatrix() {
+		return orderedMatrix;
+	}
+
+	/**
+	 * @param orderedMatrix the orderedMatrix to set
+	 */
+	private void setOrderedMatrix(Matrix orderedMatrix) {
+		this.orderedMatrix = orderedMatrix;
 	}
 }
