@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import marina.bindingsite.LinearDNAMotif;
+import marina.parameter.ParameterMap;
+import marina.parameter.ParameterName;
 
 /**
  * DNA motifs are represented as tab-delimited files whereby the first column
@@ -48,19 +50,18 @@ public class DNAMotifParser extends Parser {
 					throw new IndexOutOfBoundsException(msg);
 				}
 				else {
-					LinearDNAMotif m = new LinearDNAMotif(columns);
-					this.getLinearMotifs().add(m);
+					LinearDNAMotif motif = new LinearDNAMotif(columns);
+					if (motif.getLength() >= ParameterMap.toInteger(ParameterName.LENGTH)) {
+						this.getLinearMotifs().add(motif);
+					}
 				}
+			}
+			if (this.getLinearMotifs().size() == 0) {
+				throw new IOException("No motifs passed the filter cutoff.");
 			}
 		} catch (MalformedInputException | IndexOutOfBoundsException e) {
 			throw new IOException("Malformed motifs input file.");
 		}
-	}
-
-	@Override
-	public void filter(int minLen) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**

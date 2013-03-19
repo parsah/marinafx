@@ -90,6 +90,7 @@ public class MarinaGUI extends Application {
 	 * */
 	private Menu fileMenu() {
 		Menu menuFile = new Menu("File");
+		menuFile.setId("menuFile");
 		MenuItem itemNew = new MenuItem("New");
 		MenuItem itemSave = new MenuItem("Save");
 		MenuItem itemOptions = new MenuItem("Options");

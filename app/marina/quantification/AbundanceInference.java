@@ -80,6 +80,21 @@ public class AbundanceInference {
 	}
 	
 	/**
+	 * Determines whether a contingency matrix passes the user-defined
+	 * p-value cutoff.
+	 * @param ContingencyMatrix object.
+	 * @return boolean whether a matrix passes the p-value cutoff.
+	 * */
+	public boolean isPassPValue(ContingencyMatrix cm) {
+		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.P_VALUE);
+		double userPValue = ((DoubleParameter)(p)).getArgument();
+		if (cm.log(2).getPValue() <= userPValue) {
+			return true;
+		}
+		return false;
+	}
+	
+	/**
 	 * Feed all candidate contingency matrices through a set of filters
 	 * as defined from the Options dialog. These options determine whether a
 	 * contingency matrix (and resultant binding site) will be rendered 
@@ -96,7 +111,8 @@ public class AbundanceInference {
 			boolean passDiff = this.isPassDifference(cm);
 			boolean passLaplace = this.isPassLaplace(cm);
 			boolean passSupport = this.isPassSupport(cm);
-			if (passDiff && passLaplace && passSupport) {
+			boolean passPValue = this.isPassPValue(cm);
+			if (passDiff && passLaplace && passSupport && passPValue) {
 				if (ParameterMap.toBoolean(ParameterName.IPF)) {
 					cm.ipf(); // IPF-standardize matrix if selected.
 				}

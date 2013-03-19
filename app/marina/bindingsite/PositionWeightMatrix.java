@@ -2,6 +2,7 @@ package marina.bindingsite;
 
 import java.io.IOException;
 
+import marina.group.DNASequence;
 import marina.matrix.Matrix;
 
 /**
@@ -23,8 +24,14 @@ public class PositionWeightMatrix extends Matrix implements BindingSite {
 
 	@Override
 	public boolean sanityCheck() throws IOException{
-		// TODO Auto-generated method stub
-		return false;
+		for (char base: DNASequence.CHARSET) {
+			String b = String.valueOf(base);
+			if (!this.getRows().containsKey(b)) {
+				String msg = "Only DNA-bases permitted as PWM rows.";
+				throw new IOException(msg);
+			}
+		}
+		return true;
 	}
 	
 	/**

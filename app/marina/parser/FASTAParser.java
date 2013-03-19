@@ -56,14 +56,6 @@ public class FASTAParser extends Parser {
 			FASTASequence i = new FASTASequence(head, seqs.get(head).toString());
 			this.getSequences().add(i);
 		}
-//		String msg = seqs.size() + " FASTA entries parsed successfully.";
-//		MarinaGUI.get().getStatusBar().setText(msg);
-	}
-
-	@Override
-	public void filter(int minLen) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**

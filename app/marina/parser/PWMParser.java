@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import marina.bindingsite.PositionWeightMatrix;
+import marina.parameter.ParameterMap;
+import marina.parameter.ParameterName;
 
 /**
  * Position Weight Matrices (PWMs) are matrices which represent frequencies
@@ -33,13 +35,20 @@ public class PWMParser extends Parser {
 		super(null);
 		this.setMatrices(new ArrayList<PositionWeightMatrix>());
 	}
-	
-	public List<PositionWeightMatrix> toPWM(List<TextualPWMWrapper> wrappers) throws IOException {
+
+	public List<PositionWeightMatrix> toPWMs(List<TextualPWMWrapper> wrappers) throws IOException {
 		List<PositionWeightMatrix> pwms = new ArrayList<PositionWeightMatrix>();
 		for (TextualPWMWrapper pwmWrapper: wrappers) {
-			pwms.add(pwmWrapper.toPWM());
+			PositionWeightMatrix pwm = pwmWrapper.toPWM();
+			if (pwm.getWidth() >= ParameterMap.toInteger(ParameterName.LENGTH)) {
+				pwms.add(pwmWrapper.toPWM());				
+			}
+		}
+		if (pwms.size() == 0) {
+			throw new IOException("No PWMs passed the filter cutoff.");
 		}
 		return pwms;
+
 	}
 
 	@Override
@@ -62,22 +71,15 @@ public class PWMParser extends Parser {
 							pwmWrapper.getRawRows().add(line);
 						}
 						else {
-							String msg = "File not formatted to represent PWMs.";
-							throw new IOException(msg);
+							throw new IOException("File does not represent PWMs.");
 						}
 					}
 				}
 			}
-			this.getMatrices().addAll(this.toPWM(pwms)); // add parsed PWMs
+			this.getMatrices().addAll(this.toPWMs(pwms)); // add parsed PWMs
 		} catch (MalformedInputException | IndexOutOfBoundsException e) {
 			throw new IOException("Malformed PWM input file.");
 		}
-	}
-
-	@Override
-	public void filter(int minLen) {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**

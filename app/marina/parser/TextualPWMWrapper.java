@@ -44,6 +44,7 @@ public class TextualPWMWrapper {
 			String msg = "File is FASTA however PWM cells must be tab-delimited.";
 			throw new IOException(msg);
 		}
+		m.sanityCheck(); // check to see whether the input is valid or not.
 		m = m.buildInformation();
 		m.round(); // round matrix to 4 significant figures
 		return m;

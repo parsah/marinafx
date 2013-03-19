@@ -98,6 +98,12 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 							" motifs parsed.", false);
 				}
 				else if (menuItem.getId().equals("run")) {
+					if (MarinaGUI.get().getTable().getItems().size() > 0 ||
+							params.isAlignmentSuccess()) {
+						String msg = "TFBSs already aligned. Start new " +
+								"analysis by selecting File -> New";
+						throw new IOException(msg);
+					}
 					if (params.canRun() == true) {
 						AlignmentAction factory = new AlignmentAction();
 						factory.setOnSucceeded(new AlignmentTaskListener());
@@ -113,6 +119,11 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					}
 				}
 				else if (menuItem.getId().equals("quantify")) {
+					if (MarinaGUI.get().getTable().getItems().size() > 0) {
+						String msg = "TFBSs already quantified. Start new " +
+								"analysis by selecting File -> New";
+						throw new IOException(msg);
+					}
 					if (params.isAlignmentSuccess()) {
 						// contrast TFBS abundances between two groups
 						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();

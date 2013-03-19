@@ -31,13 +31,6 @@ public abstract class Parser {
 	public abstract void parse() throws IOException;
 	
 	/**
-	 * Some TFBSs do not pass minimum-length cutoffs. Those that do are kept
-	 * however those which do not must be filtered-out.
-	 * @param minLen Minimum length threshold.
-	 * */
-	public abstract void filter(int minLen);
-	
-	/**
 	 * Prompt the user by displaying a dialog prompt. This dialog prompt
 	 * enables selection of input files which will ultimately be specified
 	 * as input for the various TFBS models.
