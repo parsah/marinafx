@@ -165,4 +165,12 @@ public class PositionWeightMatrixTest {
 	public void testHasRows() {
 		assertTrue(this.pwm.getRows().size() == this.pwm.getHeight());
 	}
+	
+	/**
+	 * Assert that the current PWM passes a sanity check.
+	 * */
+	@Test
+	public void testPassesSanityCheck() throws IOException {
+		assertTrue(this.pwm.sanityCheck());
+	}
 }

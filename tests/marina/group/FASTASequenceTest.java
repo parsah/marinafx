@@ -109,4 +109,15 @@ public class FASTASequenceTest {
 		FASTASequence other = new FASTASequence("header", "GTACGTGTACGTCAGTCA");
 		assertEquals(this.fasta, other);
 	}
+	
+	/**
+	 * Assert the FASTASequence objects can fetch the correct base.
+	 * */
+	@Test
+	public void testGetBasesAtIndex() {
+		int idx = 2;
+		String seqBase = this.fasta.getBase(idx);
+		String seqCompare = this.fasta.getSequence().substring(idx, idx+1);
+		assertTrue(seqBase.equals(seqCompare));
+	}
 }

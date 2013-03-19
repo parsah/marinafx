@@ -52,4 +52,18 @@ public class TextualPWMWrapperTest {
 		PositionWeightMatrix pwm = this.wrapper.toPWM();
 		assertTrue(pwm.getHeight() == this.wrapper.getRawRows().size());
 	}
+	
+	/**
+	 * An invalid character in the matrix must throw an exception.
+	 * */
+	@Test(expected=IOException.class)
+	public void testInvalidRowNameYieldsException() throws IOException {
+		// deliberately alter some rows
+		this.wrapper.getRawRows().clear();
+		this.wrapper.getRawRows().add("A	12	52	11	8");
+		this.wrapper.getRawRows().add("T	28	80	90	8");
+		this.wrapper.getRawRows().add("G	18	10	5	1");
+		this.wrapper.getRawRows().add("X	10	10	4	1");
+		this.wrapper.toPWM();
+	}
 }
