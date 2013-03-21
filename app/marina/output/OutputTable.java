@@ -9,7 +9,7 @@ import marina.bindingsite.BindingSite;
 import marina.gui.MarinaGUI;
 import marina.parameter.ParameterMap;
 import marina.parameter.ParameterName;
-import marina.quantification.MetricName;
+import marina.quantification.Metric;
 
 /**
  * Provides a centralized control for the visualization of ranked and
@@ -26,7 +26,7 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 	 * Columns for this table are simply the Metrics used for analysis.
 	 * */
 	private void placeHeaders() {
-		MetricName[] metrics = MetricName.values();
+		Metric.Name[] metrics = Metric.Name.values();
 		TableColumn<RepresentedMatrixBean, BindingSite> colTFBS = 
 				this.asBindingSiteColumn("TFBS", "site");
 
@@ -36,7 +36,7 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 		TableColumn<RepresentedMatrixBean, Double> colAbund = 
 				this.asDoubleColumn("Abundances", null);
 		// add each metric to its respective nested column-set.
-		for (MetricName m: metrics) {
+		for (Metric.Name m: metrics) {
 			TableColumn<RepresentedMatrixBean, Double> col = 
 					this.asDoubleColumn(m.get(), m.getValue());
 			if (m.isStat()) {

@@ -18,7 +18,9 @@ import marina.parameter.DoubleParameterTest;
 import marina.parameter.IntegerParameterTest;
 import marina.parser.FASTAParserTest;
 import marina.parser.PWMParserTest;
-import marina.quantification.MetricNameTest;
+import marina.quantification.AbundanceInferenceTest;
+import marina.quantification.CandidateMatrixBuilderTest;
+import marina.quantification.MetricTest;
 import marina.quantification.StatisticTest;
 
 import org.junit.runner.RunWith;
@@ -36,9 +38,9 @@ import org.junit.runners.Suite.SuiteClasses;
 	PositionWeightMatrixTest.class, BooleanParameterTest.class,
 	MatrixTest.class, IntegerParameterTest.class, DoubleParameterTest.class,
 	PMatchTest.class, FASTAParserTest.class, PWMParserTest.class,
-	TextualPWMWrapperTest.class, MetricNameTest.class, 
+	TextualPWMWrapperTest.class, MetricTest.class,
 	FASTAFragmentTest.class, GroupAbundanceWrapperTest.class,
-	
+	CandidateMatrixBuilderTest.class, AbundanceInferenceTest.class,
 })
 public class MarinaTests {
 

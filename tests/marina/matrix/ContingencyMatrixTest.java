@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
+import marina.quantification.Metric;
 import marina.quantification.Statistic;
 
 import org.junit.Before;
@@ -288,7 +289,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testIsCorrectLift() {
-		assertEquals(this.cm.getLift(), 1.38599, 0.1);
+		assertEquals(Metric.lift(this.cm), 1.38599, 0.1);
 	}
 
 	/**
@@ -296,7 +297,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testIsCorrectCosine() {
-		assertEquals(this.cm.getCosine(), 0.10997, 0.1);
+		assertEquals(Metric.cosine(this.cm), 0.10997, 0.1);
 	}
 
 	/**
@@ -304,7 +305,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testIsCorrectJaccard() {
-		assertEquals(this.cm.getJaccard(), 0.01745108, 0.1);
+		assertEquals(Metric.jaccard(this.cm), 0.01745108, 0.1);
 	}
 
 	/**
@@ -312,7 +313,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testIsCorrectConfidence() {
-		assertEquals(this.cm.getConfidence(), 0.6875, 0.1);
+		assertEquals(Metric.confidence(this.cm), 0.6875, 0.1);
 	}
 
 	/**
@@ -320,7 +321,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testIsCorrectPhiCoefficient() {
-		assertEquals(this.cm.getPhi(), 0.0434179, 0.1);
+		assertEquals(Metric.phi(this.cm), 0.0434179, 0.1);
 	}
 
 	/**
@@ -328,7 +329,7 @@ public class ContingencyMatrixTest {
 	 * */
 	@Test
 	public void testIsCorrectKappaCoefficient() {
-		assertEquals(this.cm.getKappa(), 0.00979, 0.1);
+		assertEquals(Metric.kappa(this.cm), 0.00979, 0.1);
 	}
 
 	/**

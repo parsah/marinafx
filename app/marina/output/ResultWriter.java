@@ -10,7 +10,7 @@ import javafx.stage.FileChooser;
 import marina.bean.RepresentedMatrixBean;
 import marina.gui.Dialog;
 import marina.gui.MarinaGUI;
-import marina.quantification.MetricName;
+import marina.quantification.Metric;
 
 /**
  * A ResultWriter serves the purpose of writing over-represented binding
@@ -48,7 +48,7 @@ public class ResultWriter {
 	public String writeBean(RepresentedMatrixBean bean) {
 		StringBuilder line = new StringBuilder();
 		line.append(bean.getSite());
-		for (MetricName metric: MetricName.values()) {
+		for (Metric.Name metric: Metric.Name.values()) {
 			switch (metric) {
 			case CONFIDENCE:
 				line.append(ResultWriter.TAB + bean.getConfidence());
@@ -115,7 +115,7 @@ public class ResultWriter {
 	private String columns() {
 		StringBuilder columns = new StringBuilder();
 		columns.append("TFBS");
-		for (MetricName metric: MetricName.values()) {
+		for (Metric.Name metric: Metric.Name.values()) {
 			columns.append(ResultWriter.TAB + metric.get());
 		}
 		return columns.toString();

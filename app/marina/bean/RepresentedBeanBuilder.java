@@ -7,7 +7,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import marina.matrix.ContingencyMatrix;
 import marina.matrix.Matrix;
-import marina.quantification.MetricName;
+import marina.quantification.Metric;
+import marina.quantification.Metric.Name;
 
 /**
  * Provides the ability to build a collection of RepresentedMatrixBean
@@ -17,7 +18,7 @@ import marina.quantification.MetricName;
  * */
 public class RepresentedBeanBuilder {
 	private Matrix matrix;
-	private MetricName[] metrics;
+	private Metric.Name[] metrics;
 	private ContingencyMatrix[] cms;
 
 	public RepresentedBeanBuilder(Matrix m) {
@@ -27,7 +28,7 @@ public class RepresentedBeanBuilder {
 				this.getMatrix().getRows().keySet().toArray().length, 
 				ContingencyMatrix[].class));
 		this.setMetrics(Arrays.copyOf(this.getMatrix().getColumns(), 
-				this.getMatrix().getColumns().length, MetricName[].class));
+				this.getMatrix().getColumns().length, Metric.Name[].class));
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class RepresentedBeanBuilder {
 			RepresentedMatrixBean bean = new RepresentedMatrixBean();
 			bean.setSite(this.getContingencyMatrices()[rowNum].getBindingSite());
 			for (int colNum = 0; colNum < this.getMatrix().getWidth(); colNum++) {
-				MetricName metric = this.getMetrics()[colNum];
+				Name metric = this.getMetrics()[colNum];
 				double value = this.getMatrix().getData()[rowNum][colNum];
 				switch(metric) {
 				case CONFIDENCE: 
@@ -121,14 +122,14 @@ public class RepresentedBeanBuilder {
 	/**
 	 * @return the names
 	 */
-	private MetricName[] getMetrics() {
+	private Name[] getMetrics() {
 		return metrics;
 	}
 
 	/**
 	 * @param arg the names to set
 	 */
-	private void setMetrics(MetricName[] arg) {
+	private void setMetrics(Name[] arg) {
 		this.metrics = arg;
 	}
 }

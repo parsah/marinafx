@@ -73,7 +73,7 @@ public class AbundanceInference {
 	public boolean isPassLaplace(ContingencyMatrix cm) {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.LAPL);
 		double userLaplace = ((DoubleParameter)(p)).getArgument();
-		if (cm.getLaplace() >= userLaplace) {
+		if (Metric.laplace(cm) >= userLaplace) {
 			return true;
 		}
 		return false;
@@ -88,7 +88,7 @@ public class AbundanceInference {
 	public boolean isPassPValue(ContingencyMatrix cm) {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.P_VALUE);
 		double userPValue = ((DoubleParameter)(p)).getArgument();
-		if (cm.log(2).getPValue() <= userPValue) {
+		if (Metric.pValue(cm.log(2)) <= userPValue) {
 			return true;
 		}
 		return false;
@@ -139,7 +139,7 @@ public class AbundanceInference {
 	 * */
 	public void bindAbundances() throws IOException {
 		List<ContingencyMatrix> overReps = this.representedMatrices();
-		double[][] data = new double[overReps.size()][MetricName.values().length];
+		double[][] data = new double[overReps.size()][Metric.Name.values().length];
 		Map<Object, Integer> rowNames = new LinkedHashMap<Object, Integer>();
 		for (int i=0; i < overReps.size(); i++) {
 			ContingencyMatrix cm = overReps.get(i);
@@ -148,7 +148,7 @@ public class AbundanceInference {
 		}
 		// java states enumerations are returned in declaration order.
 		Matrix m = new Matrix(data);
-		m.setColumns(MetricName.values());
+		m.setColumns(Metric.Name.values());
 		m.setRows(rowNames);
 		this.setUnOrderedMatrix(new Matrix(m));
 		this.setOrderedMatrix(new Matrix(m));
@@ -161,10 +161,10 @@ public class AbundanceInference {
 	 * @return 
 	 * */
 	private void orderMatrix() {
-		MetricName[] metrics = MetricName.values();
+		Metric.Name[] metrics = Metric.Name.values();
 		for (int colNum = 0; colNum < this.getUnOrderedMatrix().getWidth(); colNum++) {
 			double[] theColumn = this.getUnOrderedMatrix().getColumn(colNum);
-			MetricName col = metrics[colNum];
+			Metric.Name col = metrics[colNum];
 			if (col.isStat()) {
 				int[] ranks = Statistic.rank(theColumn);
 				for (int rowNum = 0; rowNum < theColumn.length; rowNum++) {
