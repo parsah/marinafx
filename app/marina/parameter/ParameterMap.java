@@ -24,6 +24,7 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 	private DNAMotifParser motifParser;
 	private PWMParser pwmParser;
 	private boolean alignmentSuccess;
+	private boolean alignmentInvoked;
 	
 	public ParameterMap() {
 		super();
@@ -33,6 +34,7 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 		this.setMotifParser(null);
 		this.setPWMParser(null);
 		this.setAlignmentSuccess(false);
+		this.setAlignmentInvoked(false);
 	}
 	
 	/**
@@ -171,5 +173,19 @@ public class ParameterMap extends LinkedHashMap<ParameterName, Parameter>{
 	 */
 	public void setAlignmentSuccess(boolean state) {
 		this.alignmentSuccess = state;
+	}
+
+	/**
+	 * @return the alignmentInvoked
+	 */
+	public boolean isAlignmentInvoked() {
+		return alignmentInvoked;
+	}
+
+	/**
+	 * @param alignmentInvoked the alignmentInvoked to set
+	 */
+	public void setAlignmentInvoked(boolean alignmentInvoked) {
+		this.alignmentInvoked = alignmentInvoked;
 	}
 }

@@ -116,18 +116,24 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 								"analysis by selecting File -> New";
 						throw new IOException(msg);
 					}
-					if (params.canRun() == true) {
-						AlignmentAction factory = new AlignmentAction();
-						factory.setOnSucceeded(new AlignmentTaskListener());
-						factory.setOnFailed(new AlignmentTaskListener());
-						Thread t = new Thread(factory);
-						t.setDaemon(true);
-						t.start();
+					else if (params.isAlignmentInvoked() == true) {
+						Dialog.show("Alignment already in-progress", false);
 					}
 					else {
-						String msg = "2x FASTA files & DNA motifs " +
-								"and/or PWMs needed";
-						throw new IOException(msg);
+						if (params.canRun() == true) {
+							params.setAlignmentInvoked(true);
+							AlignmentAction factory = new AlignmentAction();
+							factory.setOnSucceeded(new AlignmentTaskListener());
+							factory.setOnFailed(new AlignmentTaskListener());
+							Thread t = new Thread(factory);
+							t.setDaemon(true);
+							t.start();
+						}
+						else {
+							String msg = "2x FASTA files & DNA motifs " +
+									"and/or PWMs needed";
+							throw new IOException(msg);
+						}
 					}
 				}
 				else if (menuItem.getId().equals("quantify")) {
@@ -154,7 +160,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 			}
 		} catch (IOException | IndexOutOfBoundsException |
-				 NumberFormatException e ) {
+				NumberFormatException e ) {
 			Dialog.show(e.getMessage(), true);
 		} catch (NullPointerException e) {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());

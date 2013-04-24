@@ -13,6 +13,11 @@ import marina.parameter.ParameterMap;
  * @author Parsa Hosseini
  * */
 public final class AlignmentAction extends Task<Void> {
+	private boolean isRunInvoked;
+	
+	public AlignmentAction() {
+		this.setRunInvoked(false);
+	}
 	
 	/**
 	 * Determine whether only DNA motifs will be aligned and not PWMs.
@@ -51,8 +56,22 @@ public final class AlignmentAction extends Task<Void> {
 		}
 		if (isUsingPWMs()) {
 			ExhaustivePWMAlignment pwmAlign = new ExhaustivePWMAlignment();
-			pwmAlign.align(); // TODO implement PWM alignment factory
+			pwmAlign.align();
 		} // return nothing since Group objects are global.
 		return null;
+	}
+
+	/**
+	 * @return the isRunInvoked
+	 */
+	public boolean isRunInvoked() {
+		return isRunInvoked;
+	}
+
+	/**
+	 * @param isRunInvoked the isRunInvoked to set
+	 */
+	public void setRunInvoked(boolean isRunInvoked) {
+		this.isRunInvoked = isRunInvoked;
 	}
 }

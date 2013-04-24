@@ -22,6 +22,7 @@ public class AlignmentTaskListener implements EventHandler<WorkerStateEvent> {
 		if (WorkerStateEvent.WORKER_STATE_FAILED == null) {
 			String msg = "Alignment failure due to background thread.";
 			MarinaGUI.get().getStatusBar().setText(msg);
+			MarinaGUI.get().parameterMap().setAlignmentSuccess(false);
 		}
 	}
 }
