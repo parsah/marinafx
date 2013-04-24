@@ -78,8 +78,8 @@ public class SchemaStage extends Stage {
 						"C    407     100   4        0     0      0      0\n" +
 						"G    353     0       2       999  999  999  541\n" +
 						"T     24      859   679    0     0       0     458\n" +
-						"\nPWMs must also be tab-delimited and only " +
-						"positive matrix values are permitted.";
+						"\nThere is no limit on the number of PWMs however" +
+						"their contents must contain positive numbers.";
 		TextArea textSchema = new TextArea();
 		textSchema.setEditable(false);
 		textSchema.setText(schema);

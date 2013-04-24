@@ -18,6 +18,7 @@ import marina.gui.SchemaStage;
 import marina.output.OutputTable;
 import marina.output.ResultWriter;
 import marina.parameter.ParameterMap;
+import marina.parameter.ParameterName;
 import marina.parser.DNAMotifParser;
 import marina.parser.FASTAParser;
 import marina.parser.PWMParser;
@@ -60,6 +61,17 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					else {
 						String msg = "Over-represented TFBSs must first " +
 								"be quantified.";
+						Dialog.show(msg, true);
+					}
+				}
+				else if (menuItem.getId().equals("export")) {
+					// can only export if IPF--standardization is performed.
+					if ((MarinaGUI.get().getTable().getItems().size() > 0) &&
+							(ParameterMap.toBoolean(ParameterName.IPF))){
+						// TODO implement of IPF-analyses.
+					}
+					else {
+						String msg = "Quantified TFBSs must undergo IPF.";
 						Dialog.show(msg, true);
 					}
 				}
