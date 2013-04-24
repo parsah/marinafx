@@ -1,6 +1,7 @@
 package marina.bean;
 
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import marina.bindingsite.BindingSite;
 
@@ -15,13 +16,13 @@ import marina.bindingsite.BindingSite;
  * */
 public class RepresentedMatrixBean {
 	private SimpleObjectProperty<BindingSite> site = new SimpleObjectProperty<BindingSite>();
-	private SimpleDoubleProperty laplace = new SimpleDoubleProperty();
-	private SimpleDoubleProperty confidence = new SimpleDoubleProperty();
-	private SimpleDoubleProperty lift = new SimpleDoubleProperty();
-	private SimpleDoubleProperty cosine = new SimpleDoubleProperty();
-	private SimpleDoubleProperty jaccard = new SimpleDoubleProperty();
-	private SimpleDoubleProperty kappa = new SimpleDoubleProperty();
-	private SimpleDoubleProperty phi = new SimpleDoubleProperty();
+	private SimpleIntegerProperty laplace = new SimpleIntegerProperty();
+	private SimpleIntegerProperty confidence = new SimpleIntegerProperty();
+	private SimpleIntegerProperty lift = new SimpleIntegerProperty();
+	private SimpleIntegerProperty cosine = new SimpleIntegerProperty();
+	private SimpleIntegerProperty jaccard = new SimpleIntegerProperty();
+	private SimpleIntegerProperty kappa = new SimpleIntegerProperty();
+	private SimpleIntegerProperty phi = new SimpleIntegerProperty();
 	private SimpleDoubleProperty pvalue = new SimpleDoubleProperty();
 	private SimpleDoubleProperty numQuery = new SimpleDoubleProperty();
 	private SimpleDoubleProperty numBaseline = new SimpleDoubleProperty();
@@ -43,85 +44,85 @@ public class RepresentedMatrixBean {
 	/**
 	 * @return the laplace
 	 */
-	public double getLaplace() {
+	public int getLaplace() {
 		return laplace.get();
 	}
 	/**
 	 * @param arg the laplace to set
 	 */
-	public void setLaplace(double arg) {
+	public void setLaplace(int arg) {
 		this.laplace.set(arg);
 	}
 	/**
 	 * @return the confidence
 	 */
-	public double getConfidence() {
+	public int getConfidence() {
 		return confidence.get();
 	}
 	/**
 	 * @param arg the confidence to set
 	 */
-	public void setConfidence(double arg) {
+	public void setConfidence(int arg) {
 		this.confidence.set(arg);
 	}
 	/**
 	 * @return the lift
 	 */
-	public double getLift() {
+	public int getLift() {
 		return lift.get();
 	}
 	/**
 	 * @param arg the lift to set
 	 */
-	public void setLift(double arg) {
+	public void setLift(int arg) {
 		this.lift.set(arg);
 	}
 	/**
 	 * @return the cosine
 	 */
-	public double getCosine() {
+	public int getCosine() {
 		return cosine.get();
 	}
 	/**
 	 * @param arg the cosine to set
 	 */
-	public void setCosine(double arg) {
+	public void setCosine(int arg) {
 		this.cosine.set(arg);
 	}
 	/**
 	 * @return the jaccard
 	 */
-	public double getJaccard() {
+	public int getJaccard() {
 		return jaccard.get();
 	}
 	/**
 	 * @param arg the jaccard to set
 	 */
-	public void setJaccard(double arg) {
+	public void setJaccard(int arg) {
 		this.jaccard.set(arg);
 	}
 	/**
 	 * @return the kappa
 	 */
-	public double getKappa() {
+	public int getKappa() {
 		return kappa.get();
 	}
 	/**
 	 * @param arg the kappa to set
 	 */
-	public void setKappa(double arg) {
+	public void setKappa(int arg) {
 		this.kappa.set(arg);
 	}
 	/**
 	 * @return the phi
 	 */
-	public double getPhi() {
+	public int getPhi() {
 		return phi.get();
 	}
 	/**
 	 * @param arg the phi to set
 	 */
-	public void setPhi(double arg) {
+	public void setPhi(int arg) {
 		this.phi.set(arg);
 	}
 	/**

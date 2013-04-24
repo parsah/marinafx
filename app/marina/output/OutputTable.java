@@ -31,8 +31,8 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 				this.asBindingSiteColumn("TFBS", "site");
 
 		// no need to set column-factory since these are high-level columns.
-		TableColumn<RepresentedMatrixBean, Double> colMets = 
-				this.asDoubleColumn("Metrics", null);
+		TableColumn<RepresentedMatrixBean, Integer> colMets = 
+				this.asIntegerColumn("Metrics", null);
 		TableColumn<RepresentedMatrixBean, Double> colAbund = 
 				this.asDoubleColumn("Abundances", null);
 		// add each metric to its respective nested column-set.
@@ -62,6 +62,20 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 				new TableColumn<RepresentedMatrixBean, Double>(arg);
 		column.setCellValueFactory(
 				new PropertyValueFactory<RepresentedMatrixBean, Double>(arg1));
+		return column;
+	}
+	
+	/**
+	 * Helper-function to create a new table column.
+	 * @param String represents column name.
+	 * @return TableColumn object.
+	 * */
+	private TableColumn<RepresentedMatrixBean, Integer> asIntegerColumn(
+			String arg, String arg1) {
+		TableColumn<RepresentedMatrixBean, Integer> column = 
+				new TableColumn<RepresentedMatrixBean, Integer>(arg);
+		column.setCellValueFactory(
+				new PropertyValueFactory<RepresentedMatrixBean, Integer>(arg1));
 		return column;
 	}
 

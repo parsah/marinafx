@@ -55,22 +55,22 @@ public class RepresentedBeanBuilder {
 				double value = this.getMatrix().getData()[rowNum][colNum];
 				switch(metric) {
 				case CONFIDENCE: 
-					bean.setConfidence(value);
+					bean.setConfidence((int)value);
 					break;
 				case COSINE:
-					bean.setCosine(value);
+					bean.setCosine((int)value);
 					break;
 				case JACCARD:
-					bean.setJaccard(value);
+					bean.setJaccard((int)value);
 					break;
 				case KAPPA:
-					bean.setKappa(value);
+					bean.setKappa((int)value);
 					break;
 				case LAPLACE:
-					bean.setLaplace(value);
+					bean.setLaplace((int)value);
 					break;
 				case LIFT:
-					bean.setLift(value);
+					bean.setLift((int)value);
 					break;
 				case NUM_BASELINE:
 					bean.setNumBaseline(value);
@@ -79,7 +79,7 @@ public class RepresentedBeanBuilder {
 					bean.setNumQuery(value);
 					break;
 				case PHI:
-					bean.setPhi(value);
+					bean.setPhi((int)value);
 					break;
 				case PVALUE:
 					bean.setPvalue(value);
