@@ -3,23 +3,29 @@ package marina.quantification;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
+import group.FASTASequence;
+import group.Group;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import marina.alignment.RabinKarp;
-import marina.bindingsite.BindingSite;
-import marina.bindingsite.LinearDNAMotif;
-import marina.group.FASTASequence;
-import marina.group.Group;
-import marina.matrix.ContingencyMatrix;
-import marina.parser.DNAMotifParser;
-import marina.parser.FASTAParser;
+import matrix.ContingencyMatrix;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.DNAMotifParser;
+import parser.FASTAParser;
+
+import quantification.CandidateMatrixBuilder;
+
+import bindingsite.BindingSite;
+import bindingsite.LinearDNAMotif;
+
+import alignment.RabinKarp;
 
 public class CandidateMatrixBuilderTest {
 	private CandidateMatrixBuilder builder;

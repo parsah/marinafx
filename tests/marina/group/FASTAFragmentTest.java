@@ -1,6 +1,9 @@
 package marina.group;
 
 import static org.junit.Assert.*;
+import group.DNASequence;
+import group.FASTAFragment;
+import group.FASTASequence;
 
 import org.junit.Before;
 import org.junit.Test;

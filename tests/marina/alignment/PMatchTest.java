@@ -2,16 +2,21 @@ package marina.alignment;
 
 import static org.junit.Assert.*;
 
+import group.FASTAFragment;
+import group.FASTASequence;
+
 import java.io.File;
 import java.io.IOException;
 
-import marina.bindingsite.PositionWeightMatrix;
-import marina.group.FASTAFragment;
-import marina.group.FASTASequence;
-import marina.parser.PWMParser;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.PWMParser;
+
+import bindingsite.PositionWeightMatrix;
+
+import alignment.PMatch;
 
 public class PMatchTest {
 	private PMatch pmatch;

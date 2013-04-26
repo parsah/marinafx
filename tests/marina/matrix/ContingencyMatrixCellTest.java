@@ -2,6 +2,8 @@ package marina.matrix;
 
 import static org.junit.Assert.assertTrue;
 
+import matrix.ContingencyMatrixCell;
+
 import org.junit.Test;
 
 public class ContingencyMatrixCellTest {

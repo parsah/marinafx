@@ -2,10 +2,12 @@ package marina.matrix;
 
 import static org.junit.Assert.*;
 
-import marina.quantification.Statistic;
+import matrix.Matrix;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import quantification.Statistic;
 
 public class MatrixTest {
 	private Matrix matrix;

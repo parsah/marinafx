@@ -4,12 +4,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import group.DNASequence;
+import group.FASTASequence;
+
 import java.util.ArrayList;
 
-import marina.bindingsite.LinearDNAMotif;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import bindingsite.LinearDNAMotif;
 
 public class FASTASequenceTest {
 	private FASTASequence fasta;

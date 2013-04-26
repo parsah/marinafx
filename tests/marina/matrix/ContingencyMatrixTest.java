@@ -8,11 +8,15 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 
-import marina.quantification.Metric;
-import marina.quantification.Statistic;
+import matrix.ContingencyMatrix;
+import matrix.ContingencyMatrixCell;
+import matrix.Matrix;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import quantification.Metric;
+import quantification.Statistic;
 
 public class ContingencyMatrixTest {
 	private ContingencyMatrix cm; // references a valid matrix

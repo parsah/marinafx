@@ -3,16 +3,23 @@ package marina.group;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import group.FASTASequence;
+import group.Group;
+import group.GroupAbundanceWrapper;
+
 import java.io.File;
 
-import marina.alignment.RabinKarp;
-import marina.bindingsite.BindingSite;
-import marina.bindingsite.LinearDNAMotif;
-import marina.parser.DNAMotifParser;
-import marina.parser.FASTAParser;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.DNAMotifParser;
+import parser.FASTAParser;
+
+import bindingsite.BindingSite;
+import bindingsite.LinearDNAMotif;
+
+import alignment.RabinKarp;
 
 public class GroupAbundanceWrapperTest {
 	private GroupAbundanceWrapper wrapper;

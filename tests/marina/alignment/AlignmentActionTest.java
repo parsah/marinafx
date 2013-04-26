@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import alignment.AlignmentAction;
+
 public class AlignmentActionTest {
 	private AlignmentAction action;
 	

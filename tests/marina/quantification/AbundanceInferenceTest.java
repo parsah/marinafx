@@ -5,19 +5,27 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import group.FASTASequence;
+import group.Group;
+
 import java.io.File;
 import java.io.IOException;
 
-import marina.alignment.RabinKarp;
-import marina.bindingsite.LinearDNAMotif;
-import marina.group.FASTASequence;
-import marina.group.Group;
-import marina.matrix.ContingencyMatrix;
-import marina.parser.DNAMotifParser;
-import marina.parser.FASTAParser;
+import matrix.ContingencyMatrix;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.DNAMotifParser;
+import parser.FASTAParser;
+
+import quantification.AbundanceInference;
+import quantification.CandidateMatrixBuilder;
+import quantification.Statistic;
+
+import bindingsite.LinearDNAMotif;
+
+import alignment.RabinKarp;
 
 public class AbundanceInferenceTest {
 	private AbundanceInference inference;

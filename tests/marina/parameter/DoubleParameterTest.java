@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import parameter.DoubleParameter;
+import parameter.ParameterName;
+
 public class DoubleParameterTest {
 	private DoubleParameter param;
 

@@ -4,11 +4,13 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
-import marina.bindingsite.PositionWeightMatrix;
-import marina.parser.TextualPWMWrapper;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.TextualPWMWrapper;
+
+import bindingsite.PositionWeightMatrix;
 
 public class TextualPWMWrapperTest {
 	private TextualPWMWrapper wrapper;

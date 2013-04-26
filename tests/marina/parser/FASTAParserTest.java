@@ -4,10 +4,11 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
-import marina.parser.FASTAParser;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.FASTAParser;
 
 
 public class FASTAParserTest {

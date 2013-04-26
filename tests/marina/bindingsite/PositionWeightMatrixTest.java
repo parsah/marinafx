@@ -9,11 +9,16 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.IOException;
 
-import marina.parser.PWMParser;
-import marina.quantification.Statistic;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.PWMParser;
+
+import quantification.Statistic;
+
+import bindingsite.BindingSite;
+import bindingsite.PositionWeightMatrix;
 
 public class PositionWeightMatrixTest {
 	private PositionWeightMatrix pwm;

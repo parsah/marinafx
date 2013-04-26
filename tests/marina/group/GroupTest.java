@@ -2,12 +2,15 @@ package marina.group;
 
 import static org.junit.Assert.*;
 
+import group.Group;
+
 import java.io.File;
 
-import marina.parser.FASTAParser;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import parser.FASTAParser;
 
 public class GroupTest {
 	private Group group;

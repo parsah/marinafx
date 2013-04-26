@@ -2,10 +2,12 @@ package marina.quantification;
 
 import static org.junit.Assert.*;
 
-import marina.matrix.ContingencyMatrix;
+import matrix.ContingencyMatrix;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import quantification.Metric;
 
 public class MetricTest {
 	private ContingencyMatrix cm;

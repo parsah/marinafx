@@ -5,6 +5,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import bindingsite.BindingSite;
+import bindingsite.LinearDNAMotif;
+
 public class LinearDNAMotifTest {
 	private LinearDNAMotif motif;
 	

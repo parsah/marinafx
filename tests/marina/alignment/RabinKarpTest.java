@@ -2,13 +2,17 @@ package marina.alignment;
 
 import static org.junit.Assert.*;
 
+import group.FASTASequence;
+
 import java.io.IOException;
 
-import marina.bindingsite.LinearDNAMotif;
-import marina.group.FASTASequence;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import bindingsite.LinearDNAMotif;
+
+import alignment.RabinKarp;
 
 public class RabinKarpTest {
 	private RabinKarp rabinKarp;

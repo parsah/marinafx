@@ -8,6 +8,8 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import parser.DNAMotifParser;
+
 public class DNAMotifParserTest {
 	private DNAMotifParser parser;
 	
