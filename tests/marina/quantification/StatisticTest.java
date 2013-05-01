@@ -14,32 +14,32 @@ public class StatisticTest {
 	 * Given an even integer, test the correct factorial is produced.
 	 * */
 	@Test
-	public void testEvenFactorial() {
-		assertEquals(Statistic.factorial(5).intValue(), 120, 4);
+	public void testEvenCombinatorial() {
+		assertEquals(Statistic.combinatorial(6, 3).intValue(), 20, 0);
 	}
 	
 	/**
 	 * Given an odd integer, test the correct factorial is produced.
 	 * */
 	@Test
-	public void testOddFactorial() {
-		assertEquals(Statistic.factorial(5).intValue(), 120, 3);
+	public void testOddCombinatorial() {
+		assertEquals(Statistic.combinatorial(30, 18).intValue(), 86493225, 0);
 	}
 	
 	/**
 	 * Test that a zero factorial (0!) equals 1.
 	 * */
 	@Test
-	public void testZeroFactorial() {
-		assertEquals(Statistic.factorial(0).intValue(), 1, 1);
+	public void testZeroCombinatorial() {
+		assertEquals(Statistic.combinatorial(0, 0).intValue(), 1, 0);
 	}
 	
 	/**
 	 * Test that a factorial of 1 (1!) equals 1.
 	 * */
 	@Test
-	public void testOneFactorial() {
-		assertEquals(Statistic.factorial(1).intValue(), 1, 1);
+	public void testOneCombinatorial() {
+		assertEquals(Statistic.combinatorial(1, 1).intValue(), 1, 0);
 	}
 		
 	/**

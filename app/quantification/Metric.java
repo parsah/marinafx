@@ -114,9 +114,9 @@ public abstract class Metric {
 		int N = (int)cm.sum();
 		int M = (int)Statistic.summation(cm.getX());
 		int n = (int)cm.getFrequency(ContingencyMatrixCell.X_AND_G);
-		BigDecimal m_give_x = new BigDecimal(Statistic.combinatorial(M, x));
-		BigDecimal nmGiveNx = new BigDecimal(Statistic.combinatorial(N - M, n - x));
-		BigDecimal nGiveN = new BigDecimal(Statistic.combinatorial(N, n));
+		BigDecimal m_give_x = Statistic.combinatorial(M, x);
+		BigDecimal nmGiveNx = Statistic.combinatorial(N - M, n - x);
+		BigDecimal nGiveN = Statistic.combinatorial(N, n);
 		BigDecimal pval = (m_give_x.multiply(nmGiveNx)).divide(nGiveN, MathContext.DECIMAL32);
 		cm.setPvalue(pval.doubleValue());
 		return cm.getPvalue();

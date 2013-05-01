@@ -1,32 +1,10 @@
 package quantification;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Arrays;
 
 
 public final class Statistic {
-
-	/**
-	 * Computes the factorial for a given integer. To enable factorial
-	 * computation of large numbers, Stirling's Approximation is performed.
-	 * @param integer representing number to compute factorial of.
-	 * @return BigInteger result.
-	 * */
-	public static BigInteger factorial(int n) {
-		if (n == 0) {
-			return new BigInteger("1");
-		}
-		// computes sqrt(2 * PI * n); used by Stirling's Approximation
-		BigDecimal radicand = new BigDecimal(
-				Math.sqrt(2 * Math.PI * n));
-		// compute (n / Math.E) ^ n
-		BigDecimal fact = new BigDecimal(n / Math.E);
-		fact = fact.pow(n);
-		// multiply the value raised to the power by the radicand.
-		fact = fact.multiply(radicand);
-		return fact.toBigInteger();
-	}
 
 	/**
 	 * Computes the combinatorial value given n-choose-r integers.
@@ -34,11 +12,16 @@ public final class Statistic {
 	 * @param r Selection size
 	 * @return combinatorial given n-choose-r.
 	 * */
-	public static BigInteger combinatorial(int n, int r) {
-		BigInteger numerator = Statistic.factorial(n);
-		BigInteger denominator = Statistic.factorial(r).
-				multiply(Statistic.factorial(n-r));
-		return numerator.divide(denominator);
+	public static BigDecimal combinatorial(int n, int k) {
+		int endPoint = Math.min(k, n-k);
+		BigDecimal result = new BigDecimal(1);
+		for (int i=1; i <= endPoint; i++) {
+			result = result.multiply(new BigDecimal(n-i+1));
+			result = result.divide(new BigDecimal(i));
+//			result *= n-i+1;
+//			result /= i;
+		}
+		return result;
 	}
 
 	/**
