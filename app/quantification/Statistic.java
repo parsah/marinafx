@@ -1,5 +1,7 @@
 package quantification;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Arrays;
 
 
@@ -7,19 +9,23 @@ public final class Statistic {
 
 	/**
 	 * Computes the factorial for a given integer. To enable factorial
-	 * computation of large numbers, log-scaling summation is performed, with
-	 * the resultant exponential of the value being returned.
+	 * computation of large numbers, Stirling's Approximation is performed.
 	 * @param integer representing number to compute factorial of.
-	 * @return factorial result.
+	 * @return BigInteger result.
 	 * */
-	public static double factorial(double num) {
-		if (num == 0) {
-			return 1.0;
+	public static BigInteger factorial(int n) {
+		if (n == 0) {
+			return new BigInteger("1");
 		}
-		return Math.pow(num, num) *
-				Math.exp(-num) * 
-				Math.sqrt(2*Math.PI*num) *
-				(1 + (1/(12 * num)));
+		// computes sqrt(2 * PI * n); used by Stirling's Approximation
+		BigDecimal radicand = new BigDecimal(
+				Math.sqrt(2 * Math.PI * n));
+		// compute (n / Math.E) ^ n
+		BigDecimal fact = new BigDecimal(n / Math.E);
+		fact = fact.pow(n);
+		// multiply the value raised to the power by the radicand.
+		fact = fact.multiply(radicand);
+		return fact.toBigInteger();
 	}
 
 	/**
@@ -28,12 +34,13 @@ public final class Statistic {
 	 * @param r Selection size
 	 * @return combinatorial given n-choose-r.
 	 * */
-	public static double combinatorial(double n, double r) {
-		double numerator = Statistic.factorial(n);
-		double denominator = Statistic.factorial(r) * Statistic.factorial(n-r);
-		return numerator / denominator;
+	public static BigInteger combinatorial(int n, int r) {
+		BigInteger numerator = Statistic.factorial(n);
+		BigInteger denominator = Statistic.factorial(r).
+				multiply(Statistic.factorial(n-r));
+		return numerator.divide(denominator);
 	}
-	
+
 	/**
 	 * Orders the predefined column array such that larger values are
 	 * closed to 1 whereas smaller values are closed to N; N references
@@ -70,7 +77,7 @@ public final class Statistic {
 		Arrays.sort(sorted);
 		return sorted;
 	}
-	
+
 	/**
 	 * Compute sum of a given array; useful in cases where a column or row
 	 * is returned.
@@ -84,7 +91,7 @@ public final class Statistic {
 		}
 		return sum;
 	}
-	
+
 	/**
 	 * Identifies the minimum value in a list of numerical values.
 	 * @param vals a list of numerical values.
@@ -99,7 +106,7 @@ public final class Statistic {
 		}
 		return minValue;
 	}
-	
+
 	/**
 	 * Identifies the maximum value in a list of numerical values.
 	 * @param vals a list of numerical values.

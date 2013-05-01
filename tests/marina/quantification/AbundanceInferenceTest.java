@@ -58,14 +58,6 @@ public class AbundanceInferenceTest {
 	}
 	
 	/**
-	 * Test that truly over-represented binding sites can be produced.
-	 * */
-	@Test
-	public void testRepresentedSitesProduced() throws IOException {
-		assertTrue(this.inference.representedMatrices().size() >= 0);
-	}
-	
-	/**
 	 * Assert that a known contingency matrix can pass the 
 	 * AbundanceInference difference-cutoff.
 	 * */

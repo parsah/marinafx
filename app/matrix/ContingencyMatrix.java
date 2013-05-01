@@ -3,7 +3,6 @@ package matrix;
 import java.io.IOException;
 
 import quantification.Metric;
-
 import bindingsite.BindingSite;
 
 
@@ -16,6 +15,7 @@ import bindingsite.BindingSite;
  * */
 public class ContingencyMatrix extends Matrix {
 	private BindingSite bindingSite; // binding site representing the matrix.
+	private double pval;
 
 	/**
 	 * A Contingency Matrix is a 2 by 2 Matrix, used for computing magnitude
@@ -23,6 +23,7 @@ public class ContingencyMatrix extends Matrix {
 	 * */
 	public ContingencyMatrix() {
 		super(new double[2][2]); // each contingency matrix is 2x2 in size.
+		this.setPvalue(1);
 	}
 
 	/**
@@ -31,6 +32,7 @@ public class ContingencyMatrix extends Matrix {
 	 * */
 	public ContingencyMatrix(double[][] data) {
 		super(data);
+		this.setPvalue(1);
 	}
 
 	/**
@@ -162,35 +164,13 @@ public class ContingencyMatrix extends Matrix {
 		this.sum();
 	}
 
-	/**
-	 * Converts a contingency matrix into log-base(n) format; useful in
-	 * instances where cells are considerably large and downstream
-	 * computations yield outputs unable to be assigned to primitive 
-	 * data-types.
-	 * @return 
-	 * */
-	public ContingencyMatrix log(int base) {
-		double[][] data = new double[this.getHeight()][this.getWidth()];
-		for (int i = 0; i < this.getHeight(); i++) {
-			for (int j = 0; j < this.getWidth(); j++) {
-				double val = Math.log(this.getData()[i][j]) / Math.log(base);
-				data[i][j] = val;
-			}
-		}
-		ContingencyMatrix cm = new ContingencyMatrix(data);
-		cm.setColumns(this.getColumns());
-		cm.setName(this.getName());
-		cm.setRows(this.getRows());
-		return cm;
-	}
-
 	public double[] metricValues() throws IOException {
 		double[] values = new double[Metric.Name.values().length];
 		for (int i = 0; i < values.length; i++) {
 			Metric.Name metric = Metric.Name.values()[i];
 			switch (metric) {
 			case PVALUE:
-				values[i] = Metric.pValue(this.log(2));
+				values[i] = this.getPvalue();
 				break;
 			case CONFIDENCE:
 				values[i] = Metric.confidence(this);
@@ -264,5 +244,19 @@ public class ContingencyMatrix extends Matrix {
 	 */
 	public void setBindingSite(BindingSite tfbs) {
 		this.bindingSite = tfbs;
+	}
+
+	/**
+	 * @return the pval
+	 */
+	public double getPvalue() {
+		return pval;
+	}
+
+	/**
+	 * @param pval the pval to set
+	 */
+	public void setPvalue(double pval) {
+		this.pval = pval;
 	}
 }

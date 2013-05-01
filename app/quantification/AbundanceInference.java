@@ -1,6 +1,7 @@
 package quantification;
 
 import gui.MarinaGUI;
+import gui.OperationUpdater;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import matrix.Matrix;
  * output from several pre-implemented statistical metrics.
  * @author Parsa Hosseini
  * */
-public class AbundanceInference {
+public class AbundanceInference extends OperationUpdater {
 	private CandidateMatrixBuilder builder;
 	private Matrix unOrderedMatrix;
 	private Matrix orderedMatrix;
@@ -90,7 +91,8 @@ public class AbundanceInference {
 	public boolean isPassPValue(ContingencyMatrix cm) {
 		Parameter p = MarinaGUI.get().parameterMap().get(ParameterName.P_VALUE);
 		double userPValue = ((DoubleParameter)(p)).getArgument();
-		if (Metric.pValue(cm.log(2)) <= userPValue) {
+		Metric.computePvalue(cm); // computes the matrix p-value
+		if (cm.getPvalue() <= userPValue) {
 			return true;
 		}
 		return false;
@@ -107,9 +109,14 @@ public class AbundanceInference {
 	 * @return whether over-represented binding-sites were identified.
 	 * @throws IOException 
 	 * */
-	public List<ContingencyMatrix> representedMatrices() throws IOException {
-		List<ContingencyMatrix> cms = new ArrayList<ContingencyMatrix>();
-		for (ContingencyMatrix cm: this.getCandidateBuilder().build()) {
+	private List<ContingencyMatrix> representedMatrices() throws IOException {
+		List<ContingencyMatrix> goodCMs = new ArrayList<ContingencyMatrix>();
+		List<ContingencyMatrix> allCMs = this.getCandidateBuilder().build();
+		for (int i=0; i < allCMs.size(); i++) {
+			ContingencyMatrix cm = allCMs.get(i);
+			this.updateGUI(i+1, allCMs.size());
+			this.updateGUI("Quantifying " + cm.getName());
+			
 			boolean passDiff = this.isPassDifference(cm);
 			boolean passLaplace = this.isPassLaplace(cm);
 			boolean passSupport = this.isPassSupport(cm);
@@ -118,14 +125,14 @@ public class AbundanceInference {
 				if (ParameterMap.toBoolean(ParameterName.IPF)) {
 					cm.ipf(); // IPF-standardize matrix if selected.
 				}
-				cms.add(cm);
+				goodCMs.add(cm); // keep matrix if it passes all criterion.
 			}
 		}
-		if (cms.size() == 0) {
+		if (goodCMs.size() == 0) {
 			String msg = "No binding sites rendered over-represented.";
 			throw new IOException(msg);
 		}
-		return cms; // return a list of over-represented binding-sites
+		return goodCMs; // return a list of over-represented binding-sites
 	}
 	
 	/**

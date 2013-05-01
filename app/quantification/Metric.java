@@ -1,5 +1,8 @@
 package quantification;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+
 import matrix.ContingencyMatrix;
 import matrix.ContingencyMatrixCell;
 
@@ -9,7 +12,7 @@ import matrix.ContingencyMatrixCell;
  * @author Parsa Hosseini
  * */
 public abstract class Metric {
-	
+
 	/**
 	 * Return the Laplace (LP) correction value for the respective matrix.
 	 * @return double representing Laplace correction.
@@ -86,21 +89,6 @@ public abstract class Metric {
 	}
 
 	/**
-	 * Computes the hypergeometric p-value for the current contingency matrix.
-	 * @return double representing the contingency matrix p-value.
-	 * */
-	public static double pValue(ContingencyMatrix cm) {
-		double x = cm.getFrequency(ContingencyMatrixCell.X_AND_G);
-		double N = cm.sum();
-		double M = Statistic.summation(cm.getX());
-		double n = cm.getFrequency(ContingencyMatrixCell.X_AND_G);
-		double m_give_x = Statistic.combinatorial(M, x);
-		double nmGiveNx = Statistic.combinatorial(N - M, n - x);
-		double nGiveN = Statistic.combinatorial(N, n);
-		return (m_give_x * nmGiveNx) / (nGiveN);
-	}
-
-	/**
 	 * Computes the Phi coefficient (PHI) for the current contingency matrix.
 	 * @return double representing the Phi coefficient measure.
 	 * */
@@ -117,13 +105,31 @@ public abstract class Metric {
 	}
 	
 	/**
+	 * Computes a p-value for the provided ContingencyMatrix object.
+	 * @param cm A ContingencyMatrix object.
+	 * @return double representing the hypergeometric p-value.
+	 * */
+	public static double computePvalue(ContingencyMatrix cm) {
+		int x = (int)cm.getFrequency(ContingencyMatrixCell.X_AND_G);
+		int N = (int)cm.sum();
+		int M = (int)Statistic.summation(cm.getX());
+		int n = (int)cm.getFrequency(ContingencyMatrixCell.X_AND_G);
+		BigDecimal m_give_x = new BigDecimal(Statistic.combinatorial(M, x));
+		BigDecimal nmGiveNx = new BigDecimal(Statistic.combinatorial(N - M, n - x));
+		BigDecimal nGiveN = new BigDecimal(Statistic.combinatorial(N, n));
+		BigDecimal pval = (m_give_x.multiply(nmGiveNx)).divide(nGiveN, MathContext.DECIMAL32);
+		cm.setPvalue(pval.doubleValue());
+		return cm.getPvalue();
+	}
+
+	/**
 	 * Computes the abundance of a TFBS in the baseline group.
 	 * @return double representing the baseline binding site abundance.
 	 * */
 	public static double mumBaseline(ContingencyMatrix cm) {
 		return cm.getFrequency(ContingencyMatrixCell.X_AND_NOT_G);
 	}
-	
+
 	/**
 	 * Computes the abundance of a TFBS in the query group.
 	 * @return double representing the query binding site abundance.
@@ -131,7 +137,7 @@ public abstract class Metric {
 	public static double numQuery(ContingencyMatrix cm) {
 		return cm.getFrequency(ContingencyMatrixCell.X_AND_G);
 	}
-	
+
 	public enum Name {
 		LAPLACE("Laplace", "laplace", true),
 		CONFIDENCE("Confidence", "confidence", true),
@@ -144,17 +150,17 @@ public abstract class Metric {
 		PVALUE("p-value", "pvalue", false),
 		NUM_QUERY("#/query", "numQuery", false),
 		NUM_BASELINE("#/baseline", "numBaseline",false);
-		
+
 		private String row;
 		private String value; // references the bean state.
 		private boolean isStat;
-		
+
 		private Name(String row, String value, boolean isStat) {
 			this.setRow(row);
 			this.setStat(isStat);
 			this.setValue(value);
 		}
-		
+
 		/**
 		 * @return the row
 		 */

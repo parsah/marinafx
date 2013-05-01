@@ -8,28 +8,18 @@ import gui.SchemaStage;
 
 import java.io.IOException;
 
-import output.OutputTable;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.MenuItem;
 import output.ResultWriter;
-
 import parameter.ParameterMap;
 import parameter.ParameterName;
 import parser.DNAMotifParser;
 import parser.FASTAParser;
 import parser.PWMParser;
-
-import quantification.AbundanceInference;
-import quantification.CandidateMatrixBuilder;
-
-import bean.RepresentedBeanBuilder;
-import bean.RepresentedMatrixBean;
-
+import quantification.QuantificationFactory;
 import alignment.AlignmentAction;
-
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.control.MenuItem;
 
 /**
  * Performs the core-logic when a clickable item is pressed by the user.
@@ -150,14 +140,12 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					}
 					if (params.isAlignmentSuccess()) {
 						// contrast TFBS abundances between two groups
-						CandidateMatrixBuilder mb = new CandidateMatrixBuilder();
-						AbundanceInference infer = new AbundanceInference(mb);
-						infer.bindAbundances();
-						RepresentedBeanBuilder builder = new 
-								RepresentedBeanBuilder(infer.getOrderedMatrix());
-						ObservableList<RepresentedMatrixBean> beans = builder.build();
-						OutputTable table = MarinaGUI.get().getTable();
-						table.addObservables(beans);
+						QuantificationFactory factory = new QuantificationFactory();
+						factory.setOnFailed(new QuantificationTaskListener());
+						factory.setOnSucceeded(new QuantificationTaskListener());
+						Thread t = new Thread(factory);
+						t.setDaemon(true);
+						t.start();
 					}
 					else {
 						String msg = "Alignment must be performed first.";
