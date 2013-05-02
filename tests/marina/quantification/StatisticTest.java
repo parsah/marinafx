@@ -15,7 +15,7 @@ public class StatisticTest {
 	 * */
 	@Test
 	public void testEvenCombinatorial() {
-		assertEquals(Statistic.combinatorial(6, 3).intValue(), 20, 0);
+		assertEquals(Statistic.combinatorial(6, 3), 20, 0);
 	}
 	
 	/**
@@ -23,7 +23,7 @@ public class StatisticTest {
 	 * */
 	@Test
 	public void testOddCombinatorial() {
-		assertEquals(Statistic.combinatorial(30, 18).intValue(), 86493225, 0);
+		assertEquals(Statistic.combinatorial(30, 18), 86493225, 0);
 	}
 	
 	/**
@@ -31,7 +31,7 @@ public class StatisticTest {
 	 * */
 	@Test
 	public void testZeroCombinatorial() {
-		assertEquals(Statistic.combinatorial(0, 0).intValue(), 1, 0);
+		assertEquals(Statistic.combinatorial(0, 0), 1, 0);
 	}
 	
 	/**
@@ -39,7 +39,7 @@ public class StatisticTest {
 	 * */
 	@Test
 	public void testOneCombinatorial() {
-		assertEquals(Statistic.combinatorial(1, 1).intValue(), 1, 0);
+		assertEquals(Statistic.combinatorial(1, 1), 1, 0);
 	}
 		
 	/**

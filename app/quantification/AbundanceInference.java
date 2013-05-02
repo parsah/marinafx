@@ -115,7 +115,7 @@ public class AbundanceInference extends OperationUpdater {
 		for (int i=0; i < allCMs.size(); i++) {
 			ContingencyMatrix cm = allCMs.get(i);
 			this.updateGUI(i+1, allCMs.size());
-			this.updateGUI("Quantifying " + cm.getName());
+			this.updateGUI("Quantifying \"" + cm.getName() + "\"");
 			
 			boolean passDiff = this.isPassDifference(cm);
 			boolean passLaplace = this.isPassLaplace(cm);

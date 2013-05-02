@@ -1,8 +1,5 @@
 package quantification;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-
 import matrix.ContingencyMatrix;
 import matrix.ContingencyMatrixCell;
 
@@ -114,11 +111,17 @@ public abstract class Metric {
 		int N = (int)cm.sum();
 		int M = (int)Statistic.summation(cm.getX());
 		int n = (int)cm.getFrequency(ContingencyMatrixCell.X_AND_G);
-		BigDecimal m_give_x = Statistic.combinatorial(M, x);
-		BigDecimal nmGiveNx = Statistic.combinatorial(N - M, n - x);
-		BigDecimal nGiveN = Statistic.combinatorial(N, n);
-		BigDecimal pval = (m_give_x.multiply(nmGiveNx)).divide(nGiveN, MathContext.DECIMAL32);
-		cm.setPvalue(pval.doubleValue());
+		double m_give_x = Statistic.combinatorial(M, x);
+		double nmGiveNx = Statistic.combinatorial(N - M, n - x);
+		double nGiveN = Statistic.combinatorial(N, n);
+		double result = (m_give_x * (nmGiveNx)) / (nGiveN);
+		// since mCx and nGiveN can both be large, factoring in nmCNx
+		// can often produce an out-of-bounds combinatorial. In such
+		// a case, the p-value is by-default set to 0
+		if (result == 1) {
+			result = 0;
+		}
+		cm.setPvalue(result);
 		return cm.getPvalue();
 	}
 

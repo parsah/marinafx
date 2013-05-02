@@ -23,8 +23,8 @@ import javafx.stage.FileChooser;
  * */
 public class ResultWriter {
 	private static final String TAB = "\t";
+	private static final String SUFFIX = ".tab"; // file suffix
 	private File file;
-
 
 	/**
 	 * Presents a user-prompt so that over-represented TFBSs can be saved
@@ -37,6 +37,10 @@ public class ResultWriter {
 		chooser.getExtensionFilters().add(csvFilter);
 		File file = chooser.showSaveDialog(null);
 		if (file != null) {
+			if (!file.getAbsolutePath().endsWith(ResultWriter.SUFFIX)) {
+				file = new File(file.getAbsolutePath() + ResultWriter.SUFFIX);
+			}
+			System.out.println(file);
 			this.setFile(file);
 		}
 		else {
@@ -124,7 +128,6 @@ public class ResultWriter {
 		return columns.toString();
 	}
 
-
 	/**
 	 * @return the file
 	 */
@@ -132,12 +135,10 @@ public class ResultWriter {
 		return file;
 	}
 
-
 	/**
 	 * @param file the file to set
 	 */
 	private void setFile(File file) {
 		this.file = file;
 	}
-
 }

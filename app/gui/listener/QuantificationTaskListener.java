@@ -1,5 +1,7 @@
 package gui.listener;
 
+import parameter.ParameterMap;
+import parameter.ParameterName;
 import gui.MarinaGUI;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
@@ -13,7 +15,10 @@ public class QuantificationTaskListener implements EventHandler<WorkerStateEvent
 	@Override
 	public void handle(WorkerStateEvent event) {
 		if (WorkerStateEvent.WORKER_STATE_SUCCEEDED != null) {
-			MarinaGUI.get().getStatusBar().setText("Quantification complete.");
+			int numTFBSs = MarinaGUI.get().getTable().getItems().size();
+			String finished = "# / TFBSs: " + numTFBSs + 
+					"; IPF: " + ParameterMap.toBoolean(ParameterName.IPF);
+			MarinaGUI.get().getStatusBar().setText(finished);		
 			MarinaGUI.get().parameterMap().setAlignmentSuccess(true);
 		}
 		if (WorkerStateEvent.WORKER_STATE_FAILED == null) {

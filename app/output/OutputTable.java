@@ -1,15 +1,12 @@
 package output;
 
-import parameter.ParameterMap;
-import parameter.ParameterName;
-import quantification.Metric;
-import gui.MarinaGUI;
-import bean.RepresentedMatrixBean;
-import bindingsite.BindingSite;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import quantification.Metric;
+import bean.RepresentedMatrixBean;
+import bindingsite.BindingSite;
 
 /**
  * Provides a centralized control for the visualization of ranked and
@@ -103,9 +100,5 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 	 * */
 	public void addObservables(ObservableList<RepresentedMatrixBean> beans) {
 		this.setItems(beans);
-		String finished = "# / TFBSs: " + beans.size() + 
-				"; IPF-standardization: " + 
-				ParameterMap.toBoolean(ParameterName.IPF);
-		MarinaGUI.get().getStatusBar().setText(finished);		
 	}
 }

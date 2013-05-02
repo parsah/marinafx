@@ -1,6 +1,5 @@
 package quantification;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 
 
@@ -12,14 +11,15 @@ public final class Statistic {
 	 * @param r Selection size
 	 * @return combinatorial given n-choose-r.
 	 * */
-	public static BigDecimal combinatorial(int n, int k) {
+	public static double combinatorial(int n, int k) {
 		int endPoint = Math.min(k, n-k);
-		BigDecimal result = new BigDecimal(1);
+		double result = 1;
 		for (int i=1; i <= endPoint; i++) {
-			result = result.multiply(new BigDecimal(n-i+1));
-			result = result.divide(new BigDecimal(i));
-//			result *= n-i+1;
-//			result /= i;
+			result = result * (n-i+1);
+			result = result / i;
+		}
+		if (Double.isInfinite(result)) {
+			result = Double.MAX_VALUE;
 		}
 		return result;
 	}
