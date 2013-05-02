@@ -1,5 +1,6 @@
 package gui.listener;
 
+import group.FASTASequence;
 import group.Group;
 import gui.Dialog;
 import gui.MarinaGUI;
@@ -7,6 +8,8 @@ import gui.ParameterStage;
 import gui.SchemaStage;
 
 import java.io.IOException;
+
+import bindingsite.BindingSite;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -47,16 +50,29 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				else if (menuItem.getId().equals("new")) {
 					MarinaGUI.get().reset();
 				}
-				else if (menuItem.getId().equals("save")) {
+				else if (menuItem.getId().equals("saveResults")) {
 					if (MarinaGUI.get().getTable().getItems().size() > 0) {
 						ResultWriter writer = new ResultWriter();
 						writer.showSaveDialog();
 						writer.write();
 					}
 					else {
-						String msg = "Over-represented TFBSs must first " +
-								"be quantified.";
+						String msg = "TFBSs must first be quantified.";
 						Dialog.show(msg, true);
+					}
+				}
+				else if (menuItem.getId().equals("saveMappings")) {
+					ParameterMap paramMap = MarinaGUI.get().parameterMap();
+					Group[] groups = new Group[]{paramMap.getQuery(), 
+							paramMap.getBaseline()}; // get both groups
+					for (Group group: groups) {
+						System.out.println(group.getBasename());
+						for (FASTASequence seq: group.getParser().getSequences()) {
+							System.out.println("\t" + seq.getHeader());
+							for (BindingSite tfbs: seq.getMappings().keySet()) {
+								System.out.println("\t\t" + tfbs);
+							}
+						}
 					}
 				}
 				else if (menuItem.getId().equals("loadQuery")) {

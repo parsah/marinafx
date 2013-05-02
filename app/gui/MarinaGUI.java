@@ -92,19 +92,17 @@ public class MarinaGUI extends Application {
 		Menu menuFile = new Menu("File");
 		menuFile.setId("menuFile");
 		MenuItem itemNew = new MenuItem("New");
-		MenuItem itemSave = new MenuItem("Save");
+		
 		MenuItem itemOptions = new MenuItem("Options");
 		MenuItem itemExit = new MenuItem("Exit");
 		menuFile.getItems().addAll(itemNew, this.fastaMenu(),
-				this.getTFBSMenu(), itemSave,
+				this.getTFBSMenu(), this.saveMenu(),
 				new SeparatorMenuItem(), itemOptions, this.runMenu(),
 				new SeparatorMenuItem(), itemExit);
 		itemOptions.setId("showOptions");
 		itemExit.setId("exit");
 		itemNew.setId("new");
-		itemSave.setId("save");
 		itemNew.setOnAction(new MenuEventHandler());
-		itemSave.setOnAction(new MenuEventHandler());
 		itemOptions.setOnAction(new MenuEventHandler());
 		itemExit.setOnAction(new MenuEventHandler());
 		return menuFile;
@@ -161,6 +159,26 @@ public class MarinaGUI extends Application {
 		itemQuantify.setOnAction(new MenuEventHandler());
 		fileRunMenu.getItems().addAll(itemRun, itemQuantify);
 		return fileRunMenu;
+	}
+	
+	/**
+	 * The Save menu provides the ability to save both the quantified TFBSs
+	 * and the features which contain the respective TFBS. This feature is
+	 * important as it provides the ability to write the results derived from
+	 * analysis to a local file as well as keep-track of what TFBSs mapped to
+	 * what input sequence.
+	 * @return Menu referencing the Save menu.
+	 * */
+	private Menu saveMenu() {
+		Menu fileSaveMenu = new Menu("Save");
+		MenuItem itemSaveResults = new MenuItem("Results");
+		MenuItem itemSaveMappings = new MenuItem("TFBS Mappings");
+		itemSaveResults.setId("saveResults");
+		itemSaveResults.setOnAction(new MenuEventHandler());
+		itemSaveMappings.setId("saveMappings");
+		itemSaveMappings.setOnAction(new MenuEventHandler());
+		fileSaveMenu.getItems().addAll(itemSaveResults, itemSaveMappings);
+		return fileSaveMenu;
 	}
 	
 	/**
