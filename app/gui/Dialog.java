@@ -18,7 +18,7 @@ import javafx.stage.Stage;
  * */
 public abstract class Dialog {
 
-	public static void show(String message, boolean isError) {
+	public static void showCustom(String message, boolean isError) {
 		// creates a simple layout for displaying a user-alert dialog.
 		Button ok = new Button("OK");
 		VBox layout = new VBox(5);
@@ -39,5 +39,9 @@ public abstract class Dialog {
 				stage.hide();
 			}
 		});
+	}
+	
+	public static void showQuantificationError() {
+		Dialog.showCustom("TFBSs must be quantified first.", false);
 	}
 }

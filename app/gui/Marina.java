@@ -10,6 +10,6 @@ public class Marina {
 	 * @return Application version.
 	 * */
 	public static String getVersion() {
-		return "1.01";
+		return "1.02";
 	}
 }

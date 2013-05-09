@@ -1,6 +1,5 @@
 package gui.listener;
 
-import group.FASTASequence;
 import group.Group;
 import gui.Dialog;
 import gui.MarinaGUI;
@@ -9,13 +8,12 @@ import gui.SchemaStage;
 
 import java.io.IOException;
 
-import bindingsite.BindingSite;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
-import output.ResultWriter;
+import output.AbundanceWriter;
+import output.MappedWriter;
 import parameter.ParameterMap;
 import parser.DNAMotifParser;
 import parser.FASTAParser;
@@ -52,27 +50,24 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 				}
 				else if (menuItem.getId().equals("saveResults")) {
 					if (MarinaGUI.get().getTable().getItems().size() > 0) {
-						ResultWriter writer = new ResultWriter();
+						AbundanceWriter writer = new AbundanceWriter();
 						writer.showSaveDialog();
-						writer.write();
+						writer.writeAll(); // write all TFBS abundances.
+						writer.close();
 					}
 					else {
-						String msg = "TFBSs must first be quantified.";
-						Dialog.show(msg, true);
+						Dialog.showQuantificationError();
 					}
 				}
 				else if (menuItem.getId().equals("saveMappings")) {
-					ParameterMap paramMap = MarinaGUI.get().parameterMap();
-					Group[] groups = new Group[]{paramMap.getQuery(), 
-							paramMap.getBaseline()}; // get both groups
-					for (Group group: groups) {
-						System.out.println(group.getBasename());
-						for (FASTASequence seq: group.getParser().getSequences()) {
-							System.out.println("\t" + seq.getHeader());
-							for (BindingSite tfbs: seq.getMappings().keySet()) {
-								System.out.println("\t\t" + tfbs);
-							}
-						}
+					if (MarinaGUI.get().getTable().getItems().size() > 0) {
+						MappedWriter writer = new MappedWriter();
+						writer.showSaveDialog();
+						writer.writeAll(); // write all mappings.
+						writer.close();
+					}
+					else {
+						Dialog.showQuantificationError();
 					}
 				}
 				else if (menuItem.getId().equals("loadQuery")) {
@@ -81,7 +76,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					parser.parse(); // set parser to the parameter-set
 					Group queryGroup = new Group(parser);
 					params.setQuery(queryGroup);
-					Dialog.show(queryGroup.getSize() + 
+					Dialog.showCustom(queryGroup.getSize() + 
 							" sequences parsed.", false);
 				}
 				else if (menuItem.getId().equals("loadBaseline")) {
@@ -90,7 +85,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					parser.parse(); // set parser to the parameter-set
 					Group controlGroup = new Group(parser);
 					params.setBaseline(controlGroup);
-					Dialog.show(controlGroup.getSize() + 
+					Dialog.showCustom(controlGroup.getSize() + 
 							" sequences parsed.", false);
 				}
 				else if (menuItem.getId().equals("loadPWMs")) {
@@ -98,7 +93,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					parser.showNoFilterPrompt();
 					parser.parse();
 					params.setPWMParser(parser);
-					Dialog.show(parser.getMatrices().size() + 
+					Dialog.showCustom(parser.getMatrices().size() + 
 							" PWMs parsed.", false);
 				}
 				else if (menuItem.getId().equals("loadMotifs")) {
@@ -106,7 +101,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					parser.showNoFilterPrompt();
 					parser.parse();
 					params.setMotifParser(parser);
-					Dialog.show(parser.getLinearMotifs().size()+
+					Dialog.showCustom(parser.getLinearMotifs().size()+
 							" motifs parsed.", false);
 				}
 				else if (menuItem.getId().equals("run")) {
@@ -117,7 +112,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						throw new IOException(msg);
 					}
 					else if (params.isAlignmentInvoked() == true) {
-						Dialog.show("Alignment already in-progress", false);
+						Dialog.showCustom("Alignment already in-progress", false);
 					}
 					else {
 						if (params.canRun() == true) {
@@ -159,7 +154,7 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 			}
 		} catch (IOException | IndexOutOfBoundsException |
 				NumberFormatException e ) {
-			Dialog.show(e.getMessage(), true);
+			Dialog.showCustom(e.getMessage(), true);
 		} catch (NullPointerException e) {
 			MarinaGUI.get().getStatusBar().setText(e.getMessage());
 		}

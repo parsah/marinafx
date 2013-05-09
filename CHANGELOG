@@ -1,0 +1,16 @@
+Version 1.02 (May 2013)
+=======================
+
+* Improved calculation of hypergeometric p-values.
+
+* New helpful feature allowing saving of which TFBSs mapped to which sequence.
+
+Version 1.01 (March 2013)
+=========================
+
+* Improved exception-handling and modeling of input parameters.
+
+Version 1.00 (March 2013)
+=========================
+
+* Initial release after porting from Python.
