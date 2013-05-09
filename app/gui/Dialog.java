@@ -42,6 +42,7 @@ public abstract class Dialog {
 	}
 	
 	public static void showQuantificationError() {
-		Dialog.showCustom("TFBSs must be quantified first.", false);
+		Dialog.showCustom("TFBSs must be quantified and have atleast 1 " +
+				"over-represented & identified TFBS.", false);
 	}
 }
