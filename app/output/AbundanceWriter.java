@@ -80,7 +80,7 @@ public class AbundanceWriter extends TabFormattedWriter {
 				writer.newLine();
 				writer.flush();
 			}
-			Dialog.showCustom("TFBSs successfully saved", false);
+			Dialog.showCustom("TFBS abundances successfully saved", false);
 		} catch (IOException e) {
 			String msg = "Error writing output. Please try another file.";
 			throw new IOException(msg);
