@@ -173,11 +173,15 @@ public class MarinaGUI extends Application {
 		Menu fileSaveMenu = new Menu("Save");
 		MenuItem itemSaveResults = new MenuItem("Results");
 		MenuItem itemSaveMappings = new MenuItem("TFBS Mappings");
+		MenuItem itemSaveCoordinates = new MenuItem("TFBS Coordinates");
 		itemSaveResults.setId("saveResults");
 		itemSaveResults.setOnAction(new MenuEventHandler());
 		itemSaveMappings.setId("saveMappings");
 		itemSaveMappings.setOnAction(new MenuEventHandler());
-		fileSaveMenu.getItems().addAll(itemSaveResults, itemSaveMappings);
+		itemSaveCoordinates.setId("saveCoordinates");
+		itemSaveCoordinates.setOnAction(new MenuEventHandler());
+		fileSaveMenu.getItems().addAll(itemSaveResults, 
+				itemSaveMappings, itemSaveCoordinates);
 		return fileSaveMenu;
 	}
 	

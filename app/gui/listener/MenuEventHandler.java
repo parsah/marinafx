@@ -70,6 +70,10 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 						Dialog.showQuantificationError();
 					}
 				}
+				else if (menuItem.getId().equals("saveCoordinates")) {
+					// TODO implement logic for saving TFBS alignment indices
+					Dialog.showQuantificationError();
+				}
 				else if (menuItem.getId().equals("loadQuery")) {
 					FASTAParser parser = new FASTAParser();
 					parser.showFASTAFilterPrompt();
