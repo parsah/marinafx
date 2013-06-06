@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 import output.AbundanceWriter;
+import output.CoordinateWriter;
 import output.MappedWriter;
 import parameter.ParameterMap;
 import parser.DNAMotifParser;
@@ -71,8 +72,15 @@ public class MenuEventHandler implements EventHandler<ActionEvent> {
 					}
 				}
 				else if (menuItem.getId().equals("saveCoordinates")) {
-					// TODO implement logic for saving TFBS alignment indices
-					Dialog.showQuantificationError();
+					if (MarinaGUI.get().getTable().getItems().size() > 0) {
+						CoordinateWriter writer = new CoordinateWriter();
+						writer.showSaveDialog();
+						writer.writeAll(); // write all TFBS coordinates.
+						writer.close();
+					}
+					else {
+						Dialog.showQuantificationError();
+					}
 				}
 				else if (menuItem.getId().equals("loadQuery")) {
 					FASTAParser parser = new FASTAParser();

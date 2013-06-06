@@ -1,5 +1,11 @@
 package output;
 
+import gui.MarinaGUI;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -100,5 +106,19 @@ public class OutputTable extends TableView<RepresentedMatrixBean> {
 	 * */
 	public void addObservables(ObservableList<RepresentedMatrixBean> beans) {
 		this.setItems(beans);
+	}
+	
+	/**
+	 * A useful function which mines only those TFBSs which are rendered
+	 * over-represented and therefore presented in the output table.
+	 * @return Set a collection of BindingSite objects set as over-represented.
+	 * */
+	public Set<BindingSite> getAbundantSites() {
+		Set<BindingSite> sites = new HashSet<BindingSite>();
+		List<RepresentedMatrixBean> items = MarinaGUI.get().getTable().getItems();
+		for (RepresentedMatrixBean bean: items) {
+			sites.add(bean.getSite());
+		}
+		return sites;
 	}
 }

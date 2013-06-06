@@ -7,38 +7,23 @@ import gui.MarinaGUI;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import parameter.ParameterMap;
-
-import bean.RepresentedMatrixBean;
 import bindingsite.BindingSite;
 
+/**
+ * A MappedWriter is responsible for writing which TFBS is found in which
+ * input sequence. This class therefore helps the user understand what TFBSs
+ * are present and what are absent in a sequence of interest.
+ * @author Parsa Hosseini
+ * */
 public class MappedWriter extends TabFormattedWriter {
 
-	/**
-	 * A useful function which mines only those TFBSs which are rendered
-	 * over-represented.
-	 * @return Set a collection of BindingSite objects set as over-represented.
-	 * */
-	private Set<BindingSite> getAbundantSites() {
-		Set<BindingSite> sites = new HashSet<BindingSite>();
-		List<RepresentedMatrixBean> items = MarinaGUI.get().getTable().getItems();
-		for (RepresentedMatrixBean bean: items) {
-			sites.add(bean.getSite());
-		}
-		return sites;
-	}
-
-	/**
-	 * Writes specific information as far as which 
-	 * */
 	@Override
 	public void writeAll() throws IOException {
-		// first, get a list of only the TFBSs which wbere rendered abundant.
-		Set<BindingSite> abundantSites = this.getAbundantSites();
+		// first, get a list of only the TFBSs which where rendered abundant.
+		Set<BindingSite> sites = MarinaGUI.get().getTable().getAbundantSites();
 		ParameterMap paramMap = MarinaGUI.get().parameterMap();
 		Group[] groups = new Group[]{paramMap.getQuery(), 
 				paramMap.getBaseline()}; // get both groups
@@ -53,7 +38,7 @@ public class MappedWriter extends TabFormattedWriter {
 						// TFBS is over-represented. Otherwise, spurious TFBS
 						// mappings will be saved and these mappings won't be very
 						// meaningful.
-						if (abundantSites.contains(tfbs)) {
+						if (sites.contains(tfbs)) {
 							allTFBSs.append(tfbs+TabFormattedWriter.TAB);
 						}
 					}
@@ -64,6 +49,7 @@ public class MappedWriter extends TabFormattedWriter {
 					writer.newLine();
 				}
 			}
+			writer.close();
 			Dialog.showCustom("TFBS mappings successfully saved", false);
 		} catch (IOException e) {
 			String msg = "Error writing output. Please try another file.";
