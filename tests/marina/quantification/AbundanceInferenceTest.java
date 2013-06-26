@@ -1,15 +1,11 @@
 package marina.quantification;
-import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
 import group.FASTASequence;
 import group.Group;
 
 import java.io.File;
-import java.io.IOException;
 
 import matrix.ContingencyMatrix;
 
@@ -18,14 +14,10 @@ import org.junit.Test;
 
 import parser.DNAMotifParser;
 import parser.FASTAParser;
-
 import quantification.AbundanceInference;
 import quantification.CandidateMatrixBuilder;
-import quantification.Statistic;
-
-import bindingsite.LinearDNAMotif;
-
 import alignment.RabinKarp;
+import bindingsite.LinearDNAMotif;
 
 public class AbundanceInferenceTest {
 	private AbundanceInference inference;
@@ -134,100 +126,4 @@ public class AbundanceInferenceTest {
 	public void testInitiallyNullUnOrderedMatrix() {
 		assertNull(this.inference.getUnOrderedMatrix());
 	}
-	
-	/**
-	 * Test that upon binding represented contingency matrices to
-	 * respective ranks, a rank-ordered matrix is instantiated. 
-	 * */
-	@Test
-	public void testBindingYieldsOrderedMatrix() throws IOException {
-		this.inference.bindAbundances();
-		assertNotNull(this.inference.getOrderedMatrix());
-	}
-	
-	/**
-	 * Test that upon binding represented contingency matrices to
-	 * respective ranks, a rank-unordered matrix is instantiated. 
-	 * */
-	@Test
-	public void testBindingYieldsUnOrderedMatrix() throws IOException {
-		this.inference.bindAbundances();
-		assertNotNull(this.inference.getUnOrderedMatrix());
-	}
-	
-	/**
-	 * Upon binding contingency matrices, test that ordered and 
-	 * unordered matrices share the same width.
-	 * */
-	@Test
-	public void testOrderedUnOrderedMatrixShareWidth() throws IOException {
-		this.inference.bindAbundances();
-		assertTrue(this.inference.getOrderedMatrix().getWidth() ==
-				this.inference.getUnOrderedMatrix().getWidth());
-	}
-	
-	/**
-	 * Upon binding contingency matrices, test that ordered and 
-	 * unordered matrices share the same height.
-	 * */
-	@Test
-	public void testOrderedUnOrderedMatrixShareHeight() throws IOException {
-		this.inference.bindAbundances();
-		assertTrue(this.inference.getOrderedMatrix().getHeight() ==
-				this.inference.getUnOrderedMatrix().getHeight());
-	}
-	
-	/**
-	 * Test that upon binding, ordered and unordered matrices are
-	 * completely different references.
-	 * */
-	@Test
-	public void testOrderedUnOrderedMatrixDifferent() throws IOException {
-		this.inference.bindAbundances();
-		assertTrue(this.inference.getOrderedMatrix().hashCode() != 
-				this.inference.getUnOrderedMatrix().hashCode());
-	}
-	
-	/**
-	 * Test that both ordered and unordered matrices share the same row names.
-	 * */
-	@Test
-	public void testOrderedUnOrderedMatrixShareSameRows() throws IOException {
-		this.inference.bindAbundances();
-		assertTrue(this.inference.getOrderedMatrix().getRows() == 
-				this.inference.getUnOrderedMatrix().getRows());
-	}
-	
-	/**
-	 * Test that both ordered and unordered matrices share the same columns.
-	 * */
-	@Test
-	public void testOrderedUnOrderedMatrixShareSameColumns() throws IOException {
-		this.inference.bindAbundances();
-		Object[] orderedCols = this.inference.getOrderedMatrix().getColumns();
-		Object[] unOrderedCols = this.inference.getUnOrderedMatrix().getColumns();
-		assertArrayEquals(orderedCols, unOrderedCols);
-	}
-	
-	/**
-	 * Test that ranking a column from the unordered matrix yields
-	 * the same column in the ordered matrix.
-	 * @throws IOException 
-	 * */
-	@Test
-	public void testRankingColumnOfOrderedMatrix() throws IOException {
-		int num = 1;
-		this.inference.bindAbundances();
-		double[] unordered = this.inference.getUnOrderedMatrix().getColumn(num);
-		int[] ranks = Statistic.rank(unordered);
-		double[] ordered = this.inference.getOrderedMatrix().getColumn(num);
-		boolean hasSameRanks = false;
-		for (int i = 0; i < ordered.length; i++) {
-			if (ranks[i] == ordered[i]) {
-				hasSameRanks = true;
-			}
-		}
-		assertTrue(hasSameRanks);
-	}
-
 }

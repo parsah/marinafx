@@ -5,7 +5,9 @@ import gui.OperationUpdater;
 import java.io.IOException;
 
 public abstract class AbstractAlignment extends OperationUpdater {
-	public abstract void align() throws IOException;
+	// perform PWM mapping on both forward and reverse strands
+	public abstract void forwardStrandAlign() throws IOException;
+	public abstract void reverseStrandAlign() throws IOException;
 	private String name; // long-name to help ID alignment mode.
 	
 	/**

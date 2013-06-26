@@ -60,7 +60,7 @@ public abstract class DNASequence {
 	/**
 	 * Derives the compliment of the sequence component of a DNASequence object.
 	 * */
-	public void compliment() {
+	public void complement() {
 		StringBuilder complimentString = new StringBuilder();
 		for (int i=0; i < this.getLength(); i++) {
 			char c = this.getSequence().charAt(i);
@@ -86,8 +86,8 @@ public abstract class DNASequence {
 	/**
 	 * Derives the reverse compliment a DNASequence object.
 	 * */
-	public void reverseCompliment() {
+	public void reverseComplement() {
 		this.reverse();
-		this.compliment();
+		this.complement();
 	}
 }

@@ -6,6 +6,7 @@ import marina.alignment.RabinKarpTest;
 import marina.bindingsite.LinearDNAMotifTest;
 import marina.bindingsite.PositionWeightMatrixTest;
 import marina.bindingsite.TextualPWMWrapperTest;
+import marina.group.DNASequenceTest;
 import marina.group.FASTAFragmentTest;
 import marina.group.FASTASequenceTest;
 import marina.group.GroupAbundanceWrapperTest;
@@ -41,7 +42,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	TextualPWMWrapperTest.class, MetricTest.class,
 	FASTAFragmentTest.class, GroupAbundanceWrapperTest.class,
 	CandidateMatrixBuilderTest.class, AbundanceInferenceTest.class,
-})
+	DNASequenceTest.class, })
 public class MarinaTests {
 
 }

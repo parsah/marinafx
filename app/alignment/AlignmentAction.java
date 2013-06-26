@@ -52,11 +52,13 @@ public final class AlignmentAction extends Task<Void> {
 	protected Void call() throws Exception {
 		if (isUsingMotifs()) {
 			ExhaustiveMotifAlignment motifAlign = new ExhaustiveMotifAlignment();
-			motifAlign.align();
+			motifAlign.forwardStrandAlign();
+			motifAlign.reverseStrandAlign();
 		}
 		if (isUsingPWMs()) {
 			ExhaustivePWMAlignment pwmAlign = new ExhaustivePWMAlignment();
-			pwmAlign.align();
+			pwmAlign.forwardStrandAlign();
+			pwmAlign.reverseStrandAlign();
 		} // return nothing since Group objects are global.
 		return null;
 	}

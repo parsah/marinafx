@@ -23,7 +23,7 @@ public class ExhaustivePWMAlignment extends AbstractAlignment {
 	}
 
 	@Override
-	public void align() throws IOException {
+	public void forwardStrandAlign() throws IOException {
 		ParameterMap param = MarinaGUI.get().parameterMap(); // get options
 		Group[] groups = new Group[]{param.getQuery(), param.getBaseline()};
 		for (Group group: groups) {
@@ -38,7 +38,31 @@ public class ExhaustivePWMAlignment extends AbstractAlignment {
 					}
 				}
 				this.updateGUI(j, group.getSize()); // update progress-bar
-				this.updateGUI(this.getName() + " - " + seq.getHeader());
+				this.updateGUI("Forward strand - " + this.getName() + " - " + 
+						seq.getHeader());
+			}
+		}
+	}
+	
+	@Override
+	public void reverseStrandAlign() throws IOException {
+		ParameterMap param = MarinaGUI.get().parameterMap(); // get options
+		Group[] groups = new Group[]{param.getQuery(), param.getBaseline()};
+		for (Group group: groups) {
+			for (int j=0; j < group.getSize(); j++) {
+				FASTASequence seq = group.getParser().getSequences().get(j);
+				seq.reverseComplement();
+				for (PositionWeightMatrix pwm: this.getParser().getMatrices()) {
+					List<FASTAFragment> fragments = seq.toFragments(pwm.getWidth());
+					for (FASTAFragment fragment: fragments) {
+						// align fragment given a PWM using P-MATCH algorithm.
+						PMatch pMatch = new PMatch(fragment, pwm);
+						pMatch.extrapolate();
+					}
+				}
+				this.updateGUI(j, group.getSize()); // update progress-bar
+				this.updateGUI("Reverse strand - " + this.getName() + " - " + 
+						seq.getHeader());
 			}
 		}
 	}
