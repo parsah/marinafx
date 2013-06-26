@@ -8,9 +8,7 @@ package group;
  * @author Parsa Hosseini
  * */
 public abstract class DNASequence {
-	
 	public static final char[] CHARSET = new char[]{'A', 'T', 'G', 'C'};
-	
 	private String sequence;
 	
 	public DNASequence() {
@@ -47,5 +45,49 @@ public abstract class DNASequence {
 	public String getBase(int i) {
 		return this.getSequence().substring(i, i+1);
 	}
-
+	
+	/**
+	 * Reverses the actual sequence component of a DNASequence object.
+	 * */
+	public void reverse() {
+		StringBuilder reverseString = new StringBuilder();
+		for (int i=this.getLength()-1; i >= 0; i--) {
+			reverseString.append(this.getSequence().charAt(i));
+		}
+		this.setSequence(reverseString.toString());
+	}
+	
+	/**
+	 * Derives the compliment of the sequence component of a DNASequence object.
+	 * */
+	public void compliment() {
+		StringBuilder complimentString = new StringBuilder();
+		for (int i=0; i < this.getLength(); i++) {
+			char c = this.getSequence().charAt(i);
+			if (c == 'A') {
+				complimentString.append('T');
+			}
+			else if (c == 'T') {
+				complimentString.append('A');
+			}
+			else if (c == 'G') {
+				complimentString.append('C');
+			}
+			else if (c == 'C') {
+				complimentString.append('G');
+			}
+			else {
+				complimentString.append(c);
+			}
+		}
+		this.setSequence(complimentString.toString());
+	}
+	
+	/**
+	 * Derives the reverse compliment a DNASequence object.
+	 * */
+	public void reverseCompliment() {
+		this.reverse();
+		this.compliment();
+	}
 }
