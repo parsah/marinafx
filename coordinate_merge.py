@@ -16,9 +16,11 @@ singular matrix data-structure.
 @author: Parsa Hosseini
 '''
 class MergerFactory():
-    def __init__(self, files):
-        self.files = files
+    def __init__(self, files, out):
+        self.files = files # list / collection of input filenames
+        self.out = out # output filename
         self.unstruct_counts = [] # contains counts but is not in matrix form
+        self.count_skeleton = None # initially, no matrix is built
         
     def parse_files(self):
         ''' 
@@ -38,7 +40,6 @@ class MergerFactory():
                     abundance = {'group': group, 'name': seq_name, 'tfbs':tfbs, 
                            'num':tfbs_count}
                     self.unstruct_counts.append(abundance)
-            print(len(self.unstruct_counts))
         except IOError:
             print('Invalid TFBS coordinate file [error]')
         except (IndexError, ValueError):
@@ -51,6 +52,8 @@ class MergerFactory():
         for every TFBS, therefore if many TFBSs hit that sequence, there will
         be many repetitions of that sequence name. This behavior represents
         these repetitions and only displays each name just once.
+        
+        @return: rows - unique collection of group and sequence names. 
         '''
         rows = collections.OrderedDict()
         for i in self.unstruct_counts:
@@ -64,21 +67,62 @@ class MergerFactory():
         because each TFBS and its initial zero-count is the key and value
         respectively. Each sequence in the matrix will have its own unique 
         copy of this data-structure, providing the ability for the sequence to
-        easily store and keep-track of sequence-specific TFBS abundance. 
+        easily store and keep-track of sequence-specific TFBS abundance.
+        
+        @return: columns - key/value of TFBS name and a zero-count abundance.
         '''
-        columns = {}
+        columns = collections.OrderedDict()
         for i in self.unstruct_counts:
             tfbs = i['tfbs']
             if tfbs not in columns: # if TFBS not in map, add it
                 columns[tfbs] = 0 # give it a unique integer ID
         return columns
         
-    def build_skeleton(self):
+    def build_count_skeleton(self):
+        ''' 
+        Creates a bare-bones data-structure whereby each row references all 
+        the TFBSs and their initial zero-count. This data-structure provides
+        the ability to easily identify TFBSs abundant (or otherwise) within a
+        specific input sequence.
+        '''
         cols = self.bare_columns()
         rows = self.get_rows()
         for key in rows:
             rows[key] = copy.deepcopy(cols)
-
+        self.count_skeleton = rows
+        
+    def populate(self):
+        ''' 
+        Iteratively sets TFBSs abundances to each respective input sequence.
+        '''
+        
+        # iterate through all the TFBS abundances and populate the
+        # bare-bones skeleton matrix with them.    
+        try:
+            for i in self.unstruct_counts:
+                key = i['group'] + '\t' + i['name']
+                tfbs, num = i['tfbs'], i['num']
+                self.count_skeleton[key][tfbs] = num # set count
+        except TypeError: # bare-bones skeleton must be made first
+            print('Must create count-skeleton first [error]')
+    
+    def write(self):
+        ''' 
+        Saves a count-skeleton data-structure to file.
+        '''
+        writer = open(self.out, 'w')
+        header = ['Group','Sequence'] + list(self.bare_columns().keys())
+        writer.write('\t'.join(header) + '\n')
+        writer.flush()
+        for i in self.count_skeleton:
+            # get TFBS counts for each respective input sequence
+            tfbs_counts = list(self.count_skeleton[i].values())
+            tfbs_counts = [str(i) for i in tfbs_counts]
+            writer.write(i + '\t' + '\t'.join(tfbs_counts) + '\n')
+            writer.flush()
+        writer.close()
+        print('Operation complete [ok]')
+            
 if __name__ == '__main__':
     desc = ''' 
     Upon running Marina, you have the option of saving "TFBS Coordinates" 
@@ -101,6 +145,8 @@ if __name__ == '__main__':
     param_opts.add_argument('-h','--help', action='help', 
                             help='Show this help screen and exit')
     args = vars(parser.parse_args())
-    factory = MergerFactory(files = args['in'])
+    factory = MergerFactory(files = args['in'], out=args['out'])
     factory.parse_files()
-    factory.build_skeleton()
+    factory.build_count_skeleton()
+    factory.populate()
+    factory.write()
