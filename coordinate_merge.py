@@ -4,6 +4,7 @@
 
 import argparse
 import collections
+import copy
 
 class Coordinate_File():
     def __init__(self):
@@ -38,11 +39,45 @@ class MergerFactory():
                            'num':tfbs_count}
                     self.unstruct_counts.append(abundance)
             print(len(self.unstruct_counts))
-            
         except IOError:
             print('Invalid TFBS coordinate file [error]')
-        except IndexError:
+        except (IndexError, ValueError):
             print('Please check if input is TFBS coordinate file [error]')
+            
+    def get_rows(self):
+        ''' 
+        Generates a singular collection of only unique group names and 
+        sequence names. This is because each TFBS Coordinates file has a line
+        for every TFBS, therefore if many TFBSs hit that sequence, there will
+        be many repetitions of that sequence name. This behavior represents
+        these repetitions and only displays each name just once.
+        '''
+        rows = collections.OrderedDict()
+        for i in self.unstruct_counts:
+            rows[i['group'] + '\t' + i['name']] = None
+        return rows
+    
+    def bare_columns(self):
+        ''' 
+        Creates a centralized collection of all the TFBSs found in all the
+        TFBS Coordinate files. This data-structure is essentially a dictionary
+        because each TFBS and its initial zero-count is the key and value
+        respectively. Each sequence in the matrix will have its own unique 
+        copy of this data-structure, providing the ability for the sequence to
+        easily store and keep-track of sequence-specific TFBS abundance. 
+        '''
+        columns = {}
+        for i in self.unstruct_counts:
+            tfbs = i['tfbs']
+            if tfbs not in columns: # if TFBS not in map, add it
+                columns[tfbs] = 0 # give it a unique integer ID
+        return columns
+        
+    def build_skeleton(self):
+        cols = self.bare_columns()
+        rows = self.get_rows()
+        for key in rows:
+            rows[key] = copy.deepcopy(cols)
 
 if __name__ == '__main__':
     desc = ''' 
@@ -68,3 +103,4 @@ if __name__ == '__main__':
     args = vars(parser.parse_args())
     factory = MergerFactory(files = args['in'])
     factory.parse_files()
+    factory.build_skeleton()
