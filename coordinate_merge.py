@@ -6,10 +6,6 @@ import argparse
 import collections
 import copy
 
-class Coordinate_File():
-    def __init__(self):
-        pass
-
 '''
 High-level class which oversees merging of various coordinates-files into a 
 singular matrix data-structure.
