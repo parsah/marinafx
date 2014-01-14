@@ -26,4 +26,4 @@ Iterative Proportional Fitting (IPF) algorithm to facilitate unanimous "agreemen
 # Questions and Contact
 We encourage users to contact us should you have questions or concerns about this tool.
 
-Please direct all questions to: Parsa Hosseini <parsa.hosseini@ars.usda.gov>
+Please direct all questions to: Parsa Hosseini <parsa.hosseini@nih.gov>
